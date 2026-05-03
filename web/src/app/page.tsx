@@ -168,7 +168,8 @@ export default async function HomePage() {
                              border border-black/15 px-5 py-3 rounded-full
                              hover:border-[#669bbc] hover:text-[#669bbc] transition-colors"
                 >
-                  🇯🇵 Japón 2026
+                  <Globe size={15} strokeWidth={1.7} />
+                  Japón 2026
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 pulse-dot" />
                 </Link>
               </div>

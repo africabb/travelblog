@@ -302,7 +302,7 @@ Se ducharon en el restaurante donde había reservado Andreas para cenar. La Tave
     ],
   },
   {
-    num: 8,
+    num: 6,
     title: 'Lo que el viento se llevó',
     date: '13 Julio 2023',
     restaurants: [
@@ -371,7 +371,7 @@ La vuelta al barco fue con los mismos salvadores suizos. Todo fue muy bien. Al l
     ],
   },
   {
-    num: 9,
+    num: 7,
     title: 'Kalimera o Kalamos?',
     date: '14 Julio 2023',
     restaurants: [
