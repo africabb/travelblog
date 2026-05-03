@@ -19,6 +19,17 @@ const TRIPS = [
   },
   {
     num:     '02',
+    slug:    'grecia',
+    href:    '/grecia',
+    flag:    '🇬🇷',
+    name:    'Grecia en barco',
+    period:  'Verano 2023',
+    cities:  'Corfú · Meganisi · Lefkada · Ithaka · Kastos · Kalamos',
+    active:  false,
+    desc:    'Doce días navegando el Mar Jónico a bordo de Mr. Bojangles. Tavernas, pulpos y ataraxia.',
+  },
+  {
+    num:     '03',
     slug:    'ibiza',
     href:    null,
     flag:    '🏝️',
@@ -29,7 +40,7 @@ const TRIPS = [
     desc:    'Chiringuitos con los pies en la arena, atardeceres en el mar y las mejores paellas.',
   },
   {
-    num:     '03',
+    num:     '04',
     slug:    'la-manga',
     href:    null,
     flag:    '🌊',

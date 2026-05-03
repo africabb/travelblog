@@ -7,6 +7,8 @@ const nextConfig = {
       { protocol: 'https', hostname: '**.s3.amazonaws.com' },
       // dominio custom de media
       { protocol: 'https', hostname: process.env.MEDIA_HOSTNAME ?? 'media.example.com' },
+      // WordPress CDN (Grecia blog)
+      { protocol: 'https', hostname: 'deaventurassevive.wordpress.com' },
       // para desarrollo local
       { protocol: 'http',  hostname: 'localhost' },
     ],
