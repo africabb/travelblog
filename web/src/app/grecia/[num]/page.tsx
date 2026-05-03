@@ -240,12 +240,12 @@ function GroupedSummary({ groups }: { groups: GreciaSummaryGroup[] }) {
         const place = normalizeReference(group.place);
 
         return (
-          <div key={place.name} className="grid grid-cols-1 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)_minmax(0,1fr)] gap-3 sm:gap-5 py-4 first:pt-0 last:pb-0">
+          <div key={place.name} className="grid grid-cols-1 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)_minmax(0,1fr)] gap-4 sm:gap-5 py-5 sm:py-4 first:pt-0 last:pb-0">
             <h3 className="font-display font-bold text-ink text-base leading-tight">
                 {place.name}
             </h3>
-            <ReferenceList items={group.restaurants ?? []} empty="-" />
-            <ReferenceList items={group.places ?? []} empty="-" />
+            <ReferenceList title="Restaurantes" items={group.restaurants ?? []} empty="-" />
+            <ReferenceList title="Lugares" items={group.places ?? []} empty="-" />
           </div>
         );
       })}
@@ -254,17 +254,32 @@ function GroupedSummary({ groups }: { groups: GreciaSummaryGroup[] }) {
   );
 }
 
-function ReferenceList({ items, empty }: { items: GreciaReferenceInput[]; empty: string }) {
-  if (!items.length) {
-    return <p className="font-sans text-sm text-ink-muted leading-relaxed">{empty}</p>;
-  }
-
-  return (
+function ReferenceList({
+  title,
+  items,
+  empty,
+}: {
+  title: string;
+  items: GreciaReferenceInput[];
+  empty: string;
+}) {
+  const content = items.length ? (
     <ul className="space-y-1.5">
       {items.map((item) => (
         <SummaryItem key={normalizeReference(item).name} item={item} />
       ))}
     </ul>
+  ) : (
+    <p className="font-sans text-sm text-ink-muted leading-relaxed">{empty}</p>
+  );
+
+  return (
+    <div className="rounded-md bg-white/55 px-3 py-2 sm:bg-transparent sm:p-0">
+      <p className="mb-1.5 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-[#1A5276] sm:hidden">
+        {title}
+      </p>
+      {content}
+    </div>
   );
 }
 
