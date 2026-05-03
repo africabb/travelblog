@@ -33,6 +33,8 @@ export interface Place {
   rating:      number | null;
   price_range: string | null;
   description: string | null;
+  google_maps_url: string | null;
+  official_url: string | null;
   visited_at:  string | null;
   created_at:  string;
 }

@@ -8,7 +8,9 @@ export const definition = {
       Registra un lugar o restaurante visitado durante el viaje.
       Úsala cuando el usuario mencione un sitio concreto: un restaurante donde comió,
       un templo que visitó, una tienda, un parque…
-      Opcionalmente puedes vincularlo a una entrada del diario con entry_id.
+      Siempre que registres un sitio o restaurante, recopila y guarda un enlace de Google Maps
+      en google_maps_url. Si es un restaurante y encuentras una web oficial fiable, guardala
+      en official_url. Opcionalmente puedes vincularlo a una entrada del diario con entry_id.
     `.trim(),
     parameters: {
       type: 'object',
@@ -53,6 +55,14 @@ export const definition = {
         description: {
           type: 'string',
           description: 'Descripción breve y evocadora del lugar. 1-2 frases.',
+        },
+        google_maps_url: {
+          type: 'string',
+          description: 'URL de Google Maps del lugar/restaurante.',
+        },
+        official_url: {
+          type: 'string',
+          description: 'Web oficial del restaurante/lugar si se encuentra una fuente fiable.',
         },
         media_id: {
           type: 'string',

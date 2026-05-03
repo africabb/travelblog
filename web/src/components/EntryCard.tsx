@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import MediaGrid from './MediaGrid';
-import type { Entry } from '@/lib/types';
+import type { Entry, Place } from '@/lib/types';
 
 interface Props {
   entry:    Entry;
@@ -29,7 +29,6 @@ function formatDate(iso: string) {
 export default function EntryCard({ entry, showDate = false, linkTo }: Props) {
   const card = (
     <article className="bg-white rounded-2xl overflow-hidden shadow-sm border border-black/5 transition-shadow hover:shadow-md">
-      {/* Media */}
       {entry.media?.length > 0 && (
         <div className="overflow-hidden">
           <MediaGrid media={entry.media} compact />
@@ -37,7 +36,6 @@ export default function EntryCard({ entry, showDate = false, linkTo }: Props) {
       )}
 
       <div className="p-4">
-        {/* Top row */}
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex-1 min-w-0">
             {showDate && (
@@ -54,18 +52,15 @@ export default function EntryCard({ entry, showDate = false, linkTo }: Props) {
           </span>
         </div>
 
-        {/* Meta */}
         {(entry.location || entry.mood) && (
           <div className="flex flex-wrap gap-2 mb-2 text-xs text-ink-soft">
-            {entry.location && <span>📍 {entry.location}</span>}
+            {entry.location && <span>Mapa: {entry.location}</span>}
             {entry.mood     && <span>{entry.mood}</span>}
           </div>
         )}
 
-        {/* Body */}
         <p className="text-sm text-ink-soft leading-relaxed line-clamp-3">{entry.body}</p>
 
-        {/* Tags */}
         {entry.tags?.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-3">
             {entry.tags.map((t) => (
@@ -76,13 +71,16 @@ export default function EntryCard({ entry, showDate = false, linkTo }: Props) {
           </div>
         )}
 
-        {/* Places */}
         {entry.places?.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1">
             {entry.places.map((p) => (
-              <span key={p.id} className="text-[10px] bg-sakura-soft text-red-deep px-2 py-0.5 rounded-full">
-                {p.type === 'restaurant' ? '🍜' : '📍'} {p.name}
-              </span>
+              linkTo ? (
+                <span key={p.id} className="text-[10px] bg-sakura-soft text-red-deep px-2 py-0.5 rounded-full">
+                  {placeLabel(p)}: {p.name}
+                </span>
+              ) : (
+                <PlaceLinks key={p.id} place={p} />
+              )
             ))}
           </div>
         )}
@@ -94,4 +92,27 @@ export default function EntryCard({ entry, showDate = false, linkTo }: Props) {
     return <Link href={linkTo} className="block">{card}</Link>;
   }
   return card;
+}
+
+function PlaceLinks({ place }: { place: Place }) {
+  const mapsUrl = place.google_maps_url
+    ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}`;
+
+  return (
+    <span className="inline-flex items-center gap-1.5 text-[10px] bg-sakura-soft text-red-deep px-2 py-0.5 rounded-full">
+      <span>{placeLabel(place)}: {place.name}</span>
+      <a href={mapsUrl} target="_blank" rel="noreferrer" className="font-semibold underline-offset-2 hover:underline">
+        Maps
+      </a>
+      {place.official_url && (
+        <a href={place.official_url} target="_blank" rel="noreferrer" className="font-semibold underline-offset-2 hover:underline">
+          Web
+        </a>
+      )}
+    </span>
+  );
+}
+
+function placeLabel(place: Place) {
+  return place.type === 'restaurant' ? 'Restaurante' : 'Lugar';
 }

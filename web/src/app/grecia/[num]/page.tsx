@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import Link          from 'next/link';
 import Image         from 'next/image';
 import { MapPin, Utensils } from 'lucide-react';
-import { GRECIA_CHAPTERS } from '@/data/grecia';
+import { GRECIA_CHAPTERS, type GreciaReference, type GreciaReferenceInput } from '@/data/grecia';
 
 /* ─── Static paths ───────────────────────────────────────── */
 export function generateStaticParams() {
@@ -186,8 +186,8 @@ function ChapterSummary({
   restaurants,
   places,
 }: {
-  restaurants: string[];
-  places: string[];
+  restaurants: GreciaReferenceInput[];
+  places: GreciaReferenceInput[];
 }) {
   return (
     <section className="mb-12 border-y border-black/[0.07] py-8">
@@ -217,7 +217,7 @@ function SummaryList({
 }: {
   title: string;
   empty: string;
-  items: string[];
+  items: GreciaReferenceInput[];
   Icon: typeof Utensils;
 }) {
   return (
@@ -230,15 +230,43 @@ function SummaryList({
       </div>
       {items.length > 0 ? (
         <ul className="space-y-2">
-          {items.map((item) => (
+          {items.map((item) => {
+            const reference = normalizeReference(item);
+
+            return (
             <li
-              key={item}
+              key={reference.name}
               className="font-sans text-sm text-ink-soft leading-relaxed flex gap-2"
             >
               <span className="mt-[0.62em] h-1.5 w-1.5 rounded-full bg-[#1A5276]/55 shrink-0" />
-              <span>{item}</span>
+              <span>
+                {reference.name}
+                <span className="ml-2 whitespace-nowrap">
+                  <a
+                    href={googleMapsUrl(reference)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#1A5276] hover:underline"
+                  >
+                    Maps
+                  </a>
+                  {reference.officialUrl && (
+                    <>
+                      <span className="text-ink-muted mx-1">·</span>
+                      <a
+                        href={reference.officialUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[#1A5276] hover:underline"
+                      >
+                        Web oficial
+                      </a>
+                    </>
+                  )}
+                </span>
+              </span>
             </li>
-          ))}
+          )})}
         </ul>
       ) : (
         <p className="font-sans text-sm text-ink-muted leading-relaxed">
@@ -247,6 +275,15 @@ function SummaryList({
       )}
     </div>
   );
+}
+
+function normalizeReference(item: GreciaReferenceInput): GreciaReference {
+  return typeof item === 'string' ? { name: item } : item;
+}
+
+function googleMapsUrl(item: GreciaReference) {
+  const query = encodeURIComponent(item.mapsQuery ?? item.name);
+  return `https://www.google.com/maps/search/?api=1&query=${query}`;
 }
 
 

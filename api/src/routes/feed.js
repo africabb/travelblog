@@ -31,7 +31,9 @@ export default async function feedRoutes(app) {
             'id', p.id, 'name', p.name, 'name_jp', p.name_jp,
             'type', p.type, 'city', p.city,
             'category', p.category, 'rating', p.rating,
-            'price_range', p.price_range, 'description', p.description
+            'price_range', p.price_range, 'description', p.description,
+            'google_maps_url', p.google_maps_url,
+            'official_url', p.official_url
           )) FILTER (WHERE p.id IS NOT NULL),
           '[]'
         ) AS places

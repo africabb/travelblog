@@ -3,7 +3,7 @@ import MediaGrid       from '@/components/MediaGrid';
 import Link            from 'next/link';
 import Image           from 'next/image';
 import { notFound }    from 'next/navigation';
-import type { Entry } from '@/lib/types';
+import type { Entry, Place } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -244,6 +244,7 @@ export default async function PublicDayPage({
                                  px-3 py-1.5 rounded-full"
                     >
                       {PLACE_EMOJI[p.type] ?? '📍'} {p.name}
+                      <PlaceExternalLinks place={p} compact />
                     </span>
                   ))}
                 </div>
@@ -294,6 +295,7 @@ export default async function PublicDayPage({
                         {p.description}
                       </p>
                     )}
+                    <PlaceExternalLinks place={p} />
                   </div>
                   {p.rating != null && (
                     <span className="text-gold font-bold text-sm shrink-0">
@@ -335,5 +337,23 @@ export default async function PublicDayPage({
         </div>
       </footer>
     </div>
+  );
+}
+
+function PlaceExternalLinks({ place, compact = false }: { place: Place; compact?: boolean }) {
+  const mapsUrl = place.google_maps_url
+    ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}`;
+
+  return (
+    <span className={compact ? 'ml-1 inline-flex gap-1' : 'mt-2 flex flex-wrap gap-2 text-xs'}>
+      <a href={mapsUrl} target="_blank" rel="noreferrer" className="text-[#1A5276] font-medium hover:underline">
+        Maps
+      </a>
+      {place.official_url && (
+        <a href={place.official_url} target="_blank" rel="noreferrer" className="text-[#1A5276] font-medium hover:underline">
+          Web oficial
+        </a>
+      )}
+    </span>
   );
 }

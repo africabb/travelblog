@@ -1,0 +1,3 @@
+ALTER TABLE places
+  ADD COLUMN IF NOT EXISTS google_maps_url TEXT,
+  ADD COLUMN IF NOT EXISTS official_url TEXT;

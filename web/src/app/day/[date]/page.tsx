@@ -3,6 +3,7 @@ import NavBar from '@/components/NavBar';
 import EntryCard from '@/components/EntryCard';
 import PublishDayButton from '@/app/drafts/PublishDayButton';
 import { notFound } from 'next/navigation';
+import type { Place } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -87,6 +88,7 @@ export default async function DayPage({ params }: { params: { date: string } }) 
                     {p.description && (
                       <p className="text-xs text-ink-soft mt-1 line-clamp-2">{p.description}</p>
                     )}
+                    <PlaceExternalLinks place={p} />
                   </div>
                   {p.rating && (
                     <div className="text-right shrink-0">
@@ -99,6 +101,24 @@ export default async function DayPage({ params }: { params: { date: string } }) 
           </section>
         )}
       </main>
+    </div>
+  );
+}
+
+function PlaceExternalLinks({ place }: { place: Place }) {
+  const mapsUrl = place.google_maps_url
+    ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}`;
+
+  return (
+    <div className="mt-1 flex flex-wrap gap-2 text-xs">
+      <a href={mapsUrl} target="_blank" rel="noreferrer" className="text-[#1A5276] font-medium hover:underline">
+        Maps
+      </a>
+      {place.official_url && (
+        <a href={place.official_url} target="_blank" rel="noreferrer" className="text-[#1A5276] font-medium hover:underline">
+          Web oficial
+        </a>
+      )}
     </div>
   );
 }

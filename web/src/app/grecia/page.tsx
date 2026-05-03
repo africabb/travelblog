@@ -1,7 +1,12 @@
 import Link          from 'next/link';
 import Image         from 'next/image';
 import { MapPin, Utensils } from 'lucide-react';
-import { GRECIA_CHAPTERS, type GreciaChapter } from '@/data/grecia';
+import {
+  GRECIA_CHAPTERS,
+  type GreciaChapter,
+  type GreciaReference,
+  type GreciaReferenceInput,
+} from '@/data/grecia';
 
 /* ─── Page ──────────────────────────────────────────────── */
 export default function GreciaPage() {
@@ -139,8 +144,15 @@ export default function GreciaPage() {
 }
 
 
-function uniqueItems(items: string[]) {
-  return Array.from(new Set(items.filter(Boolean)));
+function uniqueItems(items: GreciaReferenceInput[]) {
+  const byName = new Map<string, GreciaReference>();
+
+  items.forEach((item) => {
+    const reference = normalizeReference(item);
+    if (!byName.has(reference.name)) byName.set(reference.name, reference);
+  });
+
+  return Array.from(byName.values());
 }
 
 
@@ -149,8 +161,8 @@ function TripSummary({
   restaurants,
   places,
 }: {
-  restaurants: string[];
-  places: string[];
+  restaurants: GreciaReference[];
+  places: GreciaReference[];
 }) {
   return (
     <section className="mb-16 border-y border-black/[0.07] py-10">
@@ -183,7 +195,7 @@ function SummaryList({
   Icon,
 }: {
   title: string;
-  items: string[];
+  items: GreciaReference[];
   Icon: typeof Utensils;
 }) {
   return (
@@ -197,16 +209,50 @@ function SummaryList({
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-2">
         {items.map((item) => (
           <li
-            key={item}
+            key={item.name}
             className="font-sans text-sm text-ink-soft leading-relaxed flex gap-2"
           >
             <span className="mt-[0.62em] h-1.5 w-1.5 rounded-full bg-[#1A5276]/55 shrink-0" />
-            <span>{item}</span>
+            <span>
+              {item.name}
+              <span className="ml-2 whitespace-nowrap">
+                <a
+                  href={googleMapsUrl(item)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[#1A5276] hover:underline"
+                >
+                  Maps
+                </a>
+                {item.officialUrl && (
+                  <>
+                    <span className="text-ink-muted mx-1">·</span>
+                    <a
+                      href={item.officialUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[#1A5276] hover:underline"
+                    >
+                      Web oficial
+                    </a>
+                  </>
+                )}
+              </span>
+            </span>
           </li>
         ))}
       </ul>
     </div>
   );
+}
+
+function normalizeReference(item: GreciaReferenceInput): GreciaReference {
+  return typeof item === 'string' ? { name: item } : item;
+}
+
+function googleMapsUrl(item: GreciaReference) {
+  const query = encodeURIComponent(item.mapsQuery ?? item.name);
+  return `https://www.google.com/maps/search/?api=1&query=${query}`;
 }
 
 

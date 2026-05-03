@@ -3,6 +3,7 @@ import NavBar from '@/components/NavBar';
 import MediaGrid from '@/components/MediaGrid';
 import DraftActions from '@/components/DraftActions';
 import { notFound } from 'next/navigation';
+import type { Place } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -84,6 +85,7 @@ export default async function DraftDetailPage({ params }: { params: { id: string
                     <p className="font-medium text-sm text-ink truncate">{p.name}</p>
                     {p.name_jp && <p className="text-xs text-ink-soft">{p.name_jp}</p>}
                     {p.city    && <p className="text-xs text-ink-soft">{p.city}</p>}
+                    <PlaceExternalLinks place={p} />
                   </div>
                   {p.rating && (
                     <span className="text-xs text-gold font-semibold shrink-0">★ {p.rating}</span>
@@ -109,6 +111,24 @@ export default async function DraftDetailPage({ params }: { params: { id: string
         </div>
 
       </main>
+    </div>
+  );
+}
+
+function PlaceExternalLinks({ place }: { place: Place }) {
+  const mapsUrl = place.google_maps_url
+    ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}`;
+
+  return (
+    <div className="mt-1 flex flex-wrap gap-2 text-xs">
+      <a href={mapsUrl} target="_blank" rel="noreferrer" className="text-[#1A5276] font-medium hover:underline">
+        Maps
+      </a>
+      {place.official_url && (
+        <a href={place.official_url} target="_blank" rel="noreferrer" className="text-[#1A5276] font-medium hover:underline">
+          Web oficial
+        </a>
+      )}
     </div>
   );
 }

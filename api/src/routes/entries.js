@@ -27,7 +27,9 @@ export default async function entriesRoutes(app) {
         COALESCE(
           json_agg(DISTINCT jsonb_build_object(
             'id', p.id, 'name', p.name, 'type', p.type,
-            'city', p.city, 'category', p.category, 'rating', p.rating
+            'city', p.city, 'category', p.category, 'rating', p.rating,
+            'google_maps_url', p.google_maps_url,
+            'official_url', p.official_url
           )) FILTER (WHERE p.id IS NOT NULL),
           '[]'
         ) AS places
@@ -59,7 +61,9 @@ export default async function entriesRoutes(app) {
           json_agg(DISTINCT jsonb_build_object(
             'id', p.id, 'name', p.name, 'name_jp', p.name_jp,
             'type', p.type, 'city', p.city, 'category', p.category,
-            'rating', p.rating, 'description', p.description
+            'rating', p.rating, 'description', p.description,
+            'google_maps_url', p.google_maps_url,
+            'official_url', p.official_url
           )) FILTER (WHERE p.id IS NOT NULL),
           '[]'
         ) AS places

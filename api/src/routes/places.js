@@ -32,6 +32,7 @@ export default async function placesRoutes(app) {
       city, address, coordinates,
       category, rating, price_range,
       description, cover_media_id, visited_at,
+      google_maps_url, official_url,
     } = req.body;
 
     if (!name) return reply.badRequest('name es obligatorio');
@@ -39,8 +40,9 @@ export default async function placesRoutes(app) {
     const rows = await query(`
       INSERT INTO places
         (name, name_jp, type, city, address, coordinates,
-         category, rating, price_range, description, cover_media_id, visited_at)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+         category, rating, price_range, description, cover_media_id, visited_at,
+         google_maps_url, official_url)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
       RETURNING *
     `, [
       name, name_jp ?? null, type,
@@ -48,7 +50,7 @@ export default async function placesRoutes(app) {
       coordinates ? JSON.stringify(coordinates) : null,
       category ?? null, rating ?? null, price_range ?? null,
       description ?? null, cover_media_id ?? null,
-      visited_at ?? null,
+      visited_at ?? null, google_maps_url ?? null, official_url ?? null,
     ]);
 
     return reply.code(201).send(rows[0]);
@@ -59,7 +61,7 @@ export default async function placesRoutes(app) {
     const allowed = [
       'name', 'name_jp', 'type', 'city', 'address',
       'category', 'rating', 'price_range', 'description',
-      'cover_media_id', 'visited_at',
+      'cover_media_id', 'visited_at', 'google_maps_url', 'official_url',
     ];
 
     const sets   = [];

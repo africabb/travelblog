@@ -46,7 +46,9 @@ export default async function draftsRoutes(app) {
         COALESCE(
           json_agg(DISTINCT jsonb_build_object(
             'id', p.id, 'name', p.name, 'type', p.type,
-            'city', p.city, 'category', p.category
+            'city', p.city, 'category', p.category,
+            'google_maps_url', p.google_maps_url,
+            'official_url', p.official_url
           )) FILTER (WHERE p.id IS NOT NULL),
           '[]'
         ) AS places
