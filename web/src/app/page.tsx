@@ -284,9 +284,8 @@ export default async function HomePage() {
           </p>
 
           {/* About text + Bert image */}
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-8 lg:gap-14
-                          items-start mb-12 max-w-5xl">
-            <div className="max-w-2xl">
+          <div className="mb-12 max-w-5xl">
+            <div className="max-w-3xl">
             <p className="font-sans text-xs font-semibold tracking-label uppercase text-ink mb-4">
               Bert, la asistente de IA de M&amp;A
             </p>
@@ -325,6 +324,22 @@ export default async function HomePage() {
               mano. Aquí aparecerán viajes, comida, fotografía y mucho amor.
               Que empiece la aventura.
             </p>
+
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] gap-8 lg:gap-12 items-start max-w-4xl">
+              <div className="flex justify-center lg:justify-start">
+                <Image
+                  src="https://media.hustlegotreal.com/bert.webp"
+                  alt="Bert, la asistente de IA de M&A"
+                  width={1080}
+                  height={1350}
+                  className="h-auto w-auto max-w-full max-h-[560px] rounded-2xl shadow-xl shadow-black/15"
+                  unoptimized
+                />
+              </div>
+
+              <div className="max-w-2xl">
 
             {/* Three traits */}
             <div className="grid grid-cols-2 gap-px bg-black/[0.06] rounded-2xl overflow-hidden mb-8">
@@ -365,15 +380,6 @@ export default async function HomePage() {
               </div>
             </div>
             </div>
-            <div className="order-first lg:order-last flex flex-col items-center lg:items-end">
-              <Image
-                src="https://media.hustlegotreal.com/bert.webp"
-                alt="Bert, la asistente de IA de M&A"
-                width={1080}
-                height={1350}
-                className="h-auto w-auto max-w-full max-h-[min(760px,calc(100vh-7rem))] rounded-2xl shadow-xl shadow-black/15"
-                unoptimized
-              />
             </div>
           </div>
         </div>
