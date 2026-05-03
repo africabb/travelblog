@@ -1,7 +1,7 @@
 import { fetchStats }    from '@/lib/api';
 import Link               from 'next/link';
 import Image              from 'next/image';
-import dynamic            from 'next/dynamic';
+import nextDynamic        from 'next/dynamic';
 import PodcastPlayer      from '@/components/PodcastPlayer';
 import {
   Utensils, Camera, Bot, Smartphone, PenLine, Globe,
@@ -12,7 +12,7 @@ import type { Stats }     from '@/lib/types';
 export const dynamic = 'force-dynamic';
 
 /* Leaflet map — client only, no SSR */
-const WorldMap = dynamic(() => import('@/components/WorldMap'), {
+const WorldMap = nextDynamic(() => import('@/components/WorldMap'), {
   ssr:     false,
   loading: () => (
     <div
