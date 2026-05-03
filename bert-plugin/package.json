@@ -1,0 +1,11 @@
+{
+  "name": "bert-diary-plugin",
+  "version": "0.1.0",
+  "description": "Plugin de Openclaw/Bert para escribir en el diario de Japón",
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "form-data": "^4.0.0",
+    "node-fetch": "^3.3.2"
+  }
+}

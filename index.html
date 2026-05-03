@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Japón — Mi Diario de Viaje</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Noto+Serif+JP:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Sakura petals canvas -->
+  <canvas id="sakura-canvas"></canvas>
+
+  <!-- ─── NAV ─────────────────────────────────────────────── -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#">
+        <span class="kanji">旅</span>
+        <span class="nav-logo-text">Mi Japón</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#diary">Diario</a></li>
+        <li><a href="#places">Lugares</a></li>
+        <li><a href="#restaurants">Restaurantes</a></li>
+        <li><a href="#gallery">Galería</a></li>
+        <li><a href="#assistant" class="nav-cta">Asistente ✦</a></li>
+      </ul>
+      <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─────────────────────────────────────────────── -->
+  <header class="hero" id="hero">
+    <div class="hero-bg-layers">
+      <div class="hero-layer hero-layer-1"></div>
+      <div class="hero-layer hero-layer-2"></div>
+    </div>
+    <div class="hero-content">
+      <p class="hero-sup">日本の旅 · Primavera 2026</p>
+      <h1 class="hero-title">
+        Mi Diario<br />
+        <em>de Japón</em>
+      </h1>
+      <p class="hero-desc">Un viaje a través de templos, ramen, cerezos y momentos irrepetibles.</p>
+      <div class="hero-actions">
+        <a href="#diary" class="btn btn-primary">Ver el Diario</a>
+        <a href="#assistant" class="btn btn-ghost">Hablar con Claude</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" id="stat-days">0</span><span class="stat-label">Días</span></div>
+        <div class="stat-divider">·</div>
+        <div class="stat"><span class="stat-num" id="stat-places">0</span><span class="stat-label">Lugares</span></div>
+        <div class="stat-divider">·</div>
+        <div class="stat"><span class="stat-num" id="stat-food">0</span><span class="stat-label">Platos</span></div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Desliza</span>
+      <div class="scroll-line"></div>
+    </div>
+  </header>
+
+  <!-- ─── DIARY ENTRIES ─────────────────────────────────────── -->
+  <section class="section" id="diary">
+    <div class="container">
+      <header class="section-header">
+        <span class="section-tag">日記</span>
+        <h2 class="section-title">Diario de Viaje</h2>
+        <p class="section-sub">Cada entrada es un capítulo de esta aventura.</p>
+      </header>
+
+      <div class="diary-timeline">
+
+        <article class="diary-entry" data-day="1">
+          <div class="entry-date-col">
+            <div class="entry-dot"></div>
+            <div class="entry-date">
+              <span class="entry-day-num">01</span>
+              <span class="entry-month">Mayo</span>
+            </div>
+          </div>
+          <div class="entry-card">
+            <div class="entry-card-img" style="background-image:url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&auto=format&fit=crop')"></div>
+            <div class="entry-card-body">
+              <div class="entry-meta">
+                <span class="entry-location">✈ Tokio · Llegada</span>
+                <span class="entry-mood">🌸 Emocionada</span>
+              </div>
+              <h3 class="entry-title">El primer rayo de sol en Narita</h3>
+              <p class="entry-text">Después de 14 horas de vuelo, el avión aterrizó suavemente. La ciudad desde las alturas: una galaxia de luces ordenadas que se extendía hasta el horizonte. Ya huele diferente. Ya se siente diferente.</p>
+              <div class="entry-tags">
+                <span class="tag">Tokio</span>
+                <span class="tag">Llegada</span>
+                <span class="tag">Narita</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="diary-entry diary-entry-right" data-day="2">
+          <div class="entry-date-col">
+            <div class="entry-dot entry-dot-gold"></div>
+            <div class="entry-date">
+              <span class="entry-day-num">02</span>
+              <span class="entry-month">Mayo</span>
+            </div>
+          </div>
+          <div class="entry-card">
+            <div class="entry-card-img" style="background-image:url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&auto=format&fit=crop')"></div>
+            <div class="entry-card-body">
+              <div class="entry-meta">
+                <span class="entry-location">⛩ Asakusa · Senso-ji</span>
+                <span class="entry-mood">🙏 Serena</span>
+              </div>
+              <h3 class="entry-title">Incienso y plegarias en Senso-ji</h3>
+              <p class="entry-text">El humo del incienso me rodeó al pasar el Kaminarimon. Caminé la Nakamise-dori sin prisa, con un taiyaki caliente en la mano. El templo a las 7am es otro mundo.</p>
+              <div class="entry-tags">
+                <span class="tag">Asakusa</span>
+                <span class="tag">Templo</span>
+                <span class="tag">Taiyaki</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="diary-entry" data-day="3">
+          <div class="entry-date-col">
+            <div class="entry-dot entry-dot-red"></div>
+            <div class="entry-date">
+              <span class="entry-day-num">03</span>
+              <span class="entry-month">Mayo</span>
+            </div>
+          </div>
+          <div class="entry-card">
+            <div class="entry-card-img" style="background-image:url('https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=800&auto=format&fit=crop')"></div>
+            <div class="entry-card-body">
+              <div class="entry-meta">
+                <span class="entry-location">🏙 Shibuya · Shinjuku</span>
+                <span class="entry-mood">⚡ Electrizada</span>
+              </div>
+              <h3 class="entry-title">El cruce más famoso del mundo</h3>
+              <p class="entry-text">De pie en medio del Crossing de Shibuya cuando todos los semáforos se ponen en rojo a la vez. Cientos de personas fluyendo como agua. Tokio en estado puro.</p>
+              <div class="entry-tags">
+                <span class="tag">Shibuya</span>
+                <span class="tag">Cruce</span>
+                <span class="tag">Urbano</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- NEW ENTRY placeholder -->
+        <article class="diary-entry diary-entry-new">
+          <div class="entry-date-col">
+            <div class="entry-dot entry-dot-dashed"></div>
+          </div>
+          <div class="entry-card entry-card-new">
+            <div class="entry-new-inner">
+              <div class="entry-new-icon">📲</div>
+              <h3>Nueva entrada vía WhatsApp</h3>
+              <p>Envía una foto y mensaje a tu asistente de Claude y se añadirá automáticamente aquí.</p>
+              <a href="#assistant" class="btn btn-primary btn-sm">Abrir asistente</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PLACES ─────────────────────────────────────────────── -->
+  <section class="section section-dark" id="places">
+    <div class="container">
+      <header class="section-header">
+        <span class="section-tag section-tag-light">場所</span>
+        <h2 class="section-title section-title-light">Lugares Visitados</h2>
+        <p class="section-sub section-sub-light">Cada punto en el mapa guarda un recuerdo.</p>
+      </header>
+
+      <div class="places-grid">
+
+        <div class="place-card place-card-featured">
+          <div class="place-img" style="background-image:url('https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=900&auto=format&fit=crop')"></div>
+          <div class="place-overlay">
+            <div class="place-city-badge">東京</div>
+            <div class="place-info">
+              <h3>Tokio</h3>
+              <p>La metrópolis que nunca duerme. Neones, templos y ramen.</p>
+              <div class="place-stats-row">
+                <span>🗓 3 días</span>
+                <span>📍 12 lugares</span>
+                <span>🍜 8 restaurantes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="place-card">
+          <div class="place-img" style="background-image:url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=700&auto=format&fit=crop')"></div>
+          <div class="place-overlay">
+            <div class="place-city-badge">京都</div>
+            <div class="place-info">
+              <h3>Kioto</h3>
+              <p>Geishas, bambú y mil templos dorados.</p>
+              <div class="place-stats-row">
+                <span>🗓 2 días</span>
+                <span>📍 7 lugares</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="place-card">
+          <div class="place-img" style="background-image:url('https://images.unsplash.com/photo-1576675784201-0e142b423952?w=700&auto=format&fit=crop')"></div>
+          <div class="place-overlay">
+            <div class="place-city-badge">奈良</div>
+            <div class="place-info">
+              <h3>Nara</h3>
+              <p>Ciervos sagrados y el Gran Buda.</p>
+              <div class="place-stats-row">
+                <span>🗓 1 día</span>
+                <span>📍 4 lugares</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="place-card">
+          <div class="place-img" style="background-image:url('https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?w=700&auto=format&fit=crop')"></div>
+          <div class="place-overlay">
+            <div class="place-city-badge">富士山</div>
+            <div class="place-info">
+              <h3>Monte Fuji</h3>
+              <p>El símbolo eterno de Japón desde el lago Kawaguchi.</p>
+              <div class="place-stats-row">
+                <span>🗓 1 día</span>
+                <span>📍 2 lugares</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coming soon -->
+        <div class="place-card place-card-soon">
+          <div class="place-soon-inner">
+            <span class="place-soon-kanji">次</span>
+            <p>Próximo destino…</p>
+            <span class="place-soon-sub">Se añadirá automáticamente</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── RESTAURANTS ───────────────────────────────────────── -->
+  <section class="section" id="restaurants">
+    <div class="container">
+      <header class="section-header">
+        <span class="section-tag">食事</span>
+        <h2 class="section-title">Restaurantes & Comida</h2>
+        <p class="section-sub">El viaje también se vive por el paladar.</p>
+      </header>
+
+      <div class="food-filter">
+        <button class="filter-btn active" data-filter="all">Todo</button>
+        <button class="filter-btn" data-filter="ramen">Ramen</button>
+        <button class="filter-btn" data-filter="sushi">Sushi</button>
+        <button class="filter-btn" data-filter="izakaya">Izakaya</button>
+        <button class="filter-btn" data-filter="street">Street Food</button>
+        <button class="filter-btn" data-filter="cafe">Cafés</button>
+      </div>
+
+      <div class="food-grid">
+
+        <div class="food-card" data-cat="ramen">
+          <div class="food-img" style="background-image:url('https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=600&auto=format&fit=crop')"></div>
+          <div class="food-body">
+            <div class="food-header">
+              <div>
+                <h3 class="food-name">Ichiran Ramen</h3>
+                <p class="food-location">📍 Shinjuku, Tokio</p>
+              </div>
+              <div class="food-rating">
+                <span class="stars">★★★★★</span>
+                <span class="rating-num">5.0</span>
+              </div>
+            </div>
+            <p class="food-desc">El ramen más solitario y perfecto del mundo. Cabinas individuales, caldo de cerdo 18 horas, huevo marinado.</p>
+            <div class="food-tags">
+              <span class="tag tag-food">Ramen</span>
+              <span class="tag tag-food">¥¥</span>
+              <span class="tag tag-food">⏰ 11pm</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="food-card" data-cat="sushi">
+          <div class="food-img" style="background-image:url('https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&auto=format&fit=crop')"></div>
+          <div class="food-body">
+            <div class="food-header">
+              <div>
+                <h3 class="food-name">Tsukiji Outer Market</h3>
+                <p class="food-location">📍 Tsukiji, Tokio</p>
+              </div>
+              <div class="food-rating">
+                <span class="stars">★★★★★</span>
+                <span class="rating-num">4.9</span>
+              </div>
+            </div>
+            <p class="food-desc">Nigiri de atún a las 7am. El pescado más fresco de mi vida. Imprescindible madrugar.</p>
+            <div class="food-tags">
+              <span class="tag tag-food">Sushi</span>
+              <span class="tag tag-food">¥¥¥</span>
+              <span class="tag tag-food">🌅 Madrugada</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="food-card" data-cat="izakaya">
+          <div class="food-img" style="background-image:url('https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=600&auto=format&fit=crop')"></div>
+          <div class="food-body">
+            <div class="food-header">
+              <div>
+                <h3 class="food-name">Torikizoku Izakaya</h3>
+                <p class="food-location">📍 Shibuya, Tokio</p>
+              </div>
+              <div class="food-rating">
+                <span class="stars">★★★★☆</span>
+                <span class="rating-num">4.5</span>
+              </div>
+            </div>
+            <p class="food-desc">Yakitori y sake a 270¥ cada plato. El local lleno de locales que terminan el trabajo. Vibra única.</p>
+            <div class="food-tags">
+              <span class="tag tag-food">Izakaya</span>
+              <span class="tag tag-food">¥</span>
+              <span class="tag tag-food">🍻 Noche</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="food-card" data-cat="street">
+          <div class="food-img" style="background-image:url('https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?w=600&auto=format&fit=crop')"></div>
+          <div class="food-body">
+            <div class="food-header">
+              <div>
+                <h3 class="food-name">Takoyaki en Dotonbori</h3>
+                <p class="food-location">📍 Dotonbori, Osaka</p>
+              </div>
+              <div class="food-rating">
+                <span class="stars">★★★★★</span>
+                <span class="rating-num">4.8</span>
+              </div>
+            </div>
+            <p class="food-desc">Bolas de pulpo recién hechas con la salsa salpicando. Osaka es la capital de la comida callejera.</p>
+            <div class="food-tags">
+              <span class="tag tag-food">Street Food</span>
+              <span class="tag tag-food">¥</span>
+              <span class="tag tag-food">🐙 Pulpo</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="food-card" data-cat="cafe">
+          <div class="food-img" style="background-image:url('https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600&auto=format&fit=crop')"></div>
+          <div class="food-body">
+            <div class="food-header">
+              <div>
+                <h3 class="food-name">% Arabica Kioto</h3>
+                <p class="food-location">📍 Higashiyama, Kioto</p>
+              </div>
+              <div class="food-rating">
+                <span class="stars">★★★★★</span>
+                <span class="rating-num">4.9</span>
+              </div>
+            </div>
+            <p class="food-desc">Flat white perfecto en una ventana con vistas al barrio de geishas. El café más bonito del mundo.</p>
+            <div class="food-tags">
+              <span class="tag tag-food">Café</span>
+              <span class="tag tag-food">¥¥</span>
+              <span class="tag tag-food">☕ Mañana</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="food-card food-card-add">
+          <div class="food-add-inner">
+            <span class="food-add-icon">🍱</span>
+            <h3>Añadir restaurante</h3>
+            <p>Envía una foto de tu plato por WhatsApp y tu asistente lo añadirá aquí.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── GALLERY ────────────────────────────────────────────── -->
+  <section class="section section-paper" id="gallery">
+    <div class="container">
+      <header class="section-header">
+        <span class="section-tag">写真</span>
+        <h2 class="section-title">Galería</h2>
+        <p class="section-sub">Los momentos que no quiero olvidar.</p>
+      </header>
+      <div class="gallery-masonry">
+        <div class="gallery-item gallery-tall" style="background-image:url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&auto=format&fit=crop')">
+          <div class="gallery-caption">Senso-ji al amanecer</div>
+        </div>
+        <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&auto=format&fit=crop')">
+          <div class="gallery-caption">Tokio de noche</div>
+        </div>
+        <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&auto=format&fit=crop')">
+          <div class="gallery-caption">Fushimi Inari</div>
+        </div>
+        <div class="gallery-item gallery-wide" style="background-image:url('https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?w=900&auto=format&fit=crop')">
+          <div class="gallery-caption">Monte Fuji</div>
+        </div>
+        <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=600&auto=format&fit=crop')">
+          <div class="gallery-caption">Shibuya Crossing</div>
+        </div>
+        <div class="gallery-item gallery-tall" style="background-image:url('https://images.unsplash.com/photo-1576675784201-0e142b423952?w=600&auto=format&fit=crop')">
+          <div class="gallery-caption">Ciervos de Nara</div>
+        </div>
+        <div class="gallery-item gallery-add-photo">
+          <div class="gallery-add-inner">
+            <span>📸</span>
+            <p>Tus fotos aparecerán aquí</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ASSISTANT / WHATSAPP ──────────────────────────────── -->
+  <section class="section section-dark" id="assistant">
+    <div class="container">
+      <header class="section-header">
+        <span class="section-tag section-tag-light">アシスタント</span>
+        <h2 class="section-title section-title-light">Tu Asistente de Viaje</h2>
+        <p class="section-sub section-sub-light">Habla con Claude por WhatsApp. Envía fotos, pide recomendaciones y él actualiza tu diario.</p>
+      </header>
+
+      <div class="assistant-layout">
+
+        <!-- Phone mockup -->
+        <div class="phone-mockup">
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="wa-header">
+                <div class="wa-avatar">C</div>
+                <div class="wa-contact">
+                  <p class="wa-name">Claude — Japón</p>
+                  <p class="wa-status">🟢 en línea</p>
+                </div>
+              </div>
+              <div class="wa-messages" id="wa-messages">
+                <div class="wa-msg wa-msg-bot">
+                  <p>¡Konnichiwa! 🇯🇵 Soy tu asistente de viaje. Cuéntame qué estás haciendo o manda una foto de tu aventura.</p>
+                  <span class="wa-time">09:41</span>
+                </div>
+                <div class="wa-msg wa-msg-user">
+                  <p>Estoy en Senso-ji, es alucinante 🙏</p>
+                  <span class="wa-time">09:43</span>
+                </div>
+                <div class="wa-msg wa-msg-bot">
+                  <p>¡Genial! He añadido Senso-ji a tu diario ✨ ¿Probaste ya el taiyaki de la Nakamise-dori? Es imprescindible.</p>
+                  <span class="wa-time">09:43</span>
+                </div>
+                <div class="wa-msg wa-msg-user">
+                  <p>Sí! Mandando foto ahora 📸</p>
+                  <span class="wa-time">09:45</span>
+                </div>
+                <div class="wa-msg wa-msg-bot">
+                  <p>Foto recibida y guardada en tu galería 🌸 La he titulado "Taiyaki en Asakusa". ¿Quieres que busque el mejor ramen cerca?</p>
+                  <span class="wa-time">09:45</span>
+                </div>
+              </div>
+              <div class="wa-input-row">
+                <input type="text" class="wa-input" placeholder="Escribe un mensaje…" id="wa-demo-input" />
+                <button class="wa-send" id="wa-send-btn">➤</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Features list -->
+        <div class="assistant-features">
+          <h3 class="features-title">¿Qué puede hacer Claude por ti?</h3>
+          <ul class="feature-list">
+            <li class="feature-item">
+              <div class="feature-icon">📖</div>
+              <div>
+                <strong>Escribe tu diario</strong>
+                <p>Cuéntale lo que viviste y crea entradas narrativas elegantes automáticamente.</p>
+              </div>
+            </li>
+            <li class="feature-item">
+              <div class="feature-icon">📸</div>
+              <div>
+                <strong>Organiza tus fotos</strong>
+                <p>Envía imágenes por WhatsApp y las clasifica por lugar y fecha en tu galería.</p>
+              </div>
+            </li>
+            <li class="feature-item">
+              <div class="feature-icon">🍜</div>
+              <div>
+                <strong>Guarda restaurantes</strong>
+                <p>Foto del plato + nombre del local = entrada automática con puntuación y descripción.</p>
+              </div>
+            </li>
+            <li class="feature-item">
+              <div class="feature-icon">🗺️</div>
+              <div>
+                <strong>Recomendaciones en tiempo real</strong>
+                <p>¿Dónde comer cerca? ¿Qué visitar mañana? Claude conoce Japón de memoria.</p>
+              </div>
+            </li>
+            <li class="feature-item">
+              <div class="feature-icon">🌸</div>
+              <div>
+                <strong>Traduce al vuelo</strong>
+                <p>Foto de un menú en japonés y Claude te lo traduce al instante.</p>
+              </div>
+            </li>
+          </ul>
+          <div class="wa-connect-card">
+            <div class="wa-connect-icon">📲</div>
+            <div>
+              <p class="wa-connect-label">Conecta en WhatsApp</p>
+              <p class="wa-connect-number">+1 (415) 000-0000</p>
+              <p class="wa-connect-hint">Envía "Hola" para empezar · Powered by Claude API</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="kanji footer-kanji">旅</span>
+        <span>Mi Japón · 2026</span>
+      </div>
+      <p class="footer-haiku">
+        <em>"Estoy en Japón —<br />el cerezo ya floreció<br />sin que yo lo vea."</em>
+      </p>
+      <p class="footer-credit">Hecho con 🌸 y Claude</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

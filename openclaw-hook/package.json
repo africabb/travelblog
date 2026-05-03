@@ -1,0 +1,11 @@
+{
+  "name": "japon-diary-hook",
+  "version": "1.0.0",
+  "description": "Hook de Openclaw que conecta los mensajes de Bert con el diario de Japón",
+  "main": "handler.js",
+  "dependencies": {
+    "openai": "^4.40.0",
+    "form-data": "^4.0.0",
+    "node-fetch": "^3.3.2"
+  }
+}
