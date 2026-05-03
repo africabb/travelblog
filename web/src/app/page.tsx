@@ -144,8 +144,9 @@ export default async function HomePage() {
 
               <p className="font-sans text-base sm:text-lg text-ink-soft
                             leading-relaxed max-w-sm mb-2">
-                Viajamos para comer bien y guardar recuerdos.
-                África lo planea y lo fotografía. Bert lo escribe.
+                El viaje es una excusa, lo importante es la comida.
+                África lo planea y lo fotografía. Miguel disfruta.
+                Bert lo escribe. Síguenos en esta aventura de la vida.
               </p>
 
               <PodcastPlayer />
