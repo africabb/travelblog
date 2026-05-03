@@ -279,31 +279,37 @@ export default async function HomePage() {
             <div className="flex-1 h-px bg-black/8" />
           </div>
 
-          {/* Quote + Bert image — two columns */}
+          {/* About text + Bert image */}
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-8 lg:gap-14
                           items-start mb-12 max-w-5xl">
             <div className="max-w-2xl">
-            <p className="font-display italic text-display-md text-ink leading-[1.1]">
-              "Comemos bien. Fotografiamos mejor.
-              <br className="hidden sm:block" /> Y Bert escribe por nosotros."
-            </p>
-            <p className="font-sans text-xs font-semibold tracking-label uppercase text-ink mt-12 mb-4">
+            <p className="font-sans text-xs font-semibold tracking-label uppercase text-ink mb-4">
               Bert, la asistente de IA de M&amp;A
             </p>
 
           {/* Narrow reading column */}
             <p className="font-sans text-[15px] text-ink-soft leading-[1.85] mb-10">
-              Somos Miguel y África, dos enamorados de la buena mesa y de descubrir
-              los rincones gastronómicos más especiales allá donde vamos. En cada viaje
-              buscamos el restaurante que no sale en las guías, el mercado que huele a
-              especias, el chiringuito que sirve el mejor arroz.
+              Miguel y África viven en Palma de Mallorca, cerca del mar y con
+              una idea bastante clara de la vida: viajar, comer bien, trabajar
+              a su manera y exprimir cada aventura sin dejar de cuidar lo que
+              construyen. Allá donde van buscan una mesa especial, un mercado
+              con vida, una experiencia gastronómica que merezca recordarse y
+              una historia que contar.
               <br /><br />
-              África captura cada momento con su cámara — las fotos que ves aquí son suyas.
-              Miguel, con su pasión por la informática y las automatizaciones, construyó
-              a Bert: nuestra asistente de WhatsApp que escribe y organiza todo el
-              contenido de este blog. Le mandamos fotos, audios y mensajes durante
-              el viaje, y Bert lo convierte en un diario. Juntos nos lo pasamos
-              increíblemente bien, y nos amamos demasiado como para no compartirlo.
+              Para ellos los sueños no son más que planes sin ejecutar. Las
+              locuras son retos, y los retos empiezan trazando un plan y
+              poniéndose en marcha. Les gusta la libertad, el mundo digital,
+              la inteligencia artificial y llevarse el ordenador a cualquier
+              destino para mantener los negocios a raya mientras viven a su
+              ritmo.
+              <br /><br />
+              África hace las fotos. Miguel aporta su conocimiento de
+              informática, automatizaciones e inteligencia artificial. África
+              creó a Bert y le escribe por WhatsApp durante los viajes: fotos,
+              audios, notas sueltas y momentos que no quieren olvidar. Bert,
+              su asistente, ordena todo eso y lo convierte en este blog. Aquí
+              aparecerán viajes, comida, fotografía y mucho amor. Que empiece
+              la aventura.
             </p>
 
             {/* Three traits */}
@@ -345,7 +351,11 @@ export default async function HomePage() {
               </div>
             </div>
             </div>
-            <div className="order-first lg:order-last flex justify-center lg:sticky lg:top-24">
+            <div className="order-first lg:order-last flex flex-col items-center lg:items-end">
+              <p className="font-display italic text-display-md text-ink leading-[1.1] mb-8 max-w-[360px]">
+                "Comemos bien. Fotografiamos mejor.
+                <br className="hidden sm:block" /> Y Bert escribe por nosotros."
+              </p>
               <Image
                 src="https://media.hustlegotreal.com/bert.webp"
                 alt="Bert, la asistente de IA de M&A"
