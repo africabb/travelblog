@@ -144,9 +144,8 @@ export default async function HomePage() {
 
               <p className="font-sans text-base sm:text-lg text-ink-soft
                             leading-relaxed max-w-sm mb-2">
-                Exploramos los mejores restaurantes del mundo.
-                África los fotografia. Miguel automatizó todo.
-                Bert lo escribe.
+                Viajamos para comer bien y guardar recuerdos.
+                África lo planea y lo fotografía. Bert lo escribe.
               </p>
 
               <PodcastPlayer />
