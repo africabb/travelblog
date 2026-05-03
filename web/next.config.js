@@ -9,6 +9,8 @@ const nextConfig = {
       { protocol: 'https', hostname: process.env.MEDIA_HOSTNAME ?? 'media.example.com' },
       // WordPress CDN (Grecia blog)
       { protocol: 'https', hostname: 'deaventurassevive.wordpress.com' },
+      // M&A media CDN (hero photo, podcast)
+      { protocol: 'https', hostname: 'media.hustlegotreal.com' },
       // para desarrollo local
       { protocol: 'http',  hostname: 'localhost' },
     ],
