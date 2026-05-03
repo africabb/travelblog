@@ -20,7 +20,7 @@ const config: Config = {
         sakura:     '#F4A7B9',
         'sakura-soft':'#FDE8EF',
         /* Brand accent */
-        brand:      '#00a8e8',
+        brand:      '#669bbc',
         /* Dark (feed hero, day pages) */
         dark:       '#0C0C0C',
         'dark-card':'#161616',

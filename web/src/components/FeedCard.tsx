@@ -1,20 +1,12 @@
 import Image from 'next/image';
 import Link  from 'next/link';
+import { MapPin } from 'lucide-react';
 import type { Entry, Media, Place } from '@/lib/types';
 
 interface Props {
   entry: Entry;
   date:  string;
 }
-
-const PLACE_EMOJI: Record<string, string> = {
-  restaurant: '🍜',
-  temple:     '⛩️',
-  park:       '🌳',
-  museum:     '🏛️',
-  shop:       '🛍️',
-  other:      '📍',
-};
 
 /* ─── Main export ───────────────────────────────────────── */
 export default function FeedCard({ entry, date }: Props) {
@@ -66,7 +58,8 @@ function PhotoCard({
                            text-white/90 text-xs font-medium
                            px-2.5 py-1 rounded-full"
               >
-                📍 {entry.location}
+                <MapPin size={10} strokeWidth={2} />
+                {entry.location}
               </span>
             </div>
           )}
@@ -152,7 +145,10 @@ function TextCard({ entry, date }: { entry: Entry; date: string }) {
         {/* footer */}
         <div className="flex items-center justify-between mt-5 pt-4 border-t border-black/6">
           {entry.location
-            ? <span className="text-xs text-ink-soft">📍 {entry.location}</span>
+            ? <span className="inline-flex items-center gap-1 text-xs text-ink-soft">
+                <MapPin size={10} strokeWidth={2} />
+                {entry.location}
+              </span>
             : <span />
           }
           <span
@@ -187,10 +183,11 @@ function PlaceChips({ places }: { places?: Place[] }) {
           key={p.id}
           className="inline-flex items-center gap-1
                      text-[11px] font-medium
-                     bg-sakura-soft text-red-deep
+                     bg-black/[0.05] text-ink-soft
                      px-2.5 py-1 rounded-full"
         >
-          {PLACE_EMOJI[p.type] ?? '📍'} {p.name}
+          <MapPin size={9} strokeWidth={2} />
+          {p.name}
         </span>
       ))}
     </div>

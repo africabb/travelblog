@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { Mic, Play, Pause } from 'lucide-react';
 
 export default function PodcastPlayer() {
   const [playing,  setPlaying]  = useState(false);
@@ -67,21 +68,14 @@ export default function PodcastPlayer() {
         <button
           onClick={toggle}
           aria-label={playing ? 'Pausar' : 'Reproducir'}
-          className="w-10 h-10 rounded-full bg-ink flex items-center justify-center
-                     shrink-0 hover:bg-red transition-colors duration-200"
+          className="w-10 h-10 rounded-full flex items-center justify-center
+                     shrink-0 transition-opacity duration-200 hover:opacity-80"
+          style={{ backgroundColor: '#669bbc' }}
         >
-          {playing ? (
-            /* pause icon */
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <rect x="2" y="2" width="3.5" height="10" rx="1" fill="white"/>
-              <rect x="8.5" y="2" width="3.5" height="10" rx="1" fill="white"/>
-            </svg>
-          ) : (
-            /* play icon */
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M3 2.5L11.5 7L3 11.5V2.5Z" fill="white"/>
-            </svg>
-          )}
+          {playing
+            ? <Pause  size={14} fill="white" color="white" strokeWidth={0} />
+            : <Play   size={14} fill="white" color="white" strokeWidth={0} />
+          }
         </button>
 
         {/* Title + meta */}
@@ -89,9 +83,10 @@ export default function PodcastPlayer() {
           <p className="font-sans font-semibold text-ink text-xs leading-tight truncate">
             Vivir viajando mientras Bert escribe el blog
           </p>
-          <p className="font-sans text-[10px] text-ink-soft mt-0.5">
-            🎙️ Nuestro podcast · en español
-          </p>
+          <div className="flex items-center gap-1 mt-0.5">
+            <Mic size={9} className="text-ink-soft shrink-0" strokeWidth={2} />
+            <p className="font-sans text-[10px] text-ink-soft">Nuestro podcast · en español</p>
+          </div>
         </div>
       </div>
 
@@ -101,8 +96,8 @@ export default function PodcastPlayer() {
         onClick={seek}
       >
         <div
-          className="h-full rounded-full bg-ink transition-none"
-          style={{ width: `${progress}%` }}
+          className="h-full rounded-full transition-none"
+          style={{ width: `${progress}%`, backgroundColor: '#669bbc' }}
         />
       </div>
 
