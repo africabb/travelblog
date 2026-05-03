@@ -279,20 +279,19 @@ export default async function HomePage() {
             <div className="flex-1 h-px bg-black/8" />
           </div>
 
-          <p className="font-display italic text-display-md text-ink leading-[1.1] mb-10 max-w-3xl">
-            Comemos bien. Fotografiamos mejor.
-            <br className="hidden sm:block" /> Y Bert escribe por nosotros.
+          <p className="font-display italic text-display-md text-ink leading-[1.1] mb-10 max-w-5xl text-center mx-auto">
+            Comemos bien. Fotografiamos mejor. Y Bert escribe por nosotros.
           </p>
 
           {/* About text + Bert image */}
-          <div className="mb-12 max-w-5xl">
-            <div className="max-w-3xl">
-            <p className="font-sans text-xs font-semibold tracking-label uppercase text-ink mb-4">
+          <div className="mb-12 max-w-5xl mx-auto">
+            <div className="max-w-5xl mx-auto">
+            <p className="font-sans text-xs font-semibold tracking-label uppercase text-ink mb-4 text-center">
               Bert, la asistente de IA de M&amp;A
             </p>
 
           {/* Narrow reading column */}
-            <p className="font-sans text-[15px] text-ink-soft leading-[1.85] mb-10">
+            <p className="font-sans text-[15px] sm:text-base text-ink-soft leading-[1.85] mb-12 text-left">
               Miguel y África viven en Palma de Mallorca, cerca del mar y con
               una idea bastante clara de la vida: viajar, comer bien y
               exprimir cada aventura. Les encanta visitar sitios especiales,
@@ -328,7 +327,7 @@ export default async function HomePage() {
 
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] gap-8 lg:gap-12 items-start max-w-4xl">
+            <div className="grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] gap-8 lg:gap-12 items-start max-w-5xl mx-auto">
               <div className="flex justify-center lg:justify-start">
                 <Image
                   src="https://media.hustlegotreal.com/bert.webp"
