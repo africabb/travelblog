@@ -2,6 +2,8 @@ export interface GreciaChapter {
   num: number;
   title: string;
   date: string | null;
+  restaurants: string[];
+  places: string[];
   text: string;
   images: string[];
 }
@@ -11,6 +13,17 @@ export const GRECIA_CHAPTERS: GreciaChapter[] = [
     num: 1,
     title: 'Dando forma a los óniros',
     date: null,
+    restaurants: [],
+    places: [
+      'Palma de Mallorca',
+      'Mar Jónico',
+      'Meganisi',
+      'Lefkada',
+      'Kefalonia',
+      'Ithaka',
+      'Paxos',
+      'Mr. Bojangles',
+    ],
     text: `Una fría tarde de invierno, dos almas con hambre de vivir y de pasar tiempo una al lado de la otra, empezaron a soñar despiertas. Entre sus sueños siempre estaba presente experimentar la locura de lo desconocido y la paz que te brinda la libertad. Eran dos premisas innegociables en las que se fundamentaba su "nube", término usado para simbolizar su ideal de estilo de vida, el cual encajaba con sus espíritus indomables.
 
 Para ellos los sueños no eran más que planes sin ejecutar, se creían capaces de conseguir todos, ya que solo había que trazar el plan y ponerse en marcha. Las locuras no eran más que retos, y los sueños futuras realidades, que sabían que eventualmente cogerían forma. Sin mucho más pensar, aterrizaron la idea de navegar a vela por algún rincón del Mediterráneo en verano. Finalmente, decidieron embarcarse en la exploración de las islas griegas. Después de investigar, decidieron alquilar un velero por el mar Jónico, ya que tiene unas condiciones de navegación favorables. Es un mar protegido del viento ya que sus diversas islas se encuentran cercanas entre ellas y el clima es ideal durante el verano. Isla en griego se dice "Nisos". Este mar tiene muchas islas que poseen una belleza única, entre las cuales se encuentran Meganisi, Lefkada, Kefalonia, Ithaka, Paxos.
@@ -26,6 +39,18 @@ Si te preguntabas al leer el título del capítulo, ¿Qué serán los óniros? A
     num: 2,
     title: 'La llegada a Grecia',
     date: '7 Julio 2023',
+    restaurants: [
+      'Lampadina Traditional Cuisine',
+      'Corfú Beer',
+    ],
+    places: [
+      'Palma de Mallorca',
+      'Milán',
+      'Corfú',
+      'Centro histórico de Corfú',
+      'Puerto de Corfú',
+      'Airbnb de Corfú',
+    ],
     text: `Hacia Mr. B
 
 7. Julio. 2023
@@ -43,6 +68,19 @@ Salida desde otro bellísimo lugar del Mediterráneo, Palma de Mallorca (España
     num: 3,
     title: 'De camino al lugar donde vive Mr. Bojangles',
     date: '8 Julio 2023',
+    restaurants: [
+      'The Windmill Taverna',
+      'Supermercado bajo el hotel Azzurro',
+    ],
+    places: [
+      'Corfú',
+      'Ferry Corfú-Igoumenitsa',
+      'Igoumenitsa',
+      'Hotel usado para conectarse al examen',
+      'Paleros',
+      'Hotel Azzurro',
+      'Puerto de Paleros',
+    ],
     text: `Tras una larga noche de calor, y una mosquitera bastante inadecuada para las dimensiones del colchón, amaneció a las 7 de la mañana en Corfú. Les esperaba un largo día de camino a Paleros, con parada en Igoumenitsa, donde tenían que conectarse a Internet a las 13:00 (12 hora española) para hacer un examen durante dos horas. Después del examen un transfer les esperaría para coger carretera hacia Paleros. El primer paso era coger el ferrry de Corfú a Igoumenitsa, que salía a las 8 de la mañana. Fue un trayecto que se hizo bastante llevadero ya que las vistas eran muy bonitas (se pueden ver las fotos al final). Cuando llegaron a Igoumenitsa, ya tenían un hotel localizado el cual habían llamado la noche anterior para preguntar si podían usar su wifi durante la mañana. Los griegos no pusieron ningún problema, por lo que se instalaron en el lobby del hotel y el wifi funcionaba perfectamente. ¡Primera prueba superada! El examen fue genial y todo apuntaba a que el viaje iba a comenzar con muy buen pie. A los 10 minutos de terminar el examen, les recogió su taxi. En una hora y media de trayecto hasta Paleros, observaban el paisaje, montañoso y aparentemente sin mucha civilización.
 
 Finalmente llegaron al destino a las 5 de la tarde. Paleros les pareció muy bonito, un pueblo en el que las casitas de piedra y las plantas en las terrazas desprendían un aire muy local y mediterráneo. El taxi les dejó en la misma puerta del hotel, llamado "Azzurro". Era un pequeño edificio de tres plantas. Al llegar, se dispusieron a la planta baja para hacer el check-in, dándose cuenta que estaban entrando en la casa del aparentemente dueño del hotel. Salió un hombre, y sin preguntar ni pedir documentación, nos dirigió a nuestro apartamento que estaba en la segunda planta. Así de rápido y sencillo. Por fin podían dejar las mochilas y deleitarse con una buena ducha. Había un supermercado justo debajo del hotel lo cual fue estupendo ya que tenían que hacer la compra para llevarla al barco. El abecedario griego es un rompecabezas. No entendían ni una letra y realmente no podían leer qué llevaba lo que estaban comprando, no obstante, la compra se realizó con éxito. Tras dejar la compra en el hotel, llegaron a cenar a un restaurante muy pintoresco que tenía muy buenas valoraciones en Trip Advisor. Se llamaba "The Windmill Taverna". ¡MUY RICO! El lugar era idílico. Era un restaurante familiar (como todos los de las islas) que parecía el patio de la casa de la dueña. Fueron los primeros en llegar, a las 7 de la tarde como buenos turistas hambrientos. El patio estaba aún vacío y pudieron percibir que la mujer que salió era la madre de un niño que estaba rondando todavía por el patio de su casa. La dueña fue muy amable y sonriente y nada más llegar les trajo una botella de agua bien fría sin preguntar, una costumbre que tienen los griegos. Les pareció muy auténtico que no había carta, era el menú que la señora había preparado y que dijo que iría sacando poco a poco hasta que le dijeran que estaban llenos. Aún no sabía qué buenos clientes acababan de llegar. La única pregunta que les hizo era si les gustaba el ajo, y cómo no, la respuesta fue afirmativa. Les sacaron de primer plato que constaba de 3 dips, el primero era el típico "Tzatziki", otro de remolacha con nueces y otro puré de patata con ajo. Después salieron unos triangulitos de hojaldre rellenos de queso con miel que estaban deliciosos. Luego trajeron unas gambas con salsa de vino blanco y ajos. De principales una Moussaka y otra carne "stifada" más buena que la del día anterior. Ah, y un vino casero ligerito de cosecha propia. Al pagar, la dueña muy agradecida les dio las gracias por haber probado todo su menú. Después cenar pasearon por el puerto en busca de su embarcación, aún no sabían el nombre y sólo podían adivinar cuál era por las fotos. El paseo por Paleros por la noche fue muy bonito, habían niños jugando al fútbol en la plaza y se respiraba mucha tranquilidad. La presencia de la inmensa montaña detrás del pueblo, creaba un ambiente de grandiosidad y daba mucha seguridad. Tras el paseo nocturno por las pequeñas tavernas del pueblo con parada para comprar crema solar en una mini tienda, regresaron al hotel para descansar. ¡El día siguiente sería el gran día del encuentro con su compañero de viaje!`,
@@ -64,6 +102,20 @@ Finalmente llegaron al destino a las 5 de la tarde. Paleros les pareció muy bon
     num: 4,
     title: 'El encuentro con Mr. Bojangles',
     date: null,
+    restaurants: [
+      'Cafetería de la familia de Andreas en Paleros',
+      'Taverna Spilia',
+    ],
+    places: [
+      'Paleros',
+      'Puerto de Paleros',
+      'Mr. Bojangles',
+      'Vathiavali Beach',
+      'Meganisi',
+      'Spartochori',
+      'Porto Spilia',
+      'Mar Jónico',
+    ],
     text: `Amaneció en Paleros a las 8:30 de la mañana. El sol picaba ya fuerte y se podían escuchar las chicharras por la ventana. El dueño del barco, Andreas, les dijo que estuvieran en el puerto a las 9:30 de la mañana aunque más tarde escribió un mensaje diciendo que llegaran a las 11. Se hicieron las 11 y allá que fueron al puerto con las mochilas y las bolsas de la compra a cuestas. Se encontraron con Andreas y por fin se subieron al barco. ¡Primer encuentro con su querido Mr. Bojangles! Andreas era un chico joven, simpático y les guió por todo el barco enseñándoles donde estaba cada cosa asegurándose de que su barco se quedaba en buenas manos. Estaba preparado para 6 personas porque por alguna extraña razón Andreas se confundió. Mr. B estaba muy limpio y ordenado. A la media hora Andreas fue a coger unos papeles y ellos se fueron a desayunar a una cafetería que tenía muy buena pinta. Les atendió una chica muy agradable que cada vez que traía los platos les miraba y les decía "mi madre no sabe cocinar raciones más pequeñas, greek mom". Por 10 euros cada uno tomaron tostadas con aceite y ajo, tortilla francesa, yogur griego con nueces y fruta, croissant y café. Prácticamente hicieron un brunch. Al volverse a reencontrar con Andreas, le dijeron donde se encontraban desayunando y resultó ser la cafetería de la madre de Andreas. ¡La que nos sirvió era su hermana! Aunque Paleros es pequeñito fue bastante coincidencia. Después regresaron al barco donde Andreas terminó de enseñarles todo y les sacó las cartas náuticas para hacerle un resumen de la ruta que él recomendaba seguir. Les reservó puerto esa misma noche en Spartochori, donde sólo tenían que cenar en la Taverna del puerto para poder pasar ahí la noche. Iban a mantener el contacto con Andreas durante toda la travesía por lo que no había ningún problema en el caso de alguna duda. Se fue contento y muy tranquilo diciéndoles que se notaba que sabían lo que hacían. ¡Ya estaban listos para partir!
 
 Esta era la ruta que iban a hacer la primera semana por las islas del sur: Meganisi, Lefkada, Ithaca, Kefalonia, Kastos y Kalamos.
@@ -92,6 +144,20 @@ Al recoger las velas y aproximarse al puerto llamado Porto Spilia (donde Andreas
     num: 5,
     title: 'Explorando Meganisi y llegada a Sivota (Lefkada)',
     date: '10 Julio 2023',
+    restaurants: [
+      'Taverna de Porto Spilia',
+      '12 Gods',
+      'Comida a bordo en Papageorge\'s Cove',
+    ],
+    places: [
+      'Porto Spilia',
+      'Meganisi',
+      'Cueva del oeste de Meganisi',
+      'Papageorge\'s Cove',
+      'Sivota',
+      'Lefkada',
+      'Puerto de Sivota',
+    ],
     text: `Capítulo 5 – Explorando Meganisi y llegada a Sivota (Lefkada)
 
 10. Julio. 2023.
@@ -129,6 +195,19 @@ Se ducharon en el restaurante donde había reservado Andreas para cenar. La Tave
     num: 8,
     title: 'Lo que el viento se llevó',
     date: '13 Julio 2023',
+    restaurants: [
+      'Taverna del puerto de Kastos',
+      'Cena a bordo: café, avena y melocotón',
+    ],
+    places: [
+      'Ithaka',
+      'Atokos',
+      'Playa de Atokos',
+      'Kastos',
+      'Puerto de Kastos',
+      'Bahía de Kastos',
+      'Mini Mr. Bojangles',
+    ],
     text: `¡Buenos días!
 
 Tras un café y una avena con melocotón, cogieron rumbo al Este a Kastos. La parada para comer era en Atokos.
@@ -166,6 +245,19 @@ La vuelta al barco fue con los mismos salvadores suizos. Todo fue muy bien. Al l
     num: 9,
     title: 'Kalimera o Kalamos?',
     date: '14 Julio 2023',
+    restaurants: [
+      'Cafetería del puerto de Kastos',
+      'George\'s Taverna',
+      'Cafetería del puerto de Kalamos',
+    ],
+    places: [
+      'Kastos',
+      'Cala de entrada a Kastos',
+      'Asprogiali Beach',
+      'Kalamos',
+      'Puerto de Kalamos',
+      'Lefkada',
+    ],
     text: `¡Kalimera!
 
 «Kalimera» significa «Hola» en griego. Hoy era el día de partir hacia Kalamos. Se confundían con los nombres de las islas pero esque ésta isla en croqueta era muy liosa de decir. «Hoy iremos a….Kali…m….cosmos? Ah no Cosmos era cómo llamaban a Kastos. En fin, después de conseguir sacar la palabra Kalamos de sus memorias (el calor no les dejaba pensar) ¡Comenzaron el día! El plan era salir de Kastos y llegar a Kalamos. Fácil, como la vida misma.

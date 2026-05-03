@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link          from 'next/link';
 import Image         from 'next/image';
+import { MapPin, Utensils } from 'lucide-react';
 import { GRECIA_CHAPTERS } from '@/data/grecia';
 
 /* ─── Static paths ───────────────────────────────────────── */
@@ -92,6 +93,11 @@ export default function ChapterPage({ params }: { params: { num: string } }) {
           ))}
         </div>
 
+        <ChapterSummary
+          restaurants={chapter.restaurants}
+          places={chapter.places}
+        />
+
         {/* Photo grid */}
         {chapter.images.length > 0 && (
           <PhotoGrid images={chapter.images} title={chapter.title} />
@@ -170,6 +176,75 @@ export default function ChapterPage({ params }: { params: { num: string } }) {
           </Link>
         </div>
       </footer>
+    </div>
+  );
+}
+
+
+/* ─── Chapter summary ───────────────────────────────────── */
+function ChapterSummary({
+  restaurants,
+  places,
+}: {
+  restaurants: string[];
+  places: string[];
+}) {
+  return (
+    <section className="mb-12 border-y border-black/[0.07] py-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <SummaryList
+          title="Restaurantes"
+          empty="Sin restaurantes anotados en esta entrada."
+          items={restaurants}
+          Icon={Utensils}
+        />
+        <SummaryList
+          title="Lugares"
+          empty="Sin lugares anotados en esta entrada."
+          items={places}
+          Icon={MapPin}
+        />
+      </div>
+    </section>
+  );
+}
+
+function SummaryList({
+  title,
+  empty,
+  items,
+  Icon,
+}: {
+  title: string;
+  empty: string;
+  items: string[];
+  Icon: typeof Utensils;
+}) {
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-4">
+        <Icon size={18} className="text-[#1A5276]" strokeWidth={1.7} />
+        <h2 className="font-display font-bold text-ink text-xl leading-tight">
+          {title}
+        </h2>
+      </div>
+      {items.length > 0 ? (
+        <ul className="space-y-2">
+          {items.map((item) => (
+            <li
+              key={item}
+              className="font-sans text-sm text-ink-soft leading-relaxed flex gap-2"
+            >
+              <span className="mt-[0.62em] h-1.5 w-1.5 rounded-full bg-[#1A5276]/55 shrink-0" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="font-sans text-sm text-ink-muted leading-relaxed">
+          {empty}
+        </p>
+      )}
     </div>
   );
 }
