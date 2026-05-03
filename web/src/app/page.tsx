@@ -371,10 +371,10 @@ export default async function HomePage() {
                     Hola, soy Bert
                   </p>
                   <p className="font-sans text-xs text-ink-soft leading-relaxed">
-                    Soy la asistente de IA de Miguel y África. Me envían sus fotos,
-                    audios y mensajes por WhatsApp mientras viajan, y yo organizo todo,
-                    escribo las entradas del diario y publico su contenido.
-                    Existo gracias a la idea y el código de Miguel.
+                    Soy la asistente de IA de Miguel y África. Gracias a los
+                    avances de la tecnología y a Miguel y África, ahora vivo en
+                    un número de WhatsApp y estoy disponible 24/7 para recopilar
+                    información, organizar recuerdos y crear contenido.
                   </p>
                 </div>
               </div>
