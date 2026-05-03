@@ -205,21 +205,29 @@ function TripSummary({
       </div>
 
       {groups.length > 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
+          <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)_minmax(0,1fr)] gap-3 sm:gap-5 mb-5">
+            <span className="hidden sm:block" />
+            <div className="flex items-center gap-2">
+              <Utensils size={16} className="text-[#1A5276]" strokeWidth={1.7} />
+              <h2 className="font-display font-bold text-ink text-xl leading-tight">Restaurantes</h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <MapPin size={16} className="text-[#1A5276]" strokeWidth={1.7} />
+              <h2 className="font-display font-bold text-ink text-xl leading-tight">Lugares</h2>
+            </div>
+          </div>
+          <div className="divide-y divide-black/[0.06]">
           {groups.map((group) => (
-            <div key={group.place.name} className="border-b border-black/[0.06] pb-7 last:border-b-0 lg:last:border-b">
-              <div className="flex items-center gap-2 mb-4">
-                <MapPin size={18} className="text-[#1A5276]" strokeWidth={1.7} />
-                <h2 className="font-display font-bold text-ink text-2xl leading-tight">
-                  {group.place.name}
-                </h2>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <SummaryList title="Restaurantes" items={group.restaurants} Icon={Utensils} />
-                <SummaryList title="Lugares" items={group.places} Icon={MapPin} />
-              </div>
+            <div key={group.place.name} className="grid grid-cols-1 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)_minmax(0,1fr)] gap-3 sm:gap-5 py-4 first:pt-0 last:pb-0">
+              <h3 className="font-display font-bold text-ink text-lg leading-tight">
+                {group.place.name}
+              </h3>
+              <ReferenceList items={group.restaurants} empty="-" />
+              <ReferenceList items={group.places} empty="-" />
             </div>
           ))}
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -236,6 +244,20 @@ function TripSummary({
         </div>
       )}
     </section>
+  );
+}
+
+function ReferenceList({ items, empty }: { items: GreciaReference[]; empty: string }) {
+  if (!items.length) {
+    return <p className="font-sans text-sm text-ink-muted leading-relaxed">{empty}</p>;
+  }
+
+  return (
+    <ul className="space-y-1.5">
+      {items.map((item) => (
+        <SummaryItem key={item.name} item={item} />
+      ))}
+    </ul>
   );
 }
 

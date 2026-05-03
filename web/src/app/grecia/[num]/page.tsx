@@ -223,36 +223,48 @@ function ChapterSummary({
 
 function GroupedSummary({ groups }: { groups: GreciaSummaryGroup[] }) {
   return (
-    <div className="space-y-8">
+    <div>
+      <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)_minmax(0,1fr)] gap-3 sm:gap-5 mb-4">
+        <span className="hidden sm:block" />
+        <div className="flex items-center gap-2">
+          <Utensils size={16} className="text-[#1A5276]" strokeWidth={1.7} />
+          <h2 className="font-display font-bold text-ink text-lg leading-tight">Restaurantes</h2>
+        </div>
+        <div className="flex items-center gap-2">
+          <MapPin size={16} className="text-[#1A5276]" strokeWidth={1.7} />
+          <h2 className="font-display font-bold text-ink text-lg leading-tight">Lugares</h2>
+        </div>
+      </div>
+      <div className="divide-y divide-black/[0.06]">
       {groups.map((group) => {
         const place = normalizeReference(group.place);
 
         return (
-          <div key={place.name}>
-            <div className="flex items-center gap-2 mb-4">
-              <MapPin size={18} className="text-[#1A5276]" strokeWidth={1.7} />
-              <h2 className="font-display font-bold text-ink text-xl leading-tight">
+          <div key={place.name} className="grid grid-cols-1 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)_minmax(0,1fr)] gap-3 sm:gap-5 py-4 first:pt-0 last:pb-0">
+            <h3 className="font-display font-bold text-ink text-base leading-tight">
                 {place.name}
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <SummaryList
-                title="Restaurantes"
-                empty="Sin restaurantes anotados aquí."
-                items={group.restaurants ?? []}
-                Icon={Utensils}
-              />
-              <SummaryList
-                title="Lugares"
-                empty="Sin lugares anotados aquí."
-                items={group.places ?? []}
-                Icon={MapPin}
-              />
-            </div>
+            </h3>
+            <ReferenceList items={group.restaurants ?? []} empty="-" />
+            <ReferenceList items={group.places ?? []} empty="-" />
           </div>
         );
       })}
+      </div>
     </div>
+  );
+}
+
+function ReferenceList({ items, empty }: { items: GreciaReferenceInput[]; empty: string }) {
+  if (!items.length) {
+    return <p className="font-sans text-sm text-ink-muted leading-relaxed">{empty}</p>;
+  }
+
+  return (
+    <ul className="space-y-1.5">
+      {items.map((item) => (
+        <SummaryItem key={normalizeReference(item).name} item={item} />
+      ))}
+    </ul>
   );
 }
 
@@ -277,48 +289,9 @@ function SummaryList({
       </div>
       {items.length > 0 ? (
         <ul className="space-y-2">
-          {items.map((item) => {
-            const reference = normalizeReference(item);
-            const mapsUrl = googleMapsUrl(reference);
-
-            return (
-            <li
-              key={reference.name}
-              className="font-sans text-sm text-ink-soft leading-relaxed flex gap-2"
-            >
-              <span className="mt-[0.62em] h-1.5 w-1.5 rounded-full bg-[#1A5276]/55 shrink-0" />
-              <span>
-                {reference.name}
-                {(mapsUrl || reference.officialUrl) && (
-                  <span className="ml-2 whitespace-nowrap">
-                    {mapsUrl && (
-                      <a
-                        href={mapsUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-[#1A5276] hover:underline"
-                      >
-                        Maps
-                      </a>
-                    )}
-                    {mapsUrl && reference.officialUrl && (
-                      <span className="text-ink-muted mx-1">·</span>
-                    )}
-                    {reference.officialUrl && (
-                      <a
-                        href={reference.officialUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-[#1A5276] hover:underline"
-                      >
-                        Web oficial
-                      </a>
-                    )}
-                  </span>
-                )}
-              </span>
-            </li>
-          )})}
+          {items.map((item) => (
+            <SummaryItem key={normalizeReference(item).name} item={item} />
+          ))}
         </ul>
       ) : (
         <p className="font-sans text-sm text-ink-muted leading-relaxed">
@@ -326,6 +299,37 @@ function SummaryList({
         </p>
       )}
     </div>
+  );
+}
+
+function SummaryItem({ item }: { item: GreciaReferenceInput }) {
+  const reference = normalizeReference(item);
+  const mapsUrl = googleMapsUrl(reference);
+
+  return (
+    <li className="font-sans text-sm text-ink-soft leading-relaxed flex gap-2">
+      <span className="mt-[0.62em] h-1.5 w-1.5 rounded-full bg-[#1A5276]/55 shrink-0" />
+      <span>
+        {reference.name}
+        {(mapsUrl || reference.officialUrl) && (
+          <span className="ml-2 whitespace-nowrap">
+            {mapsUrl && (
+              <a href={mapsUrl} target="_blank" rel="noreferrer" className="text-[#1A5276] hover:underline">
+                Maps
+              </a>
+            )}
+            {mapsUrl && reference.officialUrl && (
+              <span className="text-ink-muted mx-1">·</span>
+            )}
+            {reference.officialUrl && (
+              <a href={reference.officialUrl} target="_blank" rel="noreferrer" className="text-[#1A5276] hover:underline">
+                Web oficial
+              </a>
+            )}
+          </span>
+        )}
+      </span>
+    </li>
   );
 }
 
