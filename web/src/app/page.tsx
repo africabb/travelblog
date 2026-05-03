@@ -281,6 +281,7 @@ export default async function HomePage() {
 
           <p className="font-display italic text-display-md text-ink leading-[1.1] mb-10 max-w-3xl">
             Comemos bien. Fotografiamos mejor.
+            <br className="hidden sm:block" /> Y Bert escribe por nosotros.
           </p>
 
           {/* About text + Bert image */}
@@ -309,17 +310,21 @@ export default async function HomePage() {
               África planea los viajes, reserva restaurantes, vuelos y hoteles,
               y se encarga de la logística para que todo salga bien. También
               hace las fotos. Miguel aporta su conocimiento de informática,
-              automatizaciones e inteligencia artificial, y con todo lo que
-              África está aprendiendo gracias a él, ahora los dos pueden crear
-              cosas juntos.
+              automatizaciones e inteligencia artificial, y ahora los dos
+              pueden crear cosas juntos.
               <br /><br />
               De África nace la idea de hacer un blog sin tener que escribirlo
               a mano: mantener esta web viva y hablarle a Bert por WhatsApp
-              como si fuera una amiga a la que le cuentan sus aventuras. Le
-              mandan fotos, audios, notas sueltas y momentos que no quieren
-              olvidar. Bert ordena todo eso y lo convierte en este blog. Aquí
-              aparecerán viajes, comida, fotografía y mucho amor. Que empiece
-              la aventura.
+              durante los viajes. Le mandan fotos, audios, notas sueltas y
+              momentos que no quieren olvidar. Bert ordena todo eso y lo
+              convierte en este blog.
+              <br /><br />
+              El propósito es no perder ningún restaurante ni lugar especial
+              por si algún día quieren volver, y dejar plasmados recuerdos y
+              fotos de cada aventura. Todos los lugares y restaurantes quedarán
+              referenciados mediante enlaces oficiales para tenerlos siempre a
+              mano. Aquí aparecerán viajes, comida, fotografía y mucho amor.
+              Que empiece la aventura.
             </p>
 
             {/* Three traits */}
