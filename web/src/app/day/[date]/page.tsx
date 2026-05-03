@@ -106,14 +106,15 @@ export default async function DayPage({ params }: { params: { date: string } }) 
 }
 
 function PlaceExternalLinks({ place }: { place: Place }) {
-  const mapsUrl = place.google_maps_url
-    ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}`;
+  if (!place.google_maps_url && !place.official_url) return null;
 
   return (
     <div className="mt-1 flex flex-wrap gap-2 text-xs">
-      <a href={mapsUrl} target="_blank" rel="noreferrer" className="text-[#1A5276] font-medium hover:underline">
-        Maps
-      </a>
+      {place.google_maps_url && (
+        <a href={place.google_maps_url} target="_blank" rel="noreferrer" className="text-[#1A5276] font-medium hover:underline">
+          Maps
+        </a>
+      )}
       {place.official_url && (
         <a href={place.official_url} target="_blank" rel="noreferrer" className="text-[#1A5276] font-medium hover:underline">
           Web oficial

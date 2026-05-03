@@ -95,15 +95,14 @@ export default function EntryCard({ entry, showDate = false, linkTo }: Props) {
 }
 
 function PlaceLinks({ place }: { place: Place }) {
-  const mapsUrl = place.google_maps_url
-    ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}`;
-
   return (
     <span className="inline-flex items-center gap-1.5 text-[10px] bg-sakura-soft text-red-deep px-2 py-0.5 rounded-full">
       <span>{placeLabel(place)}: {place.name}</span>
-      <a href={mapsUrl} target="_blank" rel="noreferrer" className="font-semibold underline-offset-2 hover:underline">
-        Maps
-      </a>
+      {place.google_maps_url && (
+        <a href={place.google_maps_url} target="_blank" rel="noreferrer" className="font-semibold underline-offset-2 hover:underline">
+          Maps
+        </a>
+      )}
       {place.official_url && (
         <a href={place.official_url} target="_blank" rel="noreferrer" className="font-semibold underline-offset-2 hover:underline">
           Web

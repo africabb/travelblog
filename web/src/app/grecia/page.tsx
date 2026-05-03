@@ -6,12 +6,14 @@ import {
   type GreciaChapter,
   type GreciaReference,
   type GreciaReferenceInput,
+  type GreciaSummaryGroup,
 } from '@/data/grecia';
 
 /* ─── Page ──────────────────────────────────────────────── */
 export default function GreciaPage() {
   const restaurants = uniqueItems(GRECIA_CHAPTERS.flatMap((chapter) => chapter.restaurants));
   const places      = uniqueItems(GRECIA_CHAPTERS.flatMap((chapter) => chapter.places));
+  const groups      = aggregateGroups(GRECIA_CHAPTERS.flatMap((chapter) => chapter.summaryGroups ?? []));
 
   return (
     <div className="min-h-screen bg-cream">
@@ -82,7 +84,7 @@ export default function GreciaPage() {
           CHAPTER CARDS — vertical timeline
       ══════════════════════════════════════════ */}
       <main className="max-w-5xl mx-auto px-4 pt-14 pb-28">
-        <TripSummary restaurants={restaurants} places={places} />
+        <TripSummary restaurants={restaurants} places={places} groups={groups} />
 
         <div className="max-w-2xl mx-auto">
 
@@ -155,14 +157,43 @@ function uniqueItems(items: GreciaReferenceInput[]) {
   return Array.from(byName.values());
 }
 
+function aggregateGroups(groups: GreciaSummaryGroup[]) {
+  const byPlace = new Map<string, {
+    place: GreciaReference;
+    restaurants: GreciaReferenceInput[];
+    places: GreciaReferenceInput[];
+  }>();
+
+  groups.forEach((group) => {
+    const place = normalizeReference(group.place);
+    const current = byPlace.get(place.name) ?? {
+      place,
+      restaurants: [],
+      places: [],
+    };
+
+    current.restaurants.push(...(group.restaurants ?? []));
+    current.places.push(...(group.places ?? []));
+    byPlace.set(place.name, current);
+  });
+
+  return Array.from(byPlace.values()).map((group) => ({
+    place: group.place,
+    restaurants: uniqueItems(group.restaurants),
+    places: uniqueItems(group.places),
+  }));
+}
+
 
 /* ─── Trip summary ───────────────────────────────────────── */
 function TripSummary({
   restaurants,
   places,
+  groups,
 }: {
   restaurants: GreciaReference[];
   places: GreciaReference[];
+  groups: ReturnType<typeof aggregateGroups>;
 }) {
   return (
     <section className="mb-16 border-y border-black/[0.07] py-10">
@@ -173,18 +204,37 @@ function TripSummary({
         <div className="flex-1 h-px bg-black/8" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <SummaryList
-          title="Restaurantes"
-          items={restaurants}
-          Icon={Utensils}
-        />
-        <SummaryList
-          title="Lugares"
-          items={places}
-          Icon={MapPin}
-        />
-      </div>
+      {groups.length > 0 ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {groups.map((group) => (
+            <div key={group.place.name} className="border-b border-black/[0.06] pb-7 last:border-b-0 lg:last:border-b">
+              <div className="flex items-center gap-2 mb-4">
+                <MapPin size={18} className="text-[#1A5276]" strokeWidth={1.7} />
+                <h2 className="font-display font-bold text-ink text-2xl leading-tight">
+                  {group.place.name}
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <SummaryList title="Restaurantes" items={group.restaurants} Icon={Utensils} />
+                <SummaryList title="Lugares" items={group.places} Icon={MapPin} />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <SummaryList
+            title="Restaurantes"
+            items={restaurants}
+            Icon={Utensils}
+          />
+          <SummaryList
+            title="Lugares"
+            items={places}
+            Icon={MapPin}
+          />
+        </div>
+      )}
     </section>
   );
 }
@@ -208,41 +258,40 @@ function SummaryList({
       </div>
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-2">
         {items.map((item) => (
-          <li
-            key={item.name}
-            className="font-sans text-sm text-ink-soft leading-relaxed flex gap-2"
-          >
-            <span className="mt-[0.62em] h-1.5 w-1.5 rounded-full bg-[#1A5276]/55 shrink-0" />
-            <span>
-              {item.name}
-              <span className="ml-2 whitespace-nowrap">
-                <a
-                  href={googleMapsUrl(item)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[#1A5276] hover:underline"
-                >
-                  Maps
-                </a>
-                {item.officialUrl && (
-                  <>
-                    <span className="text-ink-muted mx-1">·</span>
-                    <a
-                      href={item.officialUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[#1A5276] hover:underline"
-                    >
-                      Web oficial
-                    </a>
-                  </>
-                )}
-              </span>
-            </span>
-          </li>
+          <SummaryItem key={item.name} item={item} />
         ))}
       </ul>
     </div>
+  );
+}
+
+function SummaryItem({ item }: { item: GreciaReference }) {
+  const mapsUrl = googleMapsUrl(item);
+
+  return (
+    <li className="font-sans text-sm text-ink-soft leading-relaxed flex gap-2">
+      <span className="mt-[0.62em] h-1.5 w-1.5 rounded-full bg-[#1A5276]/55 shrink-0" />
+      <span>
+        {item.name}
+        {(mapsUrl || item.officialUrl) && (
+          <span className="ml-2 whitespace-nowrap">
+            {mapsUrl && (
+              <a href={mapsUrl} target="_blank" rel="noreferrer" className="text-[#1A5276] hover:underline">
+                Maps
+              </a>
+            )}
+            {mapsUrl && item.officialUrl && (
+              <span className="text-ink-muted mx-1">·</span>
+            )}
+            {item.officialUrl && (
+              <a href={item.officialUrl} target="_blank" rel="noreferrer" className="text-[#1A5276] hover:underline">
+                Web oficial
+              </a>
+            )}
+          </span>
+        )}
+      </span>
+    </li>
   );
 }
 
@@ -251,8 +300,7 @@ function normalizeReference(item: GreciaReferenceInput): GreciaReference {
 }
 
 function googleMapsUrl(item: GreciaReference) {
-  const query = encodeURIComponent(item.mapsQuery ?? item.name);
-  return `https://www.google.com/maps/search/?api=1&query=${query}`;
+  return item.mapsUrl ?? null;
 }
 
 

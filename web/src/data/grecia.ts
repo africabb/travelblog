@@ -1,10 +1,17 @@
 export interface GreciaReference {
   name: string;
   mapsQuery?: string;
+  mapsUrl?: string;
   officialUrl?: string;
 }
 
 export type GreciaReferenceInput = GreciaReference | string;
+
+export interface GreciaSummaryGroup {
+  place: GreciaReferenceInput;
+  restaurants?: GreciaReferenceInput[];
+  places?: GreciaReferenceInput[];
+}
 
 export interface GreciaChapter {
   num: number;
@@ -12,6 +19,7 @@ export interface GreciaChapter {
   date: string | null;
   restaurants: GreciaReferenceInput[];
   places: GreciaReferenceInput[];
+  summaryGroups?: GreciaSummaryGroup[];
   text: string;
   images: string[];
 }
@@ -37,6 +45,24 @@ export const GRECIA_CHAPTERS: GreciaChapter[] = [
       ref('Ithaka'),
       ref('Paxos'),
       ref('Mr. Bojangles'),
+    ],
+    summaryGroups: [
+      {
+        place: ref('Ruta por el mar Jónico'),
+        places: [
+          'Mar Jónico',
+          ref('Meganisi'),
+          ref('Lefkada'),
+          ref('Kefalonia'),
+          ref('Ithaka'),
+          ref('Paxos'),
+          ref('Mr. Bojangles'),
+        ],
+      },
+      {
+        place: ref('Palma de Mallorca'),
+        places: [ref('Palma de Mallorca')],
+      },
     ],
     text: `Una fría tarde de invierno, dos almas con hambre de vivir y de pasar tiempo una al lado de la otra, empezaron a soñar despiertas. Entre sus sueños siempre estaba presente experimentar la locura de lo desconocido y la paz que te brinda la libertad. Eran dos premisas innegociables en las que se fundamentaba su "nube", término usado para simbolizar su ideal de estilo de vida, el cual encajaba con sus espíritus indomables.
 
@@ -64,6 +90,20 @@ Si te preguntabas al leer el título del capítulo, ¿Qué serán los óniros? A
       'Centro histórico de Corfú',
       'Puerto de Corfú',
       'Airbnb de Corfú',
+    ],
+    summaryGroups: [
+      {
+        place: ref('Trayecto Palma-Milán-Corfú'),
+        places: [ref('Palma de Mallorca'), 'Milán'],
+      },
+      {
+        place: 'Corfú',
+        restaurants: [
+          ref('Lampadina Traditional Cuisine', 'Lampadina Traditional Cuisine Corfu', 'https://www.instagram.com/lampadinacorfu/'),
+          ref('Corfú Beer', 'Corfu Beer Greece', 'https://corfubeer.com/en/'),
+        ],
+        places: ['Corfú', 'Centro histórico de Corfú', 'Puerto de Corfú', 'Airbnb de Corfú'],
+      },
     ],
     text: `Hacia Mr. B
 
@@ -94,6 +134,20 @@ Salida desde otro bellísimo lugar del Mediterráneo, Palma de Mallorca (España
       ref('Paleros'),
       ref('Hotel Azzurro'),
       ref('Puerto de Paleros'),
+    ],
+    summaryGroups: [
+      {
+        place: ref('Trayecto Corfú-Igoumenitsa'),
+        places: ['Corfú', 'Ferry Corfú-Igoumenitsa', ref('Igoumenitsa'), ref('Hotel usado para conectarse al examen')],
+      },
+      {
+        place: ref('Paleros'),
+        restaurants: [
+          ref('The Windmill Taverna', 'The Windmill Taverna Paleros Greece'),
+          ref('Supermercado bajo el hotel Azzurro'),
+        ],
+        places: [ref('Paleros'), ref('Hotel Azzurro'), ref('Puerto de Paleros')],
+      },
     ],
     text: `Tras una larga noche de calor, y una mosquitera bastante inadecuada para las dimensiones del colchón, amaneció a las 7 de la mañana en Corfú. Les esperaba un largo día de camino a Paleros, con parada en Igoumenitsa, donde tenían que conectarse a Internet a las 13:00 (12 hora española) para hacer un examen durante dos horas. Después del examen un transfer les esperaría para coger carretera hacia Paleros. El primer paso era coger el ferrry de Corfú a Igoumenitsa, que salía a las 8 de la mañana. Fue un trayecto que se hizo bastante llevadero ya que las vistas eran muy bonitas (se pueden ver las fotos al final). Cuando llegaron a Igoumenitsa, ya tenían un hotel localizado el cual habían llamado la noche anterior para preguntar si podían usar su wifi durante la mañana. Los griegos no pusieron ningún problema, por lo que se instalaron en el lobby del hotel y el wifi funcionaba perfectamente. ¡Primera prueba superada! El examen fue genial y todo apuntaba a que el viaje iba a comenzar con muy buen pie. A los 10 minutos de terminar el examen, les recogió su taxi. En una hora y media de trayecto hasta Paleros, observaban el paisaje, montañoso y aparentemente sin mucha civilización.
 
@@ -129,6 +183,18 @@ Finalmente llegaron al destino a las 5 de la tarde. Paleros les pareció muy bon
       ref('Spartochori'),
       ref('Porto Spilia'),
       'Mar Jónico',
+    ],
+    summaryGroups: [
+      {
+        place: ref('Paleros'),
+        restaurants: ['Cafetería de la familia de Andreas en Paleros'],
+        places: [ref('Paleros'), ref('Puerto de Paleros'), ref('Mr. Bojangles'), ref('Vathiavali Beach')],
+      },
+      {
+        place: ref('Meganisi'),
+        restaurants: [ref('Taverna Spilia', 'Taverna Spilia Meganisi')],
+        places: [ref('Meganisi'), ref('Spartochori'), ref('Porto Spilia'), 'Mar Jónico'],
+      },
     ],
     text: `Amaneció en Paleros a las 8:30 de la mañana. El sol picaba ya fuerte y se podían escuchar las chicharras por la ventana. El dueño del barco, Andreas, les dijo que estuvieran en el puerto a las 9:30 de la mañana aunque más tarde escribió un mensaje diciendo que llegaran a las 11. Se hicieron las 11 y allá que fueron al puerto con las mochilas y las bolsas de la compra a cuestas. Se encontraron con Andreas y por fin se subieron al barco. ¡Primer encuentro con su querido Mr. Bojangles! Andreas era un chico joven, simpático y les guió por todo el barco enseñándoles donde estaba cada cosa asegurándose de que su barco se quedaba en buenas manos. Estaba preparado para 6 personas porque por alguna extraña razón Andreas se confundió. Mr. B estaba muy limpio y ordenado. A la media hora Andreas fue a coger unos papeles y ellos se fueron a desayunar a una cafetería que tenía muy buena pinta. Les atendió una chica muy agradable que cada vez que traía los platos les miraba y les decía "mi madre no sabe cocinar raciones más pequeñas, greek mom". Por 10 euros cada uno tomaron tostadas con aceite y ajo, tortilla francesa, yogur griego con nueces y fruta, croissant y café. Prácticamente hicieron un brunch. Al volverse a reencontrar con Andreas, le dijeron donde se encontraban desayunando y resultó ser la cafetería de la madre de Andreas. ¡La que nos sirvió era su hermana! Aunque Paleros es pequeñito fue bastante coincidencia. Después regresaron al barco donde Andreas terminó de enseñarles todo y les sacó las cartas náuticas para hacerle un resumen de la ruta que él recomendaba seguir. Les reservó puerto esa misma noche en Spartochori, donde sólo tenían que cenar en la Taverna del puerto para poder pasar ahí la noche. Iban a mantener el contacto con Andreas durante toda la travesía por lo que no había ningún problema en el caso de alguna duda. Se fue contento y muy tranquilo diciéndoles que se notaba que sabían lo que hacían. ¡Ya estaban listos para partir!
 
@@ -171,6 +237,21 @@ Al recoger las velas y aproximarse al puerto llamado Porto Spilia (donde Andreas
       ref('Sivota'),
       ref('Lefkada'),
       ref('Puerto de Sivota'),
+    ],
+    summaryGroups: [
+      {
+        place: ref('Meganisi'),
+        restaurants: [
+          ref('Taverna de Porto Spilia', 'Porto Spilia Meganisi'),
+          ref('Comida a bordo en Papageorge\'s Cove'),
+        ],
+        places: [ref('Porto Spilia'), ref('Meganisi'), ref('Cueva del oeste de Meganisi'), ref('Papageorge\'s Cove')],
+      },
+      {
+        place: ref('Sivota, Lefkada'),
+        restaurants: [ref('12 Gods', '12 Gods Sivota Lefkada')],
+        places: [ref('Sivota'), ref('Lefkada'), ref('Puerto de Sivota')],
+      },
     ],
     text: `Capítulo 5 – Explorando Meganisi y llegada a Sivota (Lefkada)
 
@@ -222,6 +303,18 @@ Se ducharon en el restaurante donde había reservado Andreas para cenar. La Tave
       'Bahía de Kastos',
       ref('Mini Mr. Bojangles'),
     ],
+    summaryGroups: [
+      {
+        place: ref('Ithaka y Atokos'),
+        restaurants: ['Cena a bordo: café, avena y melocotón'],
+        places: [ref('Ithaka'), ref('Atokos'), ref('Playa de Atokos')],
+      },
+      {
+        place: ref('Kastos'),
+        restaurants: [ref('Taverna del puerto de Kastos', 'Kastos port taverna Greece')],
+        places: [ref('Kastos'), ref('Puerto de Kastos'), 'Bahía de Kastos', ref('Mini Mr. Bojangles')],
+      },
+    ],
     text: `¡Buenos días!
 
 Tras un café y una avena con melocotón, cogieron rumbo al Este a Kastos. La parada para comer era en Atokos.
@@ -271,6 +364,21 @@ La vuelta al barco fue con los mismos salvadores suizos. Todo fue muy bien. Al l
       ref('Kalamos'),
       ref('Puerto de Kalamos'),
       ref('Lefkada'),
+    ],
+    summaryGroups: [
+      {
+        place: ref('Kastos'),
+        restaurants: ['Cafetería del puerto de Kastos'],
+        places: [ref('Kastos'), ref('Cala de entrada a Kastos')],
+      },
+      {
+        place: ref('Kalamos'),
+        restaurants: [
+          ref('George\'s Taverna', 'George\'s Restaurant Kalamos Greece'),
+          'Cafetería del puerto de Kalamos',
+        ],
+        places: [ref('Asprogiali Beach'), ref('Kalamos'), ref('Puerto de Kalamos'), ref('Lefkada')],
+      },
     ],
     text: `¡Kalimera!
 

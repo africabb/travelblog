@@ -9,8 +9,10 @@ export const definition = {
       Úsala cuando el usuario mencione un sitio concreto: un restaurante donde comió,
       un templo que visitó, una tienda, un parque…
       Siempre que registres un sitio o restaurante, recopila y guarda un enlace de Google Maps
-      en google_maps_url. Si es un restaurante y encuentras una web oficial fiable, guardala
-      en official_url. Opcionalmente puedes vincularlo a una entrada del diario con entry_id.
+      en google_maps_url solo si estas 100% segura de que corresponde al sitio exacto.
+      Si no puedes verificarlo, deja google_maps_url en blanco. Si es un restaurante y encuentras
+      una web oficial fiable, guardala en official_url; si no, dejala en blanco. Opcionalmente
+      puedes vincularlo a una entrada del diario con entry_id.
     `.trim(),
     parameters: {
       type: 'object',

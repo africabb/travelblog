@@ -2,7 +2,12 @@ import { notFound } from 'next/navigation';
 import Link          from 'next/link';
 import Image         from 'next/image';
 import { MapPin, Utensils } from 'lucide-react';
-import { GRECIA_CHAPTERS, type GreciaReference, type GreciaReferenceInput } from '@/data/grecia';
+import {
+  GRECIA_CHAPTERS,
+  type GreciaReference,
+  type GreciaReferenceInput,
+  type GreciaSummaryGroup,
+} from '@/data/grecia';
 
 /* ─── Static paths ───────────────────────────────────────── */
 export function generateStaticParams() {
@@ -96,6 +101,7 @@ export default function ChapterPage({ params }: { params: { num: string } }) {
         <ChapterSummary
           restaurants={chapter.restaurants}
           places={chapter.places}
+          groups={chapter.summaryGroups}
         />
 
         {/* Photo grid */}
@@ -185,27 +191,68 @@ export default function ChapterPage({ params }: { params: { num: string } }) {
 function ChapterSummary({
   restaurants,
   places,
+  groups,
 }: {
   restaurants: GreciaReferenceInput[];
   places: GreciaReferenceInput[];
+  groups?: GreciaSummaryGroup[];
 }) {
   return (
     <section className="mb-12 border-y border-black/[0.07] py-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-        <SummaryList
-          title="Restaurantes"
-          empty="Sin restaurantes anotados en esta entrada."
-          items={restaurants}
-          Icon={Utensils}
-        />
-        <SummaryList
-          title="Lugares"
-          empty="Sin lugares anotados en esta entrada."
-          items={places}
-          Icon={MapPin}
-        />
-      </div>
+      {groups?.length ? (
+        <GroupedSummary groups={groups} />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <SummaryList
+            title="Restaurantes"
+            empty="Sin restaurantes anotados en esta entrada."
+            items={restaurants}
+            Icon={Utensils}
+          />
+          <SummaryList
+            title="Lugares"
+            empty="Sin lugares anotados en esta entrada."
+            items={places}
+            Icon={MapPin}
+          />
+        </div>
+      )}
     </section>
+  );
+}
+
+function GroupedSummary({ groups }: { groups: GreciaSummaryGroup[] }) {
+  return (
+    <div className="space-y-8">
+      {groups.map((group) => {
+        const place = normalizeReference(group.place);
+
+        return (
+          <div key={place.name}>
+            <div className="flex items-center gap-2 mb-4">
+              <MapPin size={18} className="text-[#1A5276]" strokeWidth={1.7} />
+              <h2 className="font-display font-bold text-ink text-xl leading-tight">
+                {place.name}
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <SummaryList
+                title="Restaurantes"
+                empty="Sin restaurantes anotados aquí."
+                items={group.restaurants ?? []}
+                Icon={Utensils}
+              />
+              <SummaryList
+                title="Lugares"
+                empty="Sin lugares anotados aquí."
+                items={group.places ?? []}
+                Icon={MapPin}
+              />
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
@@ -232,6 +279,7 @@ function SummaryList({
         <ul className="space-y-2">
           {items.map((item) => {
             const reference = normalizeReference(item);
+            const mapsUrl = googleMapsUrl(reference);
 
             return (
             <li
@@ -241,18 +289,22 @@ function SummaryList({
               <span className="mt-[0.62em] h-1.5 w-1.5 rounded-full bg-[#1A5276]/55 shrink-0" />
               <span>
                 {reference.name}
-                <span className="ml-2 whitespace-nowrap">
-                  <a
-                    href={googleMapsUrl(reference)}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-[#1A5276] hover:underline"
-                  >
-                    Maps
-                  </a>
-                  {reference.officialUrl && (
-                    <>
+                {(mapsUrl || reference.officialUrl) && (
+                  <span className="ml-2 whitespace-nowrap">
+                    {mapsUrl && (
+                      <a
+                        href={mapsUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[#1A5276] hover:underline"
+                      >
+                        Maps
+                      </a>
+                    )}
+                    {mapsUrl && reference.officialUrl && (
                       <span className="text-ink-muted mx-1">·</span>
+                    )}
+                    {reference.officialUrl && (
                       <a
                         href={reference.officialUrl}
                         target="_blank"
@@ -261,9 +313,9 @@ function SummaryList({
                       >
                         Web oficial
                       </a>
-                    </>
-                  )}
-                </span>
+                    )}
+                  </span>
+                )}
               </span>
             </li>
           )})}
@@ -282,8 +334,7 @@ function normalizeReference(item: GreciaReferenceInput): GreciaReference {
 }
 
 function googleMapsUrl(item: GreciaReference) {
-  const query = encodeURIComponent(item.mapsQuery ?? item.name);
-  return `https://www.google.com/maps/search/?api=1&query=${query}`;
+  return item.mapsUrl ?? null;
 }
 
 
