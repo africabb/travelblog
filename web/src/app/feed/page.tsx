@@ -42,7 +42,7 @@ export default async function FeedPage() {
 
         {/* Decorative background kanji */}
         <span
-          className="absolute -right-4 bottom-0 font-serif font-black text-red
+          className="absolute -right-4 bottom-0 font-display font-black text-red
                      leading-none select-none pointer-events-none"
           style={{ fontSize: 'min(56vw, 440px)', opacity: 0.035 }}
           aria-hidden
@@ -82,7 +82,7 @@ export default async function FeedPage() {
             <span className="block text-display-lg">
               Diario de Japón
             </span>
-            <span className="block italic text-red text-display-lg mt-1">
+            <span className="block italic text-brand text-display-lg mt-1">
               Miguel &amp; África
             </span>
           </h1>
@@ -186,7 +186,7 @@ export default async function FeedPage() {
                           </p>
                         )}
                         <h2
-                          className="font-serif font-bold text-ink
+                          className="font-display font-bold text-ink
                                      leading-tight capitalize"
                           style={{ fontSize: 'clamp(1.3rem, 5vw, 1.65rem)' }}
                         >

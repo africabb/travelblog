@@ -91,7 +91,7 @@ function PhotoCard({
           <TagLine entry={entry} />
 
           {/* title */}
-          <h3 className="font-serif text-xl font-bold text-ink leading-snug mt-1">
+          <h3 className="font-display text-xl font-bold text-ink leading-snug mt-1">
             {entry.title}
           </h3>
 
@@ -124,7 +124,7 @@ function TextCard({ entry, date }: { entry: Entry; date: string }) {
       >
         {/* decorative quote mark */}
         <p
-          className="font-serif text-[4rem] leading-none text-red/12
+          className="font-display text-[4rem] leading-none text-red/12
                      mb-1 -ml-1 select-none"
           aria-hidden
         >
@@ -135,7 +135,7 @@ function TextCard({ entry, date }: { entry: Entry; date: string }) {
         <TagLine entry={entry} />
 
         {/* title */}
-        <h3 className="font-serif text-xl font-bold text-ink leading-snug mt-1 mb-3">
+        <h3 className="font-display text-xl font-bold text-ink leading-snug mt-1 mb-3">
           {entry.title}
         </h3>
 

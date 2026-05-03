@@ -128,7 +128,7 @@ export default async function HomePage() {
               {/* main headline */}
               <h1 className="font-display font-bold text-ink leading-[0.88] mb-6">
                 <span className="block text-display-xl">Miguel</span>
-                <span className="block text-display-xl italic text-red">
+                <span className="block text-display-xl italic text-brand">
                   &amp; África
                 </span>
               </h1>
@@ -223,68 +223,73 @@ export default async function HomePage() {
       ══════════════════════════════════════════ */}
       <section
         id="sobre"
-        className="max-w-2xl mx-auto px-5 sm:px-8 py-24 border-t border-black/[0.06]"
+        className="border-t border-black/[0.06] py-24"
       >
-        {/* section label */}
-        <div className="flex items-center gap-4 mb-12">
-          <span className="text-[10px] tracking-label uppercase font-medium text-ink-soft">
-            02 — Quiénes somos
-          </span>
-          <div className="flex-1 h-px bg-black/8" />
-        </div>
+        <div className="max-w-5xl mx-auto px-5 sm:px-8">
+          {/* section label — aligns with Destinos */}
+          <div className="flex items-center gap-4 mb-12">
+            <span className="text-[10px] tracking-label uppercase font-medium text-ink-soft">
+              02 — Quiénes somos
+            </span>
+            <div className="flex-1 h-px bg-black/8" />
+          </div>
 
-        {/* pull quote */}
-        <p className="font-display italic text-display-md text-ink leading-[1.1] mb-10">
-          "Comemos bien. Fotografiamos mejor.
-          <br className="hidden sm:block" /> Y Bert escribe por nosotros."
-        </p>
+          {/* narrower reading column */}
+          <div className="max-w-2xl">
+            {/* pull quote */}
+            <p className="font-display italic text-display-md text-ink leading-[1.1] mb-10">
+              "Comemos bien. Fotografiamos mejor.
+              <br className="hidden sm:block" /> Y Bert escribe por nosotros."
+            </p>
 
-        {/* main paragraph */}
-        <p className="font-sans text-[15px] text-ink-soft leading-[1.85] mb-10 max-w-prose">
-          Somos Miguel y África, dos enamorados de la buena mesa y de descubrir
-          los rincones gastronómicos más especiales allá donde vamos. En cada viaje
-          buscamos el restaurante que no sale en las guías, el mercado que huele a
-          especias, el chiringuito que sirve el mejor arroz.
-          <br /><br />
-          África captura cada momento con su cámara — las fotos que ves aquí son suyas.
-          Miguel, con su pasión por la informática y las automatizaciones, construyó
-          a Bert: nuestra asistente de WhatsApp que escribe y organiza todo el
-          contenido de este blog. Le mandamos fotos, audios y mensajes durante
-          el viaje, y Bert lo convierte en un diario. Juntos nos lo pasamos
-          increíblemente bien, y nos amamos demasiado como para no compartirlo.
-        </p>
+            {/* main paragraph */}
+            <p className="font-sans text-[15px] text-ink-soft leading-[1.85] mb-10">
+              Somos Miguel y África, dos enamorados de la buena mesa y de descubrir
+              los rincones gastronómicos más especiales allá donde vamos. En cada viaje
+              buscamos el restaurante que no sale en las guías, el mercado que huele a
+              especias, el chiringuito que sirve el mejor arroz.
+              <br /><br />
+              África captura cada momento con su cámara — las fotos que ves aquí son suyas.
+              Miguel, con su pasión por la informática y las automatizaciones, construyó
+              a Bert: nuestra asistente de WhatsApp que escribe y organiza todo el
+              contenido de este blog. Le mandamos fotos, audios y mensajes durante
+              el viaje, y Bert lo convierte en un diario. Juntos nos lo pasamos
+              increíblemente bien, y nos amamos demasiado como para no compartirlo.
+            </p>
 
-        {/* three traits */}
-        <div className="grid grid-cols-3 gap-px bg-black/[0.06] rounded-2xl overflow-hidden mb-12">
-          {[
-            { icon: '🍽️', label: 'Gastronomía',    sub: 'Restaurantes y experiencias únicas' },
-            { icon: '📷', label: 'Fotografía',      sub: 'Imágenes de África en cada destino'  },
-            { icon: '🤖', label: 'Automatización',  sub: 'Bert escribe el blog por WhatsApp'   },
-          ].map(({ icon, label, sub }) => (
-            <div key={label} className="bg-cream px-4 py-5 text-center">
-              <p className="text-2xl mb-2">{icon}</p>
-              <p className="font-sans font-semibold text-ink text-xs mb-1">{label}</p>
-              <p className="text-[10px] text-ink-soft leading-tight">{sub}</p>
+            {/* three traits */}
+            <div className="grid grid-cols-3 gap-px bg-black/[0.06] rounded-2xl overflow-hidden mb-8">
+              {[
+                { icon: '🍽️', label: 'Gastronomía',    sub: 'Restaurantes y experiencias únicas' },
+                { icon: '📷', label: 'Fotografía',      sub: 'Imágenes de África en cada destino'  },
+                { icon: '🤖', label: 'Automatización',  sub: 'Bert escribe el blog por WhatsApp'   },
+              ].map(({ icon, label, sub }) => (
+                <div key={label} className="bg-cream px-4 py-5 text-center">
+                  <p className="text-2xl mb-2">{icon}</p>
+                  <p className="font-sans font-semibold text-ink text-xs mb-1">{label}</p>
+                  <p className="text-[10px] text-ink-soft leading-tight">{sub}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        {/* Bert callout */}
-        <div className="border border-black/[0.07] rounded-2xl p-6 bg-white">
-          <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-ink flex items-center justify-center shrink-0">
-              <span className="text-cream text-lg">🤖</span>
-            </div>
-            <div>
-              <p className="font-sans font-semibold text-ink text-sm mb-1">
-                Hola, soy Bert
-              </p>
-              <p className="font-sans text-xs text-ink-soft leading-relaxed">
-                Soy la asistente de IA de Miguel y África. Me envían sus fotos,
-                audios y mensajes por WhatsApp mientras viajan, y yo organizo todo,
-                escribo las entradas del diario y publico su contenido.
-                Existo gracias a la idea y el código de Miguel. ✨
-              </p>
+            {/* Bert callout */}
+            <div className="border border-black/[0.07] rounded-2xl p-6 bg-white">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-ink flex items-center justify-center shrink-0">
+                  <span className="text-cream text-lg">🤖</span>
+                </div>
+                <div>
+                  <p className="font-sans font-semibold text-ink text-sm mb-1">
+                    Hola, soy Bert
+                  </p>
+                  <p className="font-sans text-xs text-ink-soft leading-relaxed">
+                    Soy la asistente de IA de Miguel y África. Me envían sus fotos,
+                    audios y mensajes por WhatsApp mientras viajan, y yo organizo todo,
+                    escribo las entradas del diario y publico su contenido.
+                    Existo gracias a la idea y el código de Miguel. ✨
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -294,43 +299,45 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════════
           HOW IT WORKS
       ══════════════════════════════════════════ */}
-      <section className="max-w-2xl mx-auto px-5 sm:px-8 py-24 border-t border-black/[0.06]">
-        {/* section label */}
-        <div className="flex items-center gap-4 mb-12">
-          <span className="text-[10px] tracking-label uppercase font-medium text-ink-soft">
-            03 — Cómo funciona
-          </span>
-          <div className="flex-1 h-px bg-black/8" />
-        </div>
+      <section className="border-t border-black/[0.06] py-24">
+        <div className="max-w-5xl mx-auto px-5 sm:px-8">
+          {/* section label — aligns with Destinos */}
+          <div className="flex items-center gap-4 mb-12">
+            <span className="text-[10px] tracking-label uppercase font-medium text-ink-soft">
+              03 — Cómo funciona
+            </span>
+            <div className="flex-1 h-px bg-black/8" />
+          </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {[
-            {
-              n:    '1',
-              icon: '📲',
-              t:    'Capturamos',
-              d:    'Le mandamos a Bert fotos, audios y texto por WhatsApp mientras vivimos el momento.',
-            },
-            {
-              n:    '2',
-              icon: '✍️',
-              t:    'Bert organiza',
-              d:    'Bert crea las entradas, identifica lugares y guarda todo como borrador.',
-            },
-            {
-              n:    '3',
-              icon: '🌐',
-              t:    'Publicamos',
-              d:    'Revisamos los borradores y con un mensaje a Bert el diario se actualiza.',
-            },
-          ].map(({ n, icon, t, d }) => (
-            <div key={n} className="flex flex-col gap-3">
-              <span className="font-display text-5xl font-bold text-black/[0.05]">{n}</span>
-              <p className="text-xl">{icon}</p>
-              <p className="font-sans font-semibold text-ink text-sm">{t}</p>
-              <p className="font-sans text-xs text-ink-soft leading-relaxed">{d}</p>
-            </div>
-          ))}
+          <div className="max-w-2xl grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[
+              {
+                n:    '1',
+                icon: '📲',
+                t:    'Capturamos',
+                d:    'Le mandamos a Bert fotos, audios y texto por WhatsApp mientras vivimos el momento.',
+              },
+              {
+                n:    '2',
+                icon: '✍️',
+                t:    'Bert organiza',
+                d:    'Bert crea las entradas, identifica lugares y guarda todo como borrador.',
+              },
+              {
+                n:    '3',
+                icon: '🌐',
+                t:    'Publicamos',
+                d:    'Revisamos los borradores y con un mensaje a Bert el diario se actualiza.',
+              },
+            ].map(({ n, icon, t, d }) => (
+              <div key={n} className="flex flex-col gap-3">
+                <span className="font-display text-5xl font-bold text-black/[0.05]">{n}</span>
+                <p className="text-xl">{icon}</p>
+                <p className="font-sans font-semibold text-ink text-sm">{t}</p>
+                <p className="font-sans text-xs text-ink-soft leading-relaxed">{d}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -19,6 +19,8 @@ const config: Config = {
         'gold-light':'#E4CFA0',
         sakura:     '#F4A7B9',
         'sakura-soft':'#FDE8EF',
+        /* Brand accent */
+        brand:      '#00a8e8',
         /* Dark (feed hero, day pages) */
         dark:       '#0C0C0C',
         'dark-card':'#161616',
