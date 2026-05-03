@@ -5,18 +5,18 @@ import { useEffect, useRef } from 'react';
 /* ─── Visited + upcoming locations ──────────────────────── */
 const LOCATIONS = [
   /* Greece — visited */
-  { name: 'Corfú',            lat: 39.6243, lng: 19.9217, trip: 'Grecia en barco', entry: 'La llegada a Grecia', href: '/grecia/2', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/img_9867.jpg' },
-  { name: 'Paleros',           lat: 38.7833, lng: 20.8667, trip: 'Grecia en barco', entry: 'De camino al lugar donde vive Mr. Bojangles', href: '/grecia/3', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/img_9892-edited.jpg' },
-  { name: 'Meganisi',          lat: 38.6436, lng: 20.7742, trip: 'Grecia en barco', entry: 'El encuentro con Mr. Bojangles', href: '/grecia/4', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/img_9951.jpg' },
-  { name: 'Sivota (Lefkada)',  lat: 38.5833, lng: 20.5667, trip: 'Grecia en barco', entry: 'Sivota', href: '/grecia/5', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/img_0001-3045918172-e1689257774541-edited.jpg' },
-  { name: 'Kastos',            lat: 38.5656, lng: 20.8898, trip: 'Grecia en barco', entry: 'Kastos', href: '/grecia/8', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/dsc02754.jpg' },
-  { name: 'Kalamos',           lat: 38.6194, lng: 20.9298, trip: 'Grecia en barco', entry: 'Kalamos', href: '/grecia/9', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/dsc02781.jpg' },
+  { name: 'Corfú',            lat: 39.6243, lng: 19.9217, trip: 'Grecia en barco', entry: 'La llegada a Grecia', date: '7 Julio 2023', href: '/grecia/2', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/img_9867.jpg' },
+  { name: 'Paleros',           lat: 38.7833, lng: 20.8667, trip: 'Grecia en barco', entry: 'De camino al lugar donde vive Mr. Bojangles', date: '8 Julio 2023', href: '/grecia/3', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/img_9892-edited.jpg' },
+  { name: 'Meganisi',          lat: 38.6436, lng: 20.7742, trip: 'Grecia en barco', entry: 'El encuentro con Mr. Bojangles', date: 'Verano 2023', href: '/grecia/4', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/img_9951.jpg' },
+  { name: 'Sivota (Lefkada)',  lat: 38.5833, lng: 20.5667, trip: 'Grecia en barco', entry: 'Sivota', date: 'Verano 2023', href: '/grecia/5', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/img_0001-3045918172-e1689257774541-edited.jpg' },
+  { name: 'Kastos',            lat: 38.5656, lng: 20.8898, trip: 'Grecia en barco', entry: 'Kastos', date: 'Verano 2023', href: '/grecia/8', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/dsc02754.jpg' },
+  { name: 'Kalamos',           lat: 38.6194, lng: 20.9298, trip: 'Grecia en barco', entry: 'Kalamos', date: 'Verano 2023', href: '/grecia/9', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/dsc02781.jpg' },
   /* Japan — upcoming */
-  { name: 'Tokio',    lat: 35.6762, lng: 139.6503, trip: 'Japón 2026', entry: 'Diario de Japón', href: '/feed', done: false },
-  { name: 'Kioto',    lat: 35.0116, lng: 135.7681, trip: 'Japón 2026', entry: 'Diario de Japón', href: '/feed', done: false },
-  { name: 'Osaka',    lat: 34.6937, lng: 135.5023, trip: 'Japón 2026', entry: 'Diario de Japón', href: '/feed', done: false },
-  { name: 'Nara',     lat: 34.6851, lng: 135.8048, trip: 'Japón 2026', entry: 'Diario de Japón', href: '/feed', done: false },
-  { name: 'Hiroshima',lat: 34.3853, lng: 132.4553, trip: 'Japón 2026', entry: 'Diario de Japón', href: '/feed', done: false },
+  { name: 'Tokio',    lat: 35.6762, lng: 139.6503, trip: 'Japón 2026', entry: 'Diario de Japón', date: 'Primavera 2026', href: '/feed', done: false },
+  { name: 'Kioto',    lat: 35.0116, lng: 135.7681, trip: 'Japón 2026', entry: 'Diario de Japón', date: 'Primavera 2026', href: '/feed', done: false },
+  { name: 'Osaka',    lat: 34.6937, lng: 135.5023, trip: 'Japón 2026', entry: 'Diario de Japón', date: 'Primavera 2026', href: '/feed', done: false },
+  { name: 'Nara',     lat: 34.6851, lng: 135.8048, trip: 'Japón 2026', entry: 'Diario de Japón', date: 'Primavera 2026', href: '/feed', done: false },
+  { name: 'Hiroshima',lat: 34.3853, lng: 132.4553, trip: 'Japón 2026', entry: 'Diario de Japón', date: 'Primavera 2026', href: '/feed', done: false },
 ];
 
 const BRAND  = '#669bbc';
@@ -86,6 +86,7 @@ export default function WorldMap() {
              ${loc.image ? `<img src="${loc.image}" alt="" style="width:100%;height:74px;object-fit:cover;border-radius:8px;margin-bottom:8px;" />` : ''}
              <strong style="display:block;font-size:13px;line-height:1.25;margin-bottom:3px;">${loc.name}</strong>
              <span style="display:block;color:#6b6760;font-size:11px;line-height:1.35;margin-bottom:3px;">${loc.trip}</span>
+             <span style="display:block;color:#6b6760;font-size:11px;line-height:1.35;margin-bottom:5px;">${loc.date}</span>
              <span style="display:block;color:#0c0c0c;font-size:12px;line-height:1.35;margin-bottom:9px;">${loc.entry}</span>
              <a href="${loc.href}" style="
                display:inline-flex;

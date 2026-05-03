@@ -182,19 +182,27 @@ function PhotoGrid({ images, title }: { images: string[]; title: string }) {
   return (
     <div className="space-y-2">
       {/* First image — full width */}
-      <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden
-                      shadow-md shadow-black/10">
+      <a
+        href={first}
+        target="_blank"
+        rel="noreferrer"
+        className="relative block w-full aspect-[4/3] rounded-2xl overflow-hidden
+                   shadow-md shadow-black/10"
+      >
         <Image src={first} alt={title} fill className="object-cover" unoptimized />
-      </div>
+      </a>
 
       {/* Rest — 2-column masonry */}
       {rest.length > 0 && (
         <div className="columns-2 gap-2 space-y-2">
           {rest.map((src, i) => (
-            <div
+            <a
               key={src}
+              href={src}
+              target="_blank"
+              rel="noreferrer"
               className="relative break-inside-avoid rounded-xl overflow-hidden
-                         shadow-sm shadow-black/8"
+                         shadow-sm shadow-black/8 block"
               style={{ aspectRatio: i % 3 === 0 ? '4/3' : '3/4' }}
             >
               <Image
@@ -204,7 +212,7 @@ function PhotoGrid({ images, title }: { images: string[]; title: string }) {
                 className="object-cover"
                 unoptimized
               />
-            </div>
+            </a>
           ))}
         </div>
       )}
