@@ -1,9 +1,13 @@
 import Link          from 'next/link';
 import Image         from 'next/image';
+import { MapPin, Utensils } from 'lucide-react';
 import { GRECIA_CHAPTERS, type GreciaChapter } from '@/data/grecia';
 
 /* ─── Page ──────────────────────────────────────────────── */
 export default function GreciaPage() {
+  const restaurants = uniqueItems(GRECIA_CHAPTERS.flatMap((chapter) => chapter.restaurants));
+  const places      = uniqueItems(GRECIA_CHAPTERS.flatMap((chapter) => chapter.places));
+
   return (
     <div className="min-h-screen bg-cream">
 
@@ -72,7 +76,10 @@ export default function GreciaPage() {
       {/* ══════════════════════════════════════════
           CHAPTER CARDS — vertical timeline
       ══════════════════════════════════════════ */}
-      <main className="max-w-2xl mx-auto px-4 pt-14 pb-28">
+      <main className="max-w-5xl mx-auto px-4 pt-14 pb-28">
+        <TripSummary restaurants={restaurants} places={places} />
+
+        <div className="max-w-2xl mx-auto">
 
         {/* top label */}
         <div className="flex items-center gap-4 mb-10">
@@ -107,6 +114,7 @@ export default function GreciaPage() {
             )}
           </div>
         ))}
+        </div>
       </main>
 
 
@@ -126,6 +134,77 @@ export default function GreciaPage() {
           </div>
         </div>
       </footer>
+    </div>
+  );
+}
+
+
+function uniqueItems(items: string[]) {
+  return Array.from(new Set(items.filter(Boolean)));
+}
+
+
+/* ─── Trip summary ───────────────────────────────────────── */
+function TripSummary({
+  restaurants,
+  places,
+}: {
+  restaurants: string[];
+  places: string[];
+}) {
+  return (
+    <section className="mb-16 border-y border-black/[0.07] py-10">
+      <div className="flex items-center gap-4 mb-8">
+        <span className="text-[10px] tracking-label uppercase font-medium text-ink-soft">
+          Resumen del viaje
+        </span>
+        <div className="flex-1 h-px bg-black/8" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <SummaryList
+          title="Restaurantes"
+          items={restaurants}
+          Icon={Utensils}
+        />
+        <SummaryList
+          title="Lugares"
+          items={places}
+          Icon={MapPin}
+        />
+      </div>
+    </section>
+  );
+}
+
+function SummaryList({
+  title,
+  items,
+  Icon,
+}: {
+  title: string;
+  items: string[];
+  Icon: typeof Utensils;
+}) {
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-4">
+        <Icon size={18} className="text-[#1A5276]" strokeWidth={1.7} />
+        <h2 className="font-display font-bold text-ink text-2xl leading-tight">
+          {title}
+        </h2>
+      </div>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-2">
+        {items.map((item) => (
+          <li
+            key={item}
+            className="font-sans text-sm text-ink-soft leading-relaxed flex gap-2"
+          >
+            <span className="mt-[0.62em] h-1.5 w-1.5 rounded-full bg-[#1A5276]/55 shrink-0" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
