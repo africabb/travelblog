@@ -5,6 +5,7 @@ import DraftActions from '@/components/DraftActions';
 import Link from 'next/link';
 import { publishDay } from '@/lib/api';
 import PublishDayButton from './PublishDayButton';
+import type { Entry } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,12 +17,12 @@ export default async function DraftsPage({
   const { date } = searchParams;
 
   const [drafts, days] = await Promise.all([
-    fetchDrafts(date).catch(() => []),
+    fetchDrafts(date).catch(() => [] as Entry[]),
     fetchDays().catch(() => []),
   ]);
 
   // Agrupar drafts por fecha
-  const byDate = drafts.reduce<Record<string, typeof drafts>>((acc, entry) => {
+  const byDate = drafts.reduce<Record<string, Entry[]>>((acc, entry) => {
     acc[entry.date] = acc[entry.date] ?? [];
     acc[entry.date].push(entry);
     return acc;

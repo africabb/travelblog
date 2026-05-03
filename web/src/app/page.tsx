@@ -280,26 +280,18 @@ export default async function HomePage() {
           </div>
 
           {/* Quote + Bert image — two columns */}
-          <div className="grid grid-cols-1 sm:grid-cols-[1fr_220px] gap-8 lg:gap-14
-                          items-center mb-12 max-w-3xl">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-8 lg:gap-14
+                          items-start mb-12 max-w-5xl">
+            <div className="max-w-2xl">
             <p className="font-display italic text-display-md text-ink leading-[1.1]">
               "Comemos bien. Fotografiamos mejor.
               <br className="hidden sm:block" /> Y Bert escribe por nosotros."
             </p>
-            <div className="relative aspect-square rounded-2xl overflow-hidden
-                            shadow-xl shadow-black/15 order-first sm:order-last">
-              <Image
-                src="https://media.hustlegotreal.com/bert.webp"
-                alt="Bert, la asistente de IA de M&A"
-                fill
-                className="object-cover"
-                unoptimized
-              />
-            </div>
-          </div>
+            <p className="font-sans text-xs font-semibold tracking-label uppercase text-ink mt-12 mb-4">
+              Bert, la asistente de IA de M&amp;A
+            </p>
 
           {/* Narrow reading column */}
-          <div className="max-w-2xl">
             <p className="font-sans text-[15px] text-ink-soft leading-[1.85] mb-10">
               Somos Miguel y África, dos enamorados de la buena mesa y de descubrir
               los rincones gastronómicos más especiales allá donde vamos. En cada viaje
@@ -315,11 +307,10 @@ export default async function HomePage() {
             </p>
 
             {/* Three traits */}
-            <div className="grid grid-cols-3 gap-px bg-black/[0.06] rounded-2xl overflow-hidden mb-8">
+            <div className="grid grid-cols-2 gap-px bg-black/[0.06] rounded-2xl overflow-hidden mb-8">
               {[
                 { Icon: Utensils, label: 'Gastronomía',   sub: 'Restaurantes y experiencias únicas' },
                 { Icon: Camera,   label: 'Fotografía',     sub: 'Imágenes de África en cada destino'  },
-                { Icon: Bot,      label: 'Automatización', sub: 'Bert escribe el blog por WhatsApp'   },
               ].map(({ Icon, label, sub }) => (
                 <div key={label} className="bg-cream px-4 py-5 text-center">
                   <div className="flex justify-center mb-2">
@@ -352,6 +343,17 @@ export default async function HomePage() {
                   </p>
                 </div>
               </div>
+            </div>
+            </div>
+            <div className="order-first lg:order-last flex justify-center lg:sticky lg:top-24">
+              <Image
+                src="https://media.hustlegotreal.com/bert.webp"
+                alt="Bert, la asistente de IA de M&A"
+                width={1080}
+                height={1350}
+                className="h-auto w-auto max-w-full max-h-[min(760px,calc(100vh-7rem))] rounded-2xl shadow-xl shadow-black/15"
+                unoptimized
+              />
             </div>
           </div>
         </div>

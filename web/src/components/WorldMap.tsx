@@ -44,13 +44,13 @@ export default function WorldMap() {
 
       mapRef.current = map;
 
-      /* CartoDB Positron — clean, light-grey, matches cream palette */
+      /* Google Maps color tiles */
       L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        'https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
         {
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+          attribution: '&copy; Google Maps',
           maxZoom: 18,
+          subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
         }
       ).addTo(map);
 
@@ -72,15 +72,30 @@ export default function WorldMap() {
 
       /* Add markers */
       LOCATIONS.forEach((loc) => {
-        L.marker([loc.lat, loc.lng], { icon: makeIcon(loc.done) })
-          .addTo(map)
-          .bindPopup(
-            `<div style="font-family:sans-serif;font-size:12px;line-height:1.4">
-               <strong style="color:#0c0c0c">${loc.name}</strong>
-               <br/><span style="color:#6b6760">${loc.trip}</span>
-             </div>`,
-            { closeButton: false, maxWidth: 160 }
-          );
+        const marker = L.marker([loc.lat, loc.lng], {
+          icon: makeIcon(loc.done),
+          title: `${loc.name} - ${loc.trip}`,
+        }).addTo(map);
+
+        marker.bindPopup(
+          `<a href="${loc.href}" style="
+             display:block;
+             font-family:sans-serif;
+             font-size:12px;
+             line-height:1.4;
+             color:#0c0c0c;
+             text-decoration:none;
+           ">
+             <strong>${loc.name}</strong>
+             <br/><span style="color:#6b6760">${loc.trip}</span>
+             <br/><span style="color:${loc.done ? BRAND : '#777'};font-weight:600">Abrir blog &rarr;</span>
+           </a>`,
+          { closeButton: false, maxWidth: 180 }
+        );
+
+        marker.on('click', () => {
+          window.location.href = loc.href;
+        });
       });
 
       /* Fix tile gap on resize */
