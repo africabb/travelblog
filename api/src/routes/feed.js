@@ -5,7 +5,7 @@ export default async function feedRoutes(app) {
   // ── GET /api/feed ─────────────────────────────────────────
   // Feed cronológico para la web pública (solo publicado).
   // Query params: limit, offset, date (YYYY-MM-DD, opcional)
-  app.get('/', async (req) => {
+  app.get('/feed', async (req) => {
     const limit  = Math.min(Number(req.query.limit  ?? 20), 100);
     const offset = Number(req.query.offset ?? 0);
     const date   = req.query.date ?? null;           // filtro opcional por fecha
