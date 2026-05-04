@@ -182,7 +182,7 @@ export default async function HomePage() {
                               aspect-[3/4] rounded-3xl overflow-hidden
                               shadow-2xl shadow-black/20">
                 <Image
-                  src="https://media.hustlegotreal.com/affymiguel.webp"
+                  src="https://media.hustlegotreal.com/affymiguelpalma.webp"
                   alt="Miguel y África"
                   fill
                   className="object-cover"
