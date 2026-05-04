@@ -1,4 +1,4 @@
-import { fetchFeed, fetchStats } from '@/lib/api';
+import { fetchFeed } from '@/lib/api';
 import FeedCard       from '@/components/FeedCard';
 import SakuraPetals   from '@/components/SakuraPetals';
 import Link           from 'next/link';
@@ -10,26 +10,57 @@ export const dynamic = 'force-dynamic';
 function groupByDate(entries: Entry[]): [string, Entry[]][] {
   const map: Record<string, Entry[]> = {};
   for (const e of entries) {
-    (map[e.date] ??= []).push(e);
+    (map[dateKey(e.date)] ??= []).push(e);
   }
   // chronological order (oldest first = narrative order)
   return Object.entries(map).sort(([a], [b]) => a.localeCompare(b));
 }
 
+function dateKey(value: string) {
+  return value.includes('T') ? value.slice(0, 10) : value;
+}
+
 function fmtDate(iso: string) {
-  return new Date(iso + 'T00:00:00').toLocaleDateString('es-ES', {
+  return new Date(dateKey(iso) + 'T00:00:00').toLocaleDateString('es-ES', {
     weekday: 'long', day: 'numeric', month: 'long',
   });
 }
 
 /* ─── Page ──────────────────────────────────────────────── */
-export default async function FeedPage() {
-  const [feed, stats] = await Promise.all([
-    fetchFeed(100).catch(() => ({ entries: [], total: 0, limit: 100, offset: 0 })),
-    fetchStats().catch(() => null),
-  ]);
+export default async function FeedPage({
+  searchParams,
+}: {
+  searchParams?: { trip?: string; city?: string };
+}) {
+  const isPalma = searchParams?.trip === 'palma' || searchParams?.city === 'Palma de Mallorca';
+  const feed = await fetchFeed(
+    100,
+    0,
+    undefined,
+    isPalma ? { city: 'Palma de Mallorca' } : { excludeCity: 'Palma de Mallorca' },
+  ).catch(() => ({ entries: [], total: 0, limit: 100, offset: 0 }));
 
   const days = groupByDate(feed.entries);
+  const places = new Set(feed.entries.flatMap((e) => e.places?.map((p) => p.id) ?? []));
+  const photos = feed.entries.reduce(
+    (sum, e) => sum + (e.media?.filter((m) => m.type === 'photo').length ?? 0),
+    0,
+  );
+  const trip = isPalma
+    ? {
+        label: 'Palma de Mallorca',
+        title: 'Diario de Palma',
+        subtitle: 'Miguel & África',
+        copy: 'Comida, sobremesas, casas especiales y recuerdos cerca del mar.',
+        footer: 'Palma de Mallorca · 2026',
+      }
+    : {
+        label: '日本の旅 · Primavera 2026',
+        title: 'Diario de Japón',
+        subtitle: 'Miguel & África',
+        copy: 'Templos, ramen, cerezos y momentos irrepetibles. Dos viajeros por el corazón de Japón.',
+        footer: 'Japón · Primavera 2026',
+      };
 
   return (
     <div className="min-h-screen bg-cream">
@@ -74,34 +105,33 @@ export default async function FeedPage() {
           {/* Kana label */}
           <p className="font-sans text-[10px] tracking-label uppercase
                         font-medium text-gold mb-7">
-            日本の旅 · Primavera 2026
+            {trip.label}
           </p>
 
           {/* Title */}
           <h1 className="font-display font-bold text-ink leading-[0.88]">
             <span className="block text-display-lg">
-              Diario de Japón
+              {trip.title}
             </span>
             <span className="block italic text-brand text-display-lg mt-1">
-              Miguel &amp; África
+              {trip.subtitle}
             </span>
           </h1>
 
           {/* Tagline */}
           <p className="font-sans text-ink-soft text-sm sm:text-base leading-relaxed
                         max-w-[21rem] mx-auto mt-6 mb-8">
-            Templos, ramen, cerezos y momentos irrepetibles.
-            Dos viajeros por el corazón de Japón.
+            {trip.copy}
           </p>
 
           {/* Stats */}
-          {stats && stats.entries > 0 && (
+          {feed.entries.length > 0 && (
             <div className="flex items-end justify-center gap-6 mb-10">
-              <StatBadge n={stats.days}   label="días"    />
+              <StatBadge n={days.length}  label="días"    />
               <span className="text-black/15 pb-1 text-lg">·</span>
-              <StatBadge n={stats.places} label="lugares" />
+              <StatBadge n={places.size} label="lugares" />
               <span className="text-black/15 pb-1 text-lg">·</span>
-              <StatBadge n={stats.photos} label="fotos"   />
+              <StatBadge n={photos} label="fotos"   />
             </div>
           )}
 
@@ -235,7 +265,7 @@ export default async function FeedPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-display font-bold text-ink">Miguel &amp; África</p>
-              <p className="font-sans text-xs text-ink-soft mt-0.5">Japón · Primavera 2026</p>
+              <p className="font-sans text-xs text-ink-soft mt-0.5">{trip.footer}</p>
             </div>
             <Link href="/" className="font-sans text-xs text-ink-soft hover:text-ink transition-colors">
               ← Todos los viajes

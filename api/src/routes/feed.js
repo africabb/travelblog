@@ -4,14 +4,31 @@ export default async function feedRoutes(app) {
 
   // ── GET /api/feed ─────────────────────────────────────────
   // Feed cronológico para la web pública (solo publicado).
-  // Query params: limit, offset, date (YYYY-MM-DD, opcional)
+  // Query params: limit, offset, date, city, excludeCity (opcionales)
   app.get('/feed', async (req) => {
     const limit  = Math.min(Number(req.query.limit  ?? 20), 100);
     const offset = Number(req.query.offset ?? 0);
     const date   = req.query.date ?? null;           // filtro opcional por fecha
+    const city   = req.query.city ?? null;
+    const excludeCity = req.query.excludeCity ?? null;
 
-    const dateClause = date ? 'AND e.date = $3' : '';
-    const params     = date ? [limit, offset, date] : [limit, offset];
+    const filters = [`e.status = 'published'`];
+    const params = [limit, offset];
+
+    if (date) {
+      params.push(date);
+      filters.push(`e.date = $${params.length}`);
+    }
+
+    if (city) {
+      params.push(city);
+      filters.push(`e.city = $${params.length}`);
+    }
+
+    if (excludeCity) {
+      params.push(excludeCity);
+      filters.push(`COALESCE(e.city, '') != $${params.length}`);
+    }
 
     const entries = await query(`
       SELECT
@@ -41,18 +58,32 @@ export default async function feedRoutes(app) {
       LEFT JOIN media        m  ON m.entry_id = e.id
       LEFT JOIN entry_places ep ON ep.entry_id = e.id
       LEFT JOIN places       p  ON p.id = ep.place_id
-      WHERE e.status = 'published' ${dateClause}
+      WHERE ${filters.join(' AND ')}
       GROUP BY e.id
       ORDER BY e.date ASC, e.sort_order ASC
       LIMIT $1 OFFSET $2
     `, params);
 
-    const countParams = date ? [date] : [];
-    const countWhere  = date ? 'WHERE status = $1 AND date = $2'
-                             : 'WHERE status = $1';
-    const countArgs   = date ? ['published', date] : ['published'];
+    const countFilters = [`status = $1`];
+    const countArgs = ['published'];
+
+    if (date) {
+      countArgs.push(date);
+      countFilters.push(`date = $${countArgs.length}`);
+    }
+
+    if (city) {
+      countArgs.push(city);
+      countFilters.push(`city = $${countArgs.length}`);
+    }
+
+    if (excludeCity) {
+      countArgs.push(excludeCity);
+      countFilters.push(`COALESCE(city, '') != $${countArgs.length}`);
+    }
+
     const [{ total }] = await query(
-      `SELECT COUNT(*) AS total FROM entries ${countWhere}`,
+      `SELECT COUNT(*) AS total FROM entries WHERE ${countFilters.join(' AND ')}`,
       countArgs,
     );
 

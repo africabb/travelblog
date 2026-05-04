@@ -42,10 +42,21 @@ async function del(path: string): Promise<void> {
 }
 
 // ── Public ────────────────────────────────────────────────────
-export const fetchFeed  = (limit = 20, offset = 0, date?: string) =>
-  get<FeedResponse>(
-    `/api/feed?limit=${limit}&offset=${offset}${date ? `&date=${date}` : ''}`,
-  );
+export const fetchFeed  = (
+  limit = 20,
+  offset = 0,
+  date?: string,
+  filters?: { city?: string; excludeCity?: string },
+) => {
+  const qs = new URLSearchParams({
+    limit: String(limit),
+    offset: String(offset),
+  });
+  if (date) qs.set('date', date);
+  if (filters?.city) qs.set('city', filters.city);
+  if (filters?.excludeCity) qs.set('excludeCity', filters.excludeCity);
+  return get<FeedResponse>(`/api/feed?${qs}`);
+};
 
 export const fetchStats = () => get<Stats>('/api/stats');
 
