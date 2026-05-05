@@ -1,5 +1,3 @@
-import { definePluginEntry } from 'openclaw/plugin-sdk/plugin-entry';
-
 /**
  * Bert/Openclaw plugin for the Japan travel diary.
  *
@@ -31,27 +29,6 @@ const HANDLERS = {
   diary_approve_draft: approveDraft.handler,
   diary_delete_draft: deleteDraft.handler,
 };
-
-function asOpenClawTool(definition) {
-  const fn = definition.function;
-  return {
-    name: fn.name,
-    label: fn.name,
-    description: fn.description,
-    parameters: fn.parameters,
-    async execute(toolCallId, params) {
-      const result = await executeTool(fn.name, params, { toolCallId });
-      return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(result),
-          },
-        ],
-      };
-    },
-  };
-}
 
 export const tools = [
   createEntry.definition,
@@ -145,17 +122,4 @@ RESPUESTA:
 FECHA ACTUAL: ${new Date().toISOString().slice(0, 10)}
 `.trim();
 
-export default definePluginEntry({
-  id: 'japon-diary',
-  name: 'Japan Diary',
-  description: 'Tools and prompt guidance for writing the Japan travel diary from WhatsApp messages.',
-  register(api) {
-    for (const tool of tools) {
-      api.registerTool(asOpenClawTool(tool));
-    }
-
-    api.on('before_prompt_build', () => ({
-      appendSystemContext: systemPrompt,
-    }));
-  },
-});
+export default { tools, executeTool, systemPrompt };
