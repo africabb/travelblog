@@ -43,3 +43,26 @@ Por eso Bert debe rellenar siempre `city` cuando cree o actualice una entrada.
 - Palma de Mallorca: `https://japon.amurasoftware.com/feed?trip=palma&city=Palma%20de%20Mallorca`
 - Borradores: `https://japon.amurasoftware.com/drafts`
 
+## Acceso a GitHub para cambios de codigo
+
+Para cambiar diseno, estructura o codigo de la web, Bert necesita permiso de escritura en el repositorio de GitHub.
+Se ha generado una clave SSH dedicada para Bert en el servidor. La clave privada se queda en el servidor y no debe copiarse.
+
+Clave publica que debes pegar en GitHub:
+
+```text
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDtuf4552JKQSQPM8ySOYjxzsaIaNsBIbzjXWBWatDOZ bert@japon.amurasoftware.com
+```
+
+Pasos en GitHub:
+
+1. Abre el repositorio `africabb/travelblog`.
+2. Ve a `Settings` -> `Deploy keys`.
+3. Pulsa `Add deploy key`.
+4. Nombre: `Bert japon.amurasoftware.com`.
+5. Pega la clave publica de arriba.
+6. Activa `Allow write access`.
+7. Guarda.
+
+Cuando esa clave este autorizada, Bert podra hacer `git push` al repositorio desde el servidor.
+Sin ese paso, GitHub rechazara el acceso aunque la clave ya exista en Bert.
