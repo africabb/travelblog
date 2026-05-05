@@ -1,9 +1,13 @@
 {
+  "id": "japon-diary",
   "name": "japon-diary",
   "version": "0.1.0",
-  "description": "OpenClaw plugin for Bert's Japan travel diary",
   "type": "module",
-  "main": "index.js",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  },
   "openclaw": {
     "extensions": [
       "./index.js"
@@ -12,9 +16,5 @@
       "pluginApi": ">=2026.3.24-beta.2",
       "minGatewayVersion": "2026.3.24-beta.2"
     }
-  },
-  "dependencies": {
-    "form-data": "^4.0.0",
-    "node-fetch": "^3.3.2"
   }
 }
