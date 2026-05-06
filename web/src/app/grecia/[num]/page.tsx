@@ -8,6 +8,7 @@ import {
   type GreciaReferenceInput,
   type GreciaSummaryGroup,
 } from '@/data/grecia';
+import { fetchGreciaDynamicChapters, mergeGreciaChapters } from '@/lib/greciaDynamic';
 
 /* ─── Static paths ───────────────────────────────────────── */
 export function generateStaticParams() {
@@ -15,14 +16,15 @@ export function generateStaticParams() {
 }
 
 /* ─── Page ──────────────────────────────────────────────── */
-export default function ChapterPage({ params }: { params: { num: string } }) {
+export default async function ChapterPage({ params }: { params: { num: string } }) {
+  const chapters = mergeGreciaChapters(GRECIA_CHAPTERS, await fetchGreciaDynamicChapters());
   const num     = parseInt(params.num, 10);
-  const idx     = GRECIA_CHAPTERS.findIndex((c) => c.num === num);
+  const idx     = chapters.findIndex((c) => c.num === num);
   if (idx === -1) notFound();
 
-  const chapter = GRECIA_CHAPTERS[idx];
-  const prev    = GRECIA_CHAPTERS[idx - 1] ?? null;
-  const next    = GRECIA_CHAPTERS[idx + 1] ?? null;
+  const chapter = chapters[idx];
+  const prev    = chapters[idx - 1] ?? null;
+  const next    = chapters[idx + 1] ?? null;
 
   const paragraphs = chapter.text
     .split(/\n\n+/)
@@ -59,7 +61,7 @@ export default function ChapterPage({ params }: { params: { num: string } }) {
             ← Grecia en barco
           </Link>
           <span className="font-sans text-[10px] text-white/40 uppercase tracking-widest">
-            {chapter.num} / {GRECIA_CHAPTERS.length}
+            {chapter.num} / {chapters.length}
           </span>
         </div>
 

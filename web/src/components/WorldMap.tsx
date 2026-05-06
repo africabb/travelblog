@@ -9,8 +9,8 @@ const LOCATIONS = [
   { name: 'Paleros',           lat: 38.7833, lng: 20.8667, trip: 'Grecia en barco', entry: 'De camino al lugar donde vive Mr. Bojangles', date: '8 Julio 2023', href: '/grecia/3', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/img_9892-edited.jpg' },
   { name: 'Meganisi',          lat: 38.6436, lng: 20.7742, trip: 'Grecia en barco', entry: 'El encuentro con Mr. Bojangles', date: 'Verano 2023', href: '/grecia/4', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/img_9951.jpg' },
   { name: 'Sivota (Lefkada)',  lat: 38.5833, lng: 20.5667, trip: 'Grecia en barco', entry: 'Sivota', date: 'Verano 2023', href: '/grecia/5', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/img_0001-3045918172-e1689257774541-edited.jpg' },
-  { name: 'Kastos',            lat: 38.5656, lng: 20.8898, trip: 'Grecia en barco', entry: 'Kastos', date: 'Verano 2023', href: '/grecia/8', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/dsc02754.jpg' },
-  { name: 'Kalamos',           lat: 38.6194, lng: 20.9298, trip: 'Grecia en barco', entry: 'Kalamos', date: 'Verano 2023', href: '/grecia/9', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/dsc02781.jpg' },
+  { name: 'Kastos',            lat: 38.5656, lng: 20.8898, trip: 'Grecia en barco', entry: 'Kastos', date: '13 Julio 2023', href: '/grecia/6', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/dsc02754.jpg' },
+  { name: 'Kalamos',           lat: 38.6194, lng: 20.9298, trip: 'Grecia en barco', entry: 'Kalamos', date: '14 Julio 2023', href: '/grecia/7', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/dsc02781.jpg' },
   /* Japan — upcoming */
   { name: 'Tokio',    lat: 35.6762, lng: 139.6503, trip: 'Japón 2026', entry: 'Diario de Japón', date: 'Primavera 2026', href: '/feed', done: false },
   { name: 'Kioto',    lat: 35.0116, lng: 135.7681, trip: 'Japón 2026', entry: 'Diario de Japón', date: 'Primavera 2026', href: '/feed', done: false },

@@ -96,6 +96,9 @@ REGLA PRINCIPAL:
 - Si ya hay una entrada publicada para la fecha, ampliala y reescribela con el nuevo recuerdo integrado.
 - No crees multiples entradas sueltas para el mismo dia salvo que la usuaria lo pida explicitamente.
 - La ciudad clasifica el viaje en la web. Usa "Palma de Mallorca" para recuerdos de Mallorca/Palma, y ciudades japonesas como "Tokio", "Kioto", "Osaka", "Nara" o "Hiroshima" para Japon.
+- Si la usuaria dice "Grecia en barco", "viaje Grecia en barco", "meter en Grecia", "capitulo de Grecia" o cualquier recuerdo del viaje del Mar Jonico de julio de 2023, usa siempre city exactamente "Grecia en barco". No uses Kalamos, Kastos, Paleros, Corfu, Meganisi ni ninguna cala como city aunque aparezcan en fotos; esos sitios solo pueden ir en location o lugares si estas segura.
+- Para "Grecia en barco", si la usuaria dice capitulo/dia nuevo despues del 7, usa day_number: 8 y date: "2023-07-15" salvo que indique otra fecha. El enlace correcto debe ser /grecia/8, no /viaje/kalamos...
+- Si la usuaria dice "meter en viaje X", nunca crees un viaje nuevo con una ciudad secundaria detectada en fotos. Usa X como city del viaje y anade el sitio secundario solo como location/lugar si es fiable.
 - Todos los viajes publicados por Bert usan el mismo formato visual que Grecia en barco: portada con foto de fondo, titulo, resumen, restaurantes/lugares y tarjetas cronologicas.
 - En viajes publicados por Bert, nunca uses "capitulo" en titulos o labels. Usa "Dia 1", "Dia 2", "Dia 3"... segun corresponda.
 - Si la usuaria escribe algo como "VIAJE X --- hoy es el dia dos del viaje X", interpreta X como el viaje/destino, guarda la ciudad correcta y manda day_number: 2.
@@ -114,6 +117,8 @@ FECHAS:
 
 MEDIA:
 - Cuando la usuaria mande foto, video o audio, usa diary_add_media primero.
+- Si llegan muchas fotos juntas, procesa como maximo 3 archivos por tanda y continua con la siguiente tanda en vez de intentar meter todas las imagenes en una sola llamada al modelo.
+- No copies ni repitas base64, URLs internas largas o metadatos completos en tus respuestas. Solo guarda la media y conserva los media_id devueltos.
 - Despues usa diary_upsert_day_entry para integrar esa media en la narrativa del dia.
 - Crea captions naturales para fotos y videos.
 - Para audio, usa la transcripcion disponible como base narrativa.

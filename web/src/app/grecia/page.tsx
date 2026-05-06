@@ -8,12 +8,14 @@ import {
   type GreciaReferenceInput,
   type GreciaSummaryGroup,
 } from '@/data/grecia';
+import { fetchGreciaDynamicChapters, mergeGreciaChapters } from '@/lib/greciaDynamic';
 
 /* ─── Page ──────────────────────────────────────────────── */
-export default function GreciaPage() {
-  const restaurants = uniqueItems(GRECIA_CHAPTERS.flatMap((chapter) => chapter.restaurants));
-  const places      = uniqueItems(GRECIA_CHAPTERS.flatMap((chapter) => chapter.places));
-  const groups      = aggregateGroups(GRECIA_CHAPTERS.flatMap((chapter) => chapter.summaryGroups ?? []));
+export default async function GreciaPage() {
+  const chapters = mergeGreciaChapters(GRECIA_CHAPTERS, await fetchGreciaDynamicChapters());
+  const restaurants = uniqueItems(chapters.flatMap((chapter) => chapter.restaurants));
+  const places      = uniqueItems(chapters.flatMap((chapter) => chapter.places));
+  const groups      = aggregateGroups(chapters.flatMap((chapter) => chapter.summaryGroups ?? []));
 
   return (
     <div className="min-h-screen bg-cream">
@@ -67,8 +69,8 @@ export default function GreciaPage() {
           <div className="flex items-center justify-center gap-6 mt-7">
             {[
               { n: 12,  l: 'días' },
-              { n: GRECIA_CHAPTERS.length, l: 'capítulos' },
-              { n: GRECIA_CHAPTERS.reduce((a, c) => a + c.images.length, 0), l: 'fotos' },
+              { n: chapters.length, l: 'capítulos' },
+              { n: chapters.reduce((a, c) => a + c.images.length, 0), l: 'fotos' },
             ].map(({ n, l }) => (
               <div key={l} className="text-center">
                 <p className="font-display font-bold text-white text-2xl leading-none">{n}</p>
@@ -96,12 +98,12 @@ export default function GreciaPage() {
           <div className="flex-1 h-px bg-black/8" />
         </div>
 
-        {GRECIA_CHAPTERS.map((chapter, idx) => (
+        {chapters.map((chapter, idx) => (
           <div key={chapter.num}>
             <ChapterCard chapter={chapter} />
 
             {/* Arrow connector between cards */}
-            {idx < GRECIA_CHAPTERS.length - 1 && (
+            {idx < chapters.length - 1 && (
               <div className="flex flex-col items-center py-1">
                 <div className="w-px h-5 bg-[#1A5276]/20" />
                 <svg

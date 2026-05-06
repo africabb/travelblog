@@ -1,6 +1,33 @@
 import { api } from '../client.js';
 
 const SITE_URL = (process.env.DIARY_SITE_URL ?? 'https://japon.amurasoftware.com').replace(/\/$/, '');
+const GREECE_TRIP_CITY = 'Grecia en barco';
+const GREECE_ALIASES = [
+  'grecia',
+  'grecia en barco',
+  'mar jonico',
+  'corfu',
+  'paleros',
+  'meganisi',
+  'sivota',
+  'lefkada',
+  'ithaka',
+  'ithaca',
+  'atokos',
+  'kastos',
+  'kalamos',
+  'agrapidia',
+];
+const GREECE_DATE_TO_DAY = {
+  '2023-07-07': 2,
+  '2023-07-08': 3,
+  '2023-07-09': 4,
+  '2023-07-10': 5,
+  '2023-07-13': 6,
+  '2023-07-14': 7,
+  '2023-07-15': 8,
+  '2023-07-16': 9,
+};
 const JAPAN_CITIES = new Set(['tokio', 'kioto', 'osaka', 'nara', 'hiroshima', 'japon', 'japón']);
 
 function slugifyTripName(name = '') {
@@ -18,6 +45,40 @@ function datePath(value) {
   return match ? match[0] : String(value ?? '');
 }
 
+function normalizeText(value = '') {
+  return String(value)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function isGreeceTrip(value = '') {
+  const normalized = normalizeText(value);
+  return GREECE_ALIASES.some((alias) => normalized.includes(normalizeText(alias)));
+}
+
+function normalizeTripFields(params) {
+  const date = datePath(params.date);
+  const tripText = [
+    params.city,
+    params.location,
+    params.title,
+    params.body,
+    ...(params.tags ?? []),
+  ].filter(Boolean).join(' ');
+
+  if (!isGreeceTrip(tripText)) return { ...params, date };
+
+  return {
+    ...params,
+    date,
+    city: GREECE_TRIP_CITY,
+    day_number: params.day_number && params.day_number > 0
+      ? params.day_number
+      : GREECE_DATE_TO_DAY[date] ?? params.day_number,
+  };
+}
+
 function publicEntryUrl(entry) {
   const city = (entry.city ?? '').trim();
   const normalized = city
@@ -26,6 +87,11 @@ function publicEntryUrl(entry) {
     .toLowerCase();
 
   const date = datePath(entry.date);
+
+  if (isGreeceTrip(normalized)) {
+    const day = entry.day_number && entry.day_number > 0 ? entry.day_number : GREECE_DATE_TO_DAY[date];
+    return day ? `${SITE_URL}/grecia/${day}` : `${SITE_URL}/grecia`;
+  }
 
   if (normalized === 'palma de mallorca' || normalized === 'palma' || normalized === 'mallorca') {
     return `${SITE_URL}/palma/${date}`;
@@ -102,6 +168,7 @@ export const definition = {
 };
 
 export async function handler(params, context) {
+  params = normalizeTripFields(params);
   const { media_ids, ...entryData } = params;
 
   const entry = await api('POST', '/api/entries', {
