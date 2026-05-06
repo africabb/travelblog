@@ -6,6 +6,7 @@
  *   DIARY_API_SECRET  - same API_SECRET configured in the diary API
  */
 
+import { definePluginEntry } from 'openclaw/plugin-sdk/plugin-entry';
 import * as createEntry from './tools/diary_create_entry.js';
 import * as upsertDay from './tools/diary_upsert_day_entry.js';
 import * as addMedia from './tools/diary_add_media.js';
@@ -42,6 +43,28 @@ export const tools = [
   approveDraft.definition,
   deleteDraft.definition,
 ];
+
+function toOpenClawTool(definition) {
+  const fn = definition.function ?? definition;
+
+  return {
+    name: fn.name,
+    description: fn.description,
+    parameters: fn.parameters,
+    async execute(_id, params, context = {}) {
+      const result = await executeTool(fn.name, params, context);
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(result),
+          },
+        ],
+      };
+    },
+  };
+}
 
 export async function executeTool(name, params, context = {}) {
   const handler = HANDLERS[name];
@@ -113,7 +136,10 @@ MEDIA:
 LUGARES Y RESTAURANTES:
 - Cuando detectes un lugar, templo, barrio, tienda o restaurante, usa diary_add_place.
 - Guarda nombre oficial si lo conoces, ciudad/zona, descripcion, tipo y categoria.
-- google_maps_url y official_url son importantes. Si no tienes un enlace fiable, deja el campo vacio y pide confirmacion.
+- Antes de guardar google_maps_url u official_url, intenta buscar el sitio con tus herramientas de busqueda web si estan disponibles.
+- Acepta un enlace de Google Maps solo si el nombre, ciudad o zona y contexto coinciden claramente con el sitio exacto.
+- Acepta una web oficial solo si parece el dominio oficial del restaurante o lugar, no un agregador, red social o directorio.
+- Si no tienes un enlace fiable o hay cualquier duda, deja el campo vacio. No inventes enlaces ni uses resultados parecidos.
 
 PUBLICACION:
 - Todo se guarda como draft por defecto.
@@ -140,4 +166,16 @@ RESPUESTA:
 FECHA ACTUAL: ${new Date().toISOString().slice(0, 10)}
 `.trim();
 
-export default { tools, executeTool, systemPrompt };
+const pluginEntry = definePluginEntry({
+  id: 'japon-diary',
+  name: 'Japon Diary',
+  description: 'Tools for Bert to write and publish Miguel and Africa travel diary entries.',
+  register(api) {
+    for (const tool of tools) {
+      api.registerTool(toOpenClawTool(tool));
+    }
+  },
+});
+
+export { pluginEntry };
+export default pluginEntry;
