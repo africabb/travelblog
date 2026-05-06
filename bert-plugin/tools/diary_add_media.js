@@ -9,6 +9,7 @@ export const definition = {
       Úsala siempre que el usuario mande un archivo multimedia.
       Puede vincularse a una entrada existente (entry_id) o quedar suelta para vincular después.
       Devuelve el ID y la URL pública del archivo subido.
+      No analices visualmente fotos o vídeos para crear captions; usa solo el texto explícito de la usuaria.
     `.trim(),
     parameters: {
       type: 'object',
@@ -28,7 +29,7 @@ export const definition = {
         },
         caption: {
           type: 'string',
-          description: 'Descripción o pie de foto. Si el usuario mandó texto junto a la foto, úsalo aquí.',
+          description: 'Pie de foto opcional. No describas la imagen: usa solo el texto que haya escrito la usuaria o un caption genérico como "Foto del día".',
         },
         location: {
           type: 'string',
@@ -63,7 +64,7 @@ export async function handler(params, context) {
     original_name:     original_name ?? null,
     entry_id:          meta.entry_id          ?? null,
     status:            'published',
-    caption:           meta.caption           ?? null,
+    caption:           meta.caption           ?? genericCaption(recordTypeFromMime(mime_type)),
     location:          meta.location          ?? null,
     taken_at:          meta.taken_at          ?? null,
     source_channel:    'whatsapp',
@@ -78,4 +79,18 @@ export async function handler(params, context) {
     type:     record.type,
     summary:  `${record.type === 'photo' ? 'Foto' : record.type === 'video' ? 'Vídeo' : 'Audio'} guardado. URL: ${record.url}`,
   };
+}
+
+function recordTypeFromMime(mimeType) {
+  if (mimeType?.startsWith('image/')) return 'photo';
+  if (mimeType?.startsWith('video/')) return 'video';
+  if (mimeType?.startsWith('audio/')) return 'audio';
+  return 'file';
+}
+
+function genericCaption(type) {
+  if (type === 'photo') return 'Foto del día';
+  if (type === 'video') return 'Vídeo del día';
+  if (type === 'audio') return 'Audio del día';
+  return null;
 }
