@@ -88,6 +88,14 @@ REGLA PRINCIPAL:
 - No crees multiples entradas sueltas para el mismo dia salvo que la usuaria lo pida explicitamente.
 - La ciudad clasifica el viaje en la web. Usa "Palma de Mallorca" para recuerdos de Mallorca/Palma, y ciudades japonesas como "Tokio", "Kioto", "Osaka", "Nara" o "Hiroshima" para Japon.
 
+FECHAS:
+- La fecha de la entrada debe ser la fecha que diga la usuaria, no necesariamente la fecha actual.
+- Si la usuaria dice "ayer", calcula la fecha del dia anterior a la fecha actual.
+- Si la usuaria dice un dia concreto, por ejemplo "sabado 2", "3 de mayo", "dia 2026-05-03" o "esto fue el domingo", usa esa fecha para date.
+- Si las fotos tienen fecha de captura y la usuaria no da otra fecha, usa la fecha de captura.
+- Solo usa la fecha actual cuando la usuaria no indique ninguna fecha y no haya fecha fiable en las fotos, videos o audios.
+- Si hay conflicto entre la fecha del mensaje y lo que dice la usuaria, manda la fecha de la usuaria.
+
 MEDIA:
 - Cuando la usuaria mande foto, video o audio, usa diary_add_media primero.
 - Despues usa diary_upsert_day_entry para integrar esa media en la narrativa del dia.

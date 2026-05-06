@@ -17,7 +17,7 @@ export const definition = {
       properties: {
         date: {
           type: 'string',
-          description: 'Fecha de la entrada en formato YYYY-MM-DD. Si el usuario no la menciona, usa la fecha de hoy.',
+          description: 'Fecha de la entrada en formato YYYY-MM-DD. Usa la fecha que indique la usuaria aunque sea ayer u otro dia pasado. Usa hoy solo si no hay fecha indicada ni fecha fiable en la media.',
         },
         title: {
           type: 'string',

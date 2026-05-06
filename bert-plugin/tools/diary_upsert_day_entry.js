@@ -15,7 +15,7 @@ export const definition = {
       properties: {
         date: {
           type: 'string',
-          description: 'Date in YYYY-MM-DD format. Use today when the user does not specify a date.',
+          description: 'Date in YYYY-MM-DD format. Use the date stated by the user even if it is yesterday or another past day. Use today only when no date is stated and media has no reliable capture date.',
         },
         title: {
           type: 'string',
