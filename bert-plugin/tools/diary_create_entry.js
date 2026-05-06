@@ -19,6 +19,10 @@ export const definition = {
           type: 'string',
           description: 'Fecha de la entrada en formato YYYY-MM-DD. Usa la fecha que indique la usuaria aunque sea ayer u otro dia pasado. Usa hoy solo si no hay fecha indicada ni fecha fiable en la media.',
         },
+        day_number: {
+          type: 'integer',
+          description: 'Numero de dia dentro del viaje. Si la usuaria dice "dia dos del viaje", usa 2 aunque la fecha real sea otra.',
+        },
         title: {
           type: 'string',
           description: 'Título evocador y poético para la entrada. Máximo 80 caracteres.',
@@ -63,6 +67,7 @@ export async function handler(params, context) {
 
   const entry = await api('POST', '/api/entries', {
     ...entryData,
+    sort_order: entryData.sort_order ?? entryData.day_number ?? 0,
     source_channel: 'whatsapp',
     source_message_id: params.source_message_id ?? context?.messageId ?? null,
     source_timestamp:  context?.timestamp        ?? new Date().toISOString(),

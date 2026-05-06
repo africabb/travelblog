@@ -40,7 +40,7 @@ const TRIPS = [
   {
     num:    '02',
     slug:   'palma',
-    href:   '/feed?trip=palma&city=Palma%20de%20Mallorca',
+    href:   '/palma',
     flag:   '🌴',
     name:   'Palma de Mallorca',
     period: '2026',

@@ -17,6 +17,10 @@ export const definition = {
           type: 'string',
           description: 'Date in YYYY-MM-DD format. Use the date stated by the user even if it is yesterday or another past day. Use today only when no date is stated and media has no reliable capture date.',
         },
+        day_number: {
+          type: 'integer',
+          description: 'Sequential day number inside the trip. If the user says "dia dos del viaje", use 2 even when the calendar date is different.',
+        },
         title: {
           type: 'string',
           description: 'Natural, elegant title for the day entry. Maximum 80 characters.',
@@ -59,12 +63,15 @@ export async function handler(params, context) {
       body: entryData.body,
       location: entryData.location ?? existing[0].location,
       city: entryData.city ?? existing[0].city,
+      day_number: entryData.day_number ?? existing[0].day_number,
+      sort_order: entryData.day_number ?? existing[0].sort_order ?? 0,
       mood: entryData.mood ?? existing[0].mood,
       tags: entryData.tags ?? existing[0].tags ?? [],
     });
   } else {
     entry = await api('POST', '/api/entries', {
       ...entryData,
+      sort_order: entryData.sort_order ?? entryData.day_number ?? 0,
       source_channel: 'whatsapp',
       source_message_id: params.source_message_id ?? context?.messageId ?? null,
       source_timestamp: context?.timestamp ?? new Date().toISOString(),
