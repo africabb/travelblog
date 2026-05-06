@@ -10,6 +10,7 @@ function privateHeaders(): HeadersInit {
 async function get<T>(path: string, priv = false): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     headers: priv ? privateHeaders() : { 'Content-Type': 'application/json' },
+    cache: 'no-store',
     next: { revalidate: 0 },
   });
   if (!res.ok) throw new Error(`GET ${path} → ${res.status}`);
