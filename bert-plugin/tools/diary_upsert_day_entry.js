@@ -7,7 +7,7 @@ export const definition = {
     description: `
       Creates or updates the main diary entry for a given day.
       Use this instead of creating multiple entries when the user sends more memories on the same date.
-      It keeps one primary draft per day and can link media already uploaded with diary_add_media.
+      It keeps one primary published entry per day and can link media already uploaded with diary_add_media.
     `.trim(),
     parameters: {
       type: 'object',
@@ -51,7 +51,6 @@ export async function handler(params, context) {
   const { media_ids, ...entryData } = params;
   const qs = new URLSearchParams({
     date: params.date,
-    status: 'draft',
   });
   if (params.city) qs.set('city', params.city);
   const existing = await api('GET', `/api/entries?${qs}`);
@@ -67,10 +66,12 @@ export async function handler(params, context) {
       sort_order: entryData.day_number ?? existing[0].sort_order ?? 0,
       mood: entryData.mood ?? existing[0].mood,
       tags: entryData.tags ?? existing[0].tags ?? [],
+      status: 'published',
     });
   } else {
     entry = await api('POST', '/api/entries', {
       ...entryData,
+      status: 'published',
       sort_order: entryData.sort_order ?? entryData.day_number ?? 0,
       source_channel: 'whatsapp',
       source_message_id: params.source_message_id ?? context?.messageId ?? null,
@@ -79,7 +80,10 @@ export async function handler(params, context) {
   }
 
   if (media_ids?.length) {
-    await Promise.all(media_ids.map((id) => api('PATCH', `/api/media/${id}`, { entry_id: entry.id })));
+    await Promise.all(media_ids.map((id) => api('PATCH', `/api/media/${id}`, {
+      entry_id: entry.id,
+      status: 'published',
+    })));
   }
 
   return {
@@ -89,6 +93,6 @@ export async function handler(params, context) {
     date: entry.date,
     status: entry.status,
     created: !existing.length,
-    summary: `Entrada principal del dia ${entry.date} ${existing.length ? 'actualizada' : 'creada'} como ${entry.status}.`,
+    summary: `Entrada principal del dia ${entry.date} ${existing.length ? 'actualizada' : 'creada'} y publicada.`,
   };
 }

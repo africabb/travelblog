@@ -53,7 +53,7 @@ export async function uploadMedia(buffer, meta) {
     contentType: meta.mime_type     ?? 'application/octet-stream',
   });
 
-  const fields = ['entry_id', 'caption', 'location', 'sort_order',
+  const fields = ['entry_id', 'status', 'caption', 'location', 'sort_order',
                   'source_channel', 'source_message_id', 'source_timestamp', 'taken_at'];
 
   fields.forEach((f) => {

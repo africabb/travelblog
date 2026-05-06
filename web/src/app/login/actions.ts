@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 
 export async function login(formData: FormData) {
   const pin  = String(formData.get('pin') ?? '');
-  const next = String(formData.get('next') ?? '/drafts');
+  const next = String(formData.get('next') ?? '/feed');
 
   const expected = process.env.PRIVATE_TOKEN;
 

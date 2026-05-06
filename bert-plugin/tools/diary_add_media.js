@@ -62,6 +62,7 @@ export async function handler(params, context) {
     mime_type:         mime_type,
     original_name:     original_name ?? null,
     entry_id:          meta.entry_id          ?? null,
+    status:            'published',
     caption:           meta.caption           ?? null,
     location:          meta.location          ?? null,
     taken_at:          meta.taken_at          ?? null,

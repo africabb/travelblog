@@ -33,6 +33,7 @@ export default async function mediaRoutes(app) {
     // Metadatos opcionales en campos del mismo multipart
     const fields           = data.fields ?? {};
     const entry_id         = fields.entry_id?.value         ?? null;
+    const status           = fields.status?.value           ?? 'draft';
     const caption          = fields.caption?.value          ?? null;
     const location         = fields.location?.value         ?? null;
     const sort_order       = Number(fields.sort_order?.value ?? 0);
@@ -46,13 +47,13 @@ export default async function mediaRoutes(app) {
     const rows = await query(`
       INSERT INTO media
         (entry_id, type, sort_order, storage_key, url, caption, mime_type, size_bytes,
-         source_channel, source_message_id, source_timestamp, taken_at)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+         source_channel, source_message_id, source_timestamp, taken_at, status)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
       RETURNING *
     `, [
       entry_id, type, sort_order, key, url, caption,
       mimeType, buffer.byteLength,
-      source_channel, source_message_id, source_timestamp, taken_at,
+      source_channel, source_message_id, source_timestamp, taken_at, status,
     ]);
 
     return reply.code(201).send(rows[0]);

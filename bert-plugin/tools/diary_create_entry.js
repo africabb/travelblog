@@ -6,10 +6,10 @@ export const definition = {
     name: 'diary_create_entry',
     description: `
       Crea una entrada de texto en el diario de viaje.
-      Siempre se crea como borrador (draft) a menos que se indique explícitamente status='published'.
-      Úsala cuando el usuario cuenta algo que ha vivido, describe un lugar, comparte una reflexión
+      Siempre se crea publicada directamente.
+      Usala cuando el usuario cuenta algo que ha vivido, describe un lugar, comparte una reflexion
       o quiere que quede escrito en su diario.
-      NO la uses para subir fotos o vídeos — para eso usa diary_add_media.
+      NO la uses para subir fotos o videos; para eso usa diary_add_media.
     `.trim(),
     parameters: {
       type: 'object',
@@ -25,28 +25,28 @@ export const definition = {
         },
         title: {
           type: 'string',
-          description: 'Título evocador y poético para la entrada. Máximo 80 caracteres.',
+          description: 'Titulo evocador para la entrada. Maximo 80 caracteres.',
         },
         body: {
           type: 'string',
-          description: 'Texto narrativo de la entrada. Primera persona, tono personal y viajero. Mínimo 2 frases, máximo 6.',
+          description: 'Texto narrativo de la entrada. Primera persona, tono personal y viajero. Minimo 2 frases, maximo 6.',
         },
         location: {
           type: 'string',
-          description: 'Nombre del lugar específico (templo, barrio, calle…).',
+          description: 'Nombre del lugar especifico.',
         },
         city: {
           type: 'string',
-          description: 'Ciudad japonesa (Tokio, Kioto, Osaka, Nara…).',
+          description: 'Ciudad o destino principal del viaje.',
         },
         mood: {
           type: 'string',
-          description: 'Emoji + adjetivo que describe el estado de ánimo. Ej: "🌸 Maravillada", "⚡ Electrizada".',
+          description: 'Estado de animo breve.',
         },
         tags: {
           type: 'array',
           items: { type: 'string' },
-          description: 'Lista de etiquetas cortas. Ej: ["Asakusa", "Templo", "Amanecer"].',
+          description: 'Lista de etiquetas cortas.',
         },
         media_ids: {
           type: 'array',
@@ -55,7 +55,7 @@ export const definition = {
         },
         source_message_id: {
           type: 'string',
-          description: 'ID del mensaje de WhatsApp de origen (para trazabilidad).',
+          description: 'ID del mensaje de WhatsApp de origen.',
         },
       },
     },
@@ -67,27 +67,28 @@ export async function handler(params, context) {
 
   const entry = await api('POST', '/api/entries', {
     ...entryData,
+    status: 'published',
     sort_order: entryData.sort_order ?? entryData.day_number ?? 0,
     source_channel: 'whatsapp',
     source_message_id: params.source_message_id ?? context?.messageId ?? null,
-    source_timestamp:  context?.timestamp        ?? new Date().toISOString(),
+    source_timestamp: context?.timestamp ?? new Date().toISOString(),
   });
 
-  // Vincular media si se pasaron IDs
   if (media_ids?.length) {
     await Promise.all(
-      media_ids.map((id) =>
-        api('PATCH', `/api/media/${id}`, { entry_id: entry.id })
-      )
+      media_ids.map((id) => api('PATCH', `/api/media/${id}`, {
+        entry_id: entry.id,
+        status: 'published',
+      })),
     );
   }
 
   return {
-    ok:       true,
+    ok: true,
     entry_id: entry.id,
-    title:    entry.title,
-    date:     entry.date,
-    status:   entry.status,
-    summary:  `Entrada "${entry.title}" guardada como ${entry.status}.`,
+    title: entry.title,
+    date: entry.date,
+    status: entry.status,
+    summary: `Entrada "${entry.title}" publicada.`,
   };
 }

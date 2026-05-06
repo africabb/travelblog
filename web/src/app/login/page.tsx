@@ -8,7 +8,7 @@ export default function LoginPage({
 }: {
   searchParams: { next?: string; error?: string };
 }) {
-  const next  = searchParams.next  ?? '/drafts';
+  const next  = searchParams.next  ?? '/feed';
   const error = searchParams.error;
 
   return (
@@ -56,9 +56,6 @@ export default function LoginPage({
 
         <p className="mt-8 text-center text-xs text-ink-soft/60">
           <a href="/feed" className="hover:text-ink-soft">Ver diario público →</a>
-        </p>
-        <p className="mt-5 text-center text-[9px] leading-none text-ink-muted/20 select-none">
-          revisar borradores
         </p>
       </div>
     </div>

@@ -425,13 +425,13 @@ export default async function HomePage() {
                 n:    '2',
                 Icon: PenLine,
                 t:    'Bert organiza',
-                d:    'Bert crea las entradas, identifica lugares y guarda todo como borrador.',
+                d:    'Bert crea las entradas, identifica lugares y organiza cada recuerdo.',
               },
               {
                 n:    '3',
                 Icon: Globe,
-                t:    'Publicamos',
-                d:    'Revisamos los borradores y con un mensaje a Bert el diario se actualiza.',
+                t:    'Se publica',
+                d:    'Cada mensaje actualiza la web directamente, sin pasos intermedios.',
               },
             ].map(({ n, Icon, t, d }) => (
               <div key={n} className="flex flex-col gap-3">
