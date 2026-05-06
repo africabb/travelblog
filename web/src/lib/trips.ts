@@ -47,7 +47,7 @@ export function tripFromSlug(slug: string): DynamicTripConfig {
     eyebrow: 'Viaje',
     description: 'Comida, fotos y recuerdos guardados por Bert.',
     basePath: `/viaje/${slugifyTripName(title)}`,
-    filters: { city: title },
+    filters: { citySlug: slug },
     fallbackCover: 'https://media.hustlegotreal.com/affymiguelpalma.webp',
     accent: '#7EC8E3',
     footer: `${title} · M&A Travels`,

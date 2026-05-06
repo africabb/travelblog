@@ -10,6 +10,7 @@ import type { Entry, Place } from '@/lib/types';
 type TripFilters = {
   city?: string;
   excludeCity?: string;
+  citySlug?: string;
 };
 
 export type DynamicTripConfig = {
@@ -31,14 +32,14 @@ type DayGroup = {
 };
 
 export async function DynamicTripPage({ config }: { config: DynamicTripConfig }) {
-  const feed = await fetchFeed(100, 0, undefined, config.filters).catch(() => ({
+  const feed = await fetchFeed(100, 0, undefined, apiFilters(config.filters)).catch(() => ({
     entries: [],
     total: 0,
     limit: 100,
     offset: 0,
   }));
 
-  const entries = feed.entries;
+  const entries = filterEntriesBySlug(feed.entries, config.filters.citySlug);
   const days = groupByDate(entries);
   const photos = entries.flatMap((entry) => entry.media?.filter((media) => media.type === 'photo') ?? []);
   const places = uniquePlaces(entries.flatMap((entry) => entry.places ?? []));
@@ -96,9 +97,10 @@ export async function DynamicTripDayPage({
   date: string;
 }) {
   let entries: Entry[] = [];
+  const normalizedDate = datePath(date);
   try {
-    const feed = await fetchFeed(50, 0, date, config.filters);
-    entries = feed.entries;
+    const feed = await fetchFeed(50, 0, normalizedDate, apiFilters(config.filters));
+    entries = filterEntriesBySlug(feed.entries, config.filters.citySlug);
   } catch {
     notFound();
   }
@@ -106,7 +108,7 @@ export async function DynamicTripDayPage({
   if (!entries.length) notFound();
 
   const dayNumber = getDayNumber(entries, 0);
-  const dateLabel = formatDate(date, true);
+  const dateLabel = formatDate(normalizedDate, true);
   const cities = [...new Set(entries.map((entry) => entry.city).filter(Boolean))];
   const photos = entries.flatMap((entry) => entry.media?.filter((media) => media.type === 'photo') ?? []);
   const places = uniquePlaces(entries.flatMap((entry) => entry.places ?? []));
@@ -239,20 +241,21 @@ export async function generateTripDayMetadata({
 }): Promise<Metadata> {
   const siteUrl = getSiteUrl();
   const fallbackImage = absoluteUrl(config.fallbackCover, siteUrl);
+  const normalizedDate = datePath(date);
 
   try {
-    const feed = await fetchFeed(50, 0, date, config.filters);
-    const entries = feed.entries;
+    const feed = await fetchFeed(50, 0, normalizedDate, apiFilters(config.filters));
+    const entries = filterEntriesBySlug(feed.entries, config.filters.citySlug);
     const firstEntry = entries[0];
 
     if (!firstEntry) {
       return {
-        title: `${config.title} · ${formatDate(date, true)}`,
+        title: `${config.title} · ${formatDate(normalizedDate, true)}`,
         description: config.description,
         openGraph: {
-          title: `${config.title} · ${formatDate(date, true)}`,
+          title: `${config.title} · ${formatDate(normalizedDate, true)}`,
           description: config.description,
-          url: absoluteUrl(`${config.basePath}/${date}`, siteUrl),
+          url: absoluteUrl(`${config.basePath}/${normalizedDate}`, siteUrl),
           images: [{ url: fallbackImage }],
         },
       };
@@ -269,7 +272,7 @@ export async function generateTripDayMetadata({
         .find(Boolean)?.url ?? config.fallbackCover,
       siteUrl,
     );
-    const url = absoluteUrl(`${config.basePath}/${date}`, siteUrl);
+    const url = absoluteUrl(`${config.basePath}/${normalizedDate}`, siteUrl);
 
     return {
       title,
@@ -298,12 +301,12 @@ export async function generateTripDayMetadata({
     };
   } catch {
     return {
-      title: `${config.title} · ${formatDate(date, true)}`,
+      title: `${config.title} · ${formatDate(normalizedDate, true)}`,
       description: config.description,
       openGraph: {
-        title: `${config.title} · ${formatDate(date, true)}`,
+        title: `${config.title} · ${formatDate(normalizedDate, true)}`,
         description: config.description,
-        url: absoluteUrl(`${config.basePath}/${date}`, siteUrl),
+        url: absoluteUrl(`${config.basePath}/${normalizedDate}`, siteUrl),
         images: [{ url: fallbackImage }],
       },
     };
@@ -376,6 +379,31 @@ function TripHero({
 
 function getSiteUrl() {
   return (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://japon.amurasoftware.com').replace(/\/$/, '');
+}
+
+function apiFilters(filters: TripFilters) {
+  const { citySlug, ...rest } = filters;
+  return rest;
+}
+
+function filterEntriesBySlug(entries: Entry[], citySlug?: string) {
+  if (!citySlug) return entries;
+  return entries.filter((entry) => slugifyForRoute(entry.city ?? '') === citySlug);
+}
+
+function slugifyForRoute(name: string) {
+  return name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/&/g, ' y ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function datePath(value: string) {
+  const match = decodeURIComponent(value).match(/\d{4}-\d{2}-\d{2}/);
+  return match ? match[0] : value;
 }
 
 function absoluteUrl(url: string, siteUrl: string) {
@@ -695,7 +723,8 @@ function groupByDate(entries: Entry[]): DayGroup[] {
 }
 
 function getDayNumber(entries: Entry[], index: number) {
-  return entries.find((entry) => entry.day_number != null)?.day_number ?? index + 1;
+  const explicitDay = entries.find((entry) => entry.day_number != null)?.day_number;
+  return explicitDay && explicitDay > 0 ? explicitDay : index + 1;
 }
 
 function dateKey(value: string) {

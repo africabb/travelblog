@@ -13,6 +13,11 @@ function slugifyTripName(name = '') {
     .replace(/^-+|-+$/g, '');
 }
 
+function datePath(value) {
+  const match = String(value ?? '').match(/\d{4}-\d{2}-\d{2}/);
+  return match ? match[0] : String(value ?? '');
+}
+
 function publicEntryUrl(entry) {
   const city = (entry.city ?? '').trim();
   const normalized = city
@@ -20,16 +25,18 @@ function publicEntryUrl(entry) {
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
 
+  const date = datePath(entry.date);
+
   if (normalized === 'palma de mallorca' || normalized === 'palma' || normalized === 'mallorca') {
-    return `${SITE_URL}/palma/${entry.date}`;
+    return `${SITE_URL}/palma/${date}`;
   }
 
   if (JAPAN_CITIES.has(normalized)) {
-    return `${SITE_URL}/feed/${entry.date}`;
+    return `${SITE_URL}/feed/${date}`;
   }
 
   const slug = slugifyTripName(city || 'viaje');
-  return `${SITE_URL}/viaje/${slug}/${entry.date}`;
+  return `${SITE_URL}/viaje/${slug}/${date}`;
 }
 
 export const definition = {
