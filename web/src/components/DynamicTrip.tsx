@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { CalendarDays, Camera, MapPin, Utensils } from 'lucide-react';
 import { fetchFeed } from '@/lib/api';
@@ -229,6 +230,86 @@ export async function DynamicTripDayPage({
   );
 }
 
+export async function generateTripDayMetadata({
+  config,
+  date,
+}: {
+  config: DynamicTripConfig;
+  date: string;
+}): Promise<Metadata> {
+  const siteUrl = getSiteUrl();
+  const fallbackImage = absoluteUrl(config.fallbackCover, siteUrl);
+
+  try {
+    const feed = await fetchFeed(50, 0, date, config.filters);
+    const entries = feed.entries;
+    const firstEntry = entries[0];
+
+    if (!firstEntry) {
+      return {
+        title: `${config.title} · ${formatDate(date, true)}`,
+        description: config.description,
+        openGraph: {
+          title: `${config.title} · ${formatDate(date, true)}`,
+          description: config.description,
+          url: absoluteUrl(`${config.basePath}/${date}`, siteUrl),
+          images: [{ url: fallbackImage }],
+        },
+      };
+    }
+
+    const dayNumber = getDayNumber(entries, 0);
+    const title = firstEntry.title
+      ? `${firstEntry.title} · Dia ${dayNumber}`
+      : `${config.title} · Dia ${dayNumber}`;
+    const description = excerpt(entries.map((entry) => entry.body).join(' '), config.description);
+    const image = absoluteUrl(
+      entries
+        .flatMap((entry) => entry.media?.filter((media) => media.type === 'photo') ?? [])
+        .find(Boolean)?.url ?? config.fallbackCover,
+      siteUrl,
+    );
+    const url = absoluteUrl(`${config.basePath}/${date}`, siteUrl);
+
+    return {
+      title,
+      description,
+      alternates: { canonical: url },
+      openGraph: {
+        title,
+        description,
+        url,
+        type: 'article',
+        siteName: 'Miguel & Africa',
+        publishedTime: firstEntry.date,
+        images: [
+          {
+            url: image,
+            alt: firstEntry.title,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: [image],
+      },
+    };
+  } catch {
+    return {
+      title: `${config.title} · ${formatDate(date, true)}`,
+      description: config.description,
+      openGraph: {
+        title: `${config.title} · ${formatDate(date, true)}`,
+        description: config.description,
+        url: absoluteUrl(`${config.basePath}/${date}`, siteUrl),
+        images: [{ url: fallbackImage }],
+      },
+    };
+  }
+}
+
 function TripHero({
   config,
   cover,
@@ -291,6 +372,24 @@ function TripHero({
       </div>
     </section>
   );
+}
+
+function getSiteUrl() {
+  return (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://japon.amurasoftware.com').replace(/\/$/, '');
+}
+
+function absoluteUrl(url: string, siteUrl: string) {
+  if (/^http:\/\/204\.168\.146\.128:3001\/uploads\//i.test(url)) {
+    return url.replace(/^http:\/\/204\.168\.146\.128:3001/i, siteUrl);
+  }
+  if (/^https?:\/\//i.test(url)) return url;
+  return `${siteUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+}
+
+function excerpt(text: string | null | undefined, fallback: string) {
+  const clean = (text ?? '').replace(/\s+/g, ' ').trim();
+  if (!clean) return fallback;
+  return clean.length > 155 ? `${clean.slice(0, 152).trim()}...` : clean;
 }
 
 function TripSummary({

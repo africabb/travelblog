@@ -1,5 +1,37 @@
 import { api } from '../client.js';
 
+const SITE_URL = (process.env.DIARY_SITE_URL ?? 'https://japon.amurasoftware.com').replace(/\/$/, '');
+const JAPAN_CITIES = new Set(['tokio', 'kioto', 'osaka', 'nara', 'hiroshima', 'japon', 'japón']);
+
+function slugifyTripName(name = '') {
+  return name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/&/g, ' y ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function publicEntryUrl(entry) {
+  const city = (entry.city ?? '').trim();
+  const normalized = city
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+  if (normalized === 'palma de mallorca' || normalized === 'palma' || normalized === 'mallorca') {
+    return `${SITE_URL}/palma/${entry.date}`;
+  }
+
+  if (JAPAN_CITIES.has(normalized)) {
+    return `${SITE_URL}/feed/${entry.date}`;
+  }
+
+  const slug = slugifyTripName(city || 'viaje');
+  return `${SITE_URL}/viaje/${slug}/${entry.date}`;
+}
+
 export const definition = {
   type: 'function',
   function: {
@@ -92,7 +124,8 @@ export async function handler(params, context) {
     title: entry.title,
     date: entry.date,
     status: entry.status,
+    public_url: publicEntryUrl(entry),
     created: !existing.length,
-    summary: `Entrada principal del dia ${entry.date} ${existing.length ? 'actualizada' : 'creada'} y publicada.`,
+    summary: `Entrada principal del dia ${entry.date} ${existing.length ? 'actualizada' : 'creada'} y publicada: ${publicEntryUrl(entry)}`,
   };
 }

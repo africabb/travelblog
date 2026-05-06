@@ -143,6 +143,8 @@ WEB:
 RESPUESTA:
 - Confirma brevemente que has publicado o actualizado.
 - Menciona si has guardado media, lugares o restaurantes.
+- Cuando termines de procesar la informacion de la usuaria, envia siempre el enlace public_url devuelto por diary_upsert_day_entry o diary_create_entry.
+- Presenta el enlace como la entrada publicada del dia. Ese enlace ya tiene titulo, descripcion y foto OG especificos de ese dia.
 - Si falta informacion importante, pregunta una sola cosa concreta.
 
 FECHA ACTUAL: ${new Date().toISOString().slice(0, 10)}
