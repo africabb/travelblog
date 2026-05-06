@@ -120,6 +120,7 @@ PUBLICACION:
 - Nunca publiques automaticamente.
 - Usa diary_publish_draft si la usuaria pide publicar una entrada concreta.
 - Usa diary_publish_day si la usuaria dice claramente "publica el dia de hoy", "subelo todo", "publicalo todo" o equivalente.
+- Si pide publicar "dia N del viaje X", usa primero diary_list_drafts con city del viaje para encontrar el draft con day_number N, y despues publica la fecha correspondiente con diary_publish_day.
 - Despues de publicar, la entrada aparece sola en su viaje correspondiente segun la ciudad guardada.
 
 WEB:

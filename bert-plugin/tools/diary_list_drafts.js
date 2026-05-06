@@ -5,10 +5,10 @@ export const definition = {
   function: {
     name: 'diary_list_drafts',
     description: `
-      Lista los borradores del diario pendientes de revisión.
-      Úsala cuando el usuario pregunte qué has guardado, quiera ver sus borradores,
-      o quiera revisar lo del día antes de publicarlo.
-      Devuelve un resumen compacto de cada borrador para que puedas contárselo en chat.
+      Lista los borradores del diario pendientes de revision.
+      Usala cuando el usuario pregunte que has guardado, quiera ver sus borradores,
+      quiera revisar lo del dia antes de publicarlo, o quiera publicar por numero de dia del viaje.
+      Devuelve un resumen compacto de cada borrador para que puedas contarselo en chat.
     `.trim(),
     parameters: {
       type: 'object',
@@ -19,7 +19,7 @@ export const definition = {
         },
         city: {
           type: 'string',
-          description: 'Filtrar por ciudad.',
+          description: 'Filtrar por ciudad o viaje.',
         },
       },
     },
@@ -38,7 +38,7 @@ export async function handler(params) {
   }
 
   const lines = drafts.map((d, i) =>
-    `${i + 1}. [${d.date}] "${d.title}"${d.city ? ` — ${d.city}` : ''}` +
+    `${i + 1}. [${d.date}]${d.day_number ? ` Dia ${d.day_number}` : ''} "${d.title}"${d.city ? ` - ${d.city}` : ''}` +
     `${d.media?.length ? ` (${d.media.length} foto${d.media.length > 1 ? 's' : ''})` : ''}`
   );
 
@@ -46,10 +46,11 @@ export async function handler(params) {
     ok:     true,
     count:  drafts.length,
     drafts: drafts.map((d) => ({
-      id:    d.id,
-      date:  d.date,
-      title: d.title,
-      city:  d.city,
+      id:          d.id,
+      date:        d.date,
+      day_number:  d.day_number,
+      title:       d.title,
+      city:        d.city,
       media_count: d.media?.length ?? 0,
     })),
     summary: `Tienes ${drafts.length} borrador${drafts.length > 1 ? 'es' : ''}:\n${lines.join('\n')}`,
