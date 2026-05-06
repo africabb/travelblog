@@ -23,3 +23,33 @@ export const PALMA_TRIP: DynamicTripConfig = {
   accent: '#7EC8E3',
   footer: 'Palma de Mallorca · 2026',
 };
+
+export function slugifyTripName(name: string) {
+  return name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/&/g, ' y ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+export function tripFromSlug(slug: string): DynamicTripConfig {
+  const title = slug
+    .split('-')
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+
+  return {
+    title,
+    subtitle: 'Miguel & África',
+    eyebrow: 'Viaje',
+    description: 'Comida, fotos y recuerdos guardados por Bert.',
+    basePath: `/viaje/${slugifyTripName(title)}`,
+    filters: { city: title },
+    fallbackCover: 'https://media.hustlegotreal.com/affymiguelpalma.webp',
+    accent: '#7EC8E3',
+    footer: `${title} · M&A Travels`,
+  };
+}
