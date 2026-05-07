@@ -75,7 +75,7 @@ const TRIPS = [
     cities: 'Tokio · Kioto · Osaka · Nara · Hiroshima',
     active: false,
     done:   false,
-    cover:  'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=82',
+    cover:  null,
     bg:     '#2C0A0A',
   },
   {
@@ -88,7 +88,7 @@ const TRIPS = [
     cities: 'Santa Eulalia · Es Canar · Sant Antoni · Dalt Vila',
     active: false,
     done:   false,
-    cover:  'https://images.unsplash.com/photo-1605443796819-7f468cbd6f34?auto=format&fit=crop&w=1200&q=82',
+    cover:  null,
     bg:     '#0A2118',
   },
   {
@@ -101,7 +101,7 @@ const TRIPS = [
     cities: 'Mar Menor · La Manga del Mar Menor · Cartagena',
     active: false,
     done:   false,
-    cover:  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=82',
+    cover:  null,
     bg:     '#071A2A',
   },
 ] as const;
@@ -513,27 +513,38 @@ function TripCard({
     : trip.done
       ? 'text-white bg-white/16'
       : 'text-white/75 bg-black/35 uppercase tracking-[0.16em]';
+  const hasCover = Boolean(trip.cover);
+  const tripLabel = trip.active ? 'Diario activo' : trip.done ? 'Diario publicado' : 'Diario en camino';
   const inner = (
     <div
-      className="relative min-h-[390px] overflow-hidden rounded-[1.25rem] group
+      className="relative h-full min-h-[390px] overflow-hidden rounded-[1.25rem] group
                   shadow-[0_16px_45px_rgba(18,27,33,0.10)]
                   ring-1 ring-black/[0.06]"
       style={{ backgroundColor: trip.bg }}
     >
-      <Image
-        src={trip.cover}
-        alt={trip.name}
-        fill
-        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-        className="object-cover opacity-80 group-hover:scale-[1.045] transition-transform duration-700"
-        unoptimized
-      />
+      {hasCover && (
+        <Image
+          src={trip.cover!}
+          alt={trip.name}
+          fill
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          className="object-cover opacity-80 group-hover:scale-[1.045] transition-transform duration-700"
+          unoptimized
+        />
+      )}
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/15 to-black/78" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/78" />
       <div
-        className="absolute inset-0 opacity-70 mix-blend-multiply"
-        style={{ background: `linear-gradient(135deg, transparent 25%, ${trip.bg} 100%)` }}
+        className={hasCover ? 'absolute inset-0 opacity-70 mix-blend-multiply' : 'absolute inset-0 opacity-100'}
+        style={{
+          background: hasCover
+            ? `linear-gradient(135deg, transparent 25%, ${trip.bg} 100%)`
+            : `linear-gradient(145deg, ${trip.bg} 0%, #101010 100%)`,
+        }}
       />
+      {!hasCover && (
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_26%_18%,rgba(255,255,255,0.16),transparent_30%),radial-gradient(circle_at_80%_82%,rgba(255,255,255,0.08),transparent_34%)]" />
+      )}
 
       <div className="absolute top-4 left-4 right-4 z-10 flex items-start justify-between gap-3">
         <span className="font-sans text-[10px] text-white/70 tracking-[0.28em] uppercase">
@@ -546,14 +557,14 @@ function TripCard({
       </div>
 
       <div className="absolute bottom-0 inset-x-0 z-10 p-5 sm:p-6">
-        <p className="font-sans text-[11px] text-white/72 mb-2">
-          {trip.flag} {trip.active ? 'Viaje vivo' : trip.done ? 'Diario publicado' : 'En la lista'}
+        <p className="font-sans text-[11px] text-white/72 mb-2 min-h-[1rem]">
+          {trip.flag} {tripLabel}
         </p>
-        <h2 className="font-display font-bold text-white leading-[0.96] text-[clamp(2.25rem,8vw,3.4rem)] sm:text-[clamp(2.1rem,4vw,3rem)] break-words max-w-[10ch]">
+        <h2 className="font-display font-bold text-white leading-[0.96] text-[clamp(2.15rem,8vw,3rem)] sm:text-[clamp(2rem,4vw,2.7rem)] break-words max-w-[10ch] min-h-[5.3rem] flex items-end">
           {trip.name}
         </h2>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap content-start gap-2 min-h-[5.5rem]">
           {places.map((place) => (
             <span
               key={place}
@@ -567,8 +578,8 @@ function TripCard({
         </div>
 
         <div className="mt-5 flex items-end justify-between gap-4">
-          <p className="font-sans text-xs text-white/62 max-w-[14rem] leading-relaxed">
-            Restaurantes, lugares y recuerdos en orden cronológico.
+          <p className="font-sans text-xs text-white/68 max-w-[14rem] leading-relaxed">
+            {trip.period}
           </p>
 
           {trip.href && (
@@ -585,5 +596,5 @@ function TripCard({
     </div>
   );
 
-  return trip.href ? <Link href={trip.href}>{inner}</Link> : <div>{inner}</div>;
+  return trip.href ? <Link href={trip.href} className="block h-full">{inner}</Link> : <div className="h-full">{inner}</div>;
 }

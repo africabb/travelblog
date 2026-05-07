@@ -128,7 +128,7 @@ export async function DynamicTripDayPage({
             sizes="100vw"
             priority
           />
-        ) : (
+        ) : config.fallbackCover ? (
           <Image
             src={config.fallbackCover}
             alt={config.title}
@@ -138,7 +138,7 @@ export async function DynamicTripDayPage({
             priority
             unoptimized
           />
-        )}
+        ) : null}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D1B2A]/55 via-[#0D1B2A]/10 to-[#0D1B2A]" />
 
         <div className="relative z-10 flex items-center justify-between px-5 pt-5">
@@ -239,7 +239,7 @@ export async function generateTripDayMetadata({
   date: string;
 }): Promise<Metadata> {
   const siteUrl = getSiteUrl();
-  const fallbackImage = absoluteUrl(config.fallbackCover, siteUrl);
+  const fallbackImage = config.fallbackCover ? absoluteUrl(config.fallbackCover, siteUrl) : undefined;
   const normalizedDate = datePath(date);
 
   try {
@@ -255,7 +255,7 @@ export async function generateTripDayMetadata({
           title: `${config.title} · ${formatDate(normalizedDate, true)}`,
           description: config.description,
           url: absoluteUrl(`${config.basePath}/${normalizedDate}`, siteUrl),
-          images: [{ url: fallbackImage }],
+          ...(fallbackImage ? { images: [{ url: fallbackImage }] } : {}),
         },
       };
     }
@@ -265,12 +265,10 @@ export async function generateTripDayMetadata({
       ? `${firstEntry.title} · Día ${dayNumber}`
       : `${config.title} · Día ${dayNumber}`;
     const description = excerpt(entries.map((entry) => entry.body).join(' '), config.description);
-    const image = absoluteUrl(
-      entries
-        .flatMap((entry) => entry.media?.filter((media) => media.type === 'photo') ?? [])
-        .find(Boolean)?.url ?? config.fallbackCover,
-      siteUrl,
-    );
+    const imageSource = entries
+      .flatMap((entry) => entry.media?.filter((media) => media.type === 'photo') ?? [])
+      .find(Boolean)?.url ?? config.fallbackCover;
+    const image = imageSource ? absoluteUrl(imageSource, siteUrl) : undefined;
     const url = absoluteUrl(`${config.basePath}/${normalizedDate}`, siteUrl);
 
     return {
@@ -284,18 +282,13 @@ export async function generateTripDayMetadata({
         type: 'article',
         siteName: 'Miguel & África',
         publishedTime: firstEntry.date,
-        images: [
-          {
-            url: image,
-            alt: firstEntry.title,
-          },
-        ],
+        ...(image ? { images: [{ url: image, alt: firstEntry.title }] } : {}),
       },
       twitter: {
         card: 'summary_large_image',
         title,
         description,
-        images: [image],
+        ...(image ? { images: [image] } : {}),
       },
     };
   } catch {
@@ -306,7 +299,7 @@ export async function generateTripDayMetadata({
         title: `${config.title} · ${formatDate(normalizedDate, true)}`,
         description: config.description,
         url: absoluteUrl(`${config.basePath}/${normalizedDate}`, siteUrl),
-        images: [{ url: fallbackImage }],
+        ...(fallbackImage ? { images: [{ url: fallbackImage }] } : {}),
       },
     };
   }
@@ -328,15 +321,17 @@ function TripHero({
   return (
     <section className="relative h-[60vh] min-h-[400px] flex flex-col overflow-hidden bg-[#0D1B2A]">
       <div className="absolute inset-0">
-        <Image
-          src={cover}
-          alt={config.title}
-          fill
-          className="object-cover opacity-35"
-          sizes="100vw"
-          priority
-          unoptimized
-        />
+        {cover ? (
+          <Image
+            src={cover}
+            alt={config.title}
+            fill
+            className="object-cover opacity-35"
+            sizes="100vw"
+            priority
+            unoptimized
+          />
+        ) : null}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D1B2A]/50 via-transparent to-[#0D1B2A]" />
       </div>
 
