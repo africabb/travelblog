@@ -62,6 +62,15 @@ export const definition = {
 export async function handler(params, context) {
   const { file_path, media_base64, mime_type, original_name, ...meta } = params;
 
+  if (mime_type?.startsWith('audio/')) {
+    return {
+      ok: true,
+      skipped: true,
+      type: 'audio',
+      summary: 'Audio no publicado. Usar solo la transcripción como fuente para redactar la entrada.',
+    };
+  }
+
   if (!file_path && !media_base64) {
     throw new Error('file_path o media_base64 es obligatorio');
   }
