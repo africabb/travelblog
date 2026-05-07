@@ -80,6 +80,26 @@ function normalizeTripFields(params) {
   };
 }
 
+function normalizeBody(value = '') {
+  return String(value).replace(/\s+/g, ' ').trim();
+}
+
+function mergeBody(existingBody = '', nextBody = '') {
+  const existing = String(existingBody ?? '').trim();
+  const next = String(nextBody ?? '').trim();
+
+  if (!existing) return next;
+  if (!next) return existing;
+
+  const normalizedExisting = normalizeBody(existing);
+  const normalizedNext = normalizeBody(next);
+
+  if (normalizedNext.includes(normalizedExisting)) return next;
+  if (normalizedExisting.includes(normalizedNext)) return existing;
+
+  return `${existing}\n\n${next}`;
+}
+
 function publicEntryUrl(entry) {
   const city = (entry.city ?? '').trim();
   const normalized = city
@@ -133,7 +153,7 @@ export const definition = {
         },
         body: {
           type: 'string',
-          description: 'Updated full body for the day entry. Merge prior context with the new memory.',
+          description: 'Narrative body for the day entry. If the day already exists, write only the new polished scene or the full merged story; the tool will never delete previous text accidentally.',
         },
         location: { type: 'string' },
         city: { type: 'string' },
@@ -164,9 +184,11 @@ export async function handler(params, context) {
 
   let entry;
   if (existing.length) {
+    const body = mergeBody(existing[0].body, entryData.body);
+
     entry = await api('PATCH', `/api/entries/${existing[0].id}`, {
-      title: entryData.title,
-      body: entryData.body,
+      title: entryData.title ?? existing[0].title,
+      body,
       location: entryData.location ?? existing[0].location,
       city: entryData.city ?? existing[0].city,
       day_number: entryData.day_number ?? existing[0].day_number,
