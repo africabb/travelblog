@@ -45,8 +45,8 @@ export async function DynamicTripPage({ config }: { config: DynamicTripConfig })
   const places = uniquePlaces(entries.flatMap((entry) => entry.places ?? []));
   const restaurants = places.filter(isRestaurantLike);
   const cover = photos[0]?.url ?? config.fallbackCover;
-  const restaurantStat = restaurants.length || places.length;
-  const summary = buildSummary(entries);
+  const restaurantStat = restaurants.length;
+  const summary = buildSummary(entries, config.title);
 
   return (
     <div className="min-h-screen bg-cream">
@@ -112,6 +112,8 @@ export async function DynamicTripDayPage({
   const cities = [...new Set(entries.map((entry) => entry.city).filter(Boolean))];
   const photos = entries.flatMap((entry) => entry.media?.filter((media) => media.type === 'photo') ?? []);
   const places = uniquePlaces(entries.flatMap((entry) => entry.places ?? []));
+  const restaurants = places.filter(isRestaurantLike);
+  const dayPlaces = places.filter((place) => !isRestaurantLike(place));
   const cover = photos[0]?.url;
 
   return (
@@ -202,23 +204,20 @@ export async function DynamicTripDayPage({
                   ))}
                 </div>
               )}
-              {(entry.places?.length ?? 0) > 0 && <EntryPlaces places={entry.places} accent={config.accent} />}
+              <EntryPlaces places={entry.places ?? []} accent={config.accent} />
             </article>
           ))}
         </div>
 
-        {places.length > 0 && (
-          <section className="mt-14 pt-8 border-t border-black/8">
-            <p className="text-[10px] tracking-[.38em] uppercase text-ink-soft font-semibold mb-5">
-              Restaurantes y lugares
-            </p>
-            <div className="grid grid-cols-1 gap-3">
-              {places.map((place) => (
-                <PlaceRow key={place.id} place={place} accent={config.accent} />
-              ))}
-            </div>
-          </section>
-        )}
+        <section className="mt-14 pt-8 border-t border-black/8">
+          <p className="text-[10px] tracking-[.38em] uppercase text-ink-soft font-semibold mb-5">
+            Restaurantes y lugares
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <ReferenceList title="Restaurantes" items={restaurants} empty="Sin restaurantes guardados todavía" accent={config.accent} />
+            <ReferenceList title="Lugares" items={dayPlaces} empty="Sin lugares guardados todavía" accent={config.accent} />
+          </div>
+        </section>
 
         <div className="flex justify-center mt-14 pt-8 border-t border-black/8">
           <Link href={config.basePath} className="inline-flex items-center gap-2 text-sm font-medium hover:underline" style={{ color: config.accent }}>
@@ -427,8 +426,6 @@ function TripSummary({
   groups: ReturnType<typeof buildSummary>;
   accent: string;
 }) {
-  if (!groups.length) return null;
-
   return (
     <section className="mb-16 border-y border-black/[0.07] py-10">
       <div className="flex items-center gap-4 mb-8">
@@ -573,16 +570,19 @@ function SummaryItem({ item, accent }: { item: Place; accent: string }) {
 }
 
 function EntryPlaces({ places, accent }: { places: Place[]; accent: string }) {
+  const restaurants = places.filter(isRestaurantLike);
+  const locations = places.filter((place) => !isRestaurantLike(place));
+
   return (
-    <div className="flex flex-wrap gap-1.5 mt-5">
-      {places.map((place) => (
-        <span key={place.id} className="inline-flex items-center gap-1.5 text-xs font-medium bg-white text-ink-soft px-3 py-1.5 rounded-full border border-black/8">
-          <MapPin size={10} strokeWidth={1.8} style={{ color: accent }} />
-          {place.name}
-          <ExternalLinks place={place} accent={accent} compact />
-        </span>
-      ))}
-    </div>
+    <section className="mt-8 pt-6 border-t border-black/8">
+      <p className="text-[10px] tracking-[.34em] uppercase text-ink-soft font-semibold mb-4">
+        Restaurantes y lugares
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <ReferenceList title="Restaurantes" items={restaurants} empty="Sin restaurantes guardados todavía" accent={accent} />
+        <ReferenceList title="Lugares" items={locations} empty="Sin lugares guardados todavía" accent={accent} />
+      </div>
+    </section>
   );
 }
 
@@ -753,11 +753,11 @@ function isRestaurantLike(place: Place) {
   return text.includes('restaurant') || text.includes('restaurante') || text.includes('gastronom') || text.includes('comida');
 }
 
-function buildSummary(entries: Entry[]) {
+function buildSummary(entries: Entry[], fallbackName = 'Viaje') {
   const groups = new Map<string, { name: string; restaurants: Place[]; places: Place[] }>();
 
   entries.forEach((entry) => {
-    const groupName = entry.location || entry.city || 'Viaje';
+    const groupName = entry.location || entry.city || fallbackName;
     const group = groups.get(groupName) ?? { name: groupName, restaurants: [], places: [] };
 
     uniquePlaces(entry.places ?? []).forEach((place) => {
@@ -768,5 +768,5 @@ function buildSummary(entries: Entry[]) {
     groups.set(groupName, group);
   });
 
-  return Array.from(groups.values()).filter((group) => group.restaurants.length || group.places.length);
+  return Array.from(groups.values());
 }
