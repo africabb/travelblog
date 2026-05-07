@@ -63,7 +63,21 @@ export async function buildApp(opts = {}) {
       return reply.notFound('Media not found');
     }
 
-    return reply.send(fs.createReadStream(resolvedPath));
+    const ext = path.extname(resolvedPath).toLowerCase();
+    const contentType = {
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.png': 'image/png',
+      '.webp': 'image/webp',
+      '.gif': 'image/gif',
+      '.mp4': 'video/mp4',
+      '.mov': 'video/quicktime',
+      '.ogg': 'audio/ogg',
+      '.mp3': 'audio/mpeg',
+      '.m4a': 'audio/mp4',
+    }[ext] ?? 'application/octet-stream';
+
+    return reply.type(contentType).send(fs.createReadStream(resolvedPath));
   });
 
   return app;

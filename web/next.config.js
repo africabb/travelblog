@@ -12,6 +12,8 @@ const nextConfig = {
       // M&A media CDN (hero photo, podcast)
       { protocol: 'https', hostname: 'media.hustlegotreal.com' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
+      // media local servida bajo el mismo dominio público
+      { protocol: 'https', hostname: 'japon.amurasoftware.com' },
       // para desarrollo local
       { protocol: 'http',  hostname: 'localhost' },
       // media local servida por la API en el servidor
