@@ -1,4 +1,4 @@
-import { uploadMedia } from '../client.js';
+﻿import { uploadMedia } from '../client.js';
 
 export const definition = {
   type: 'function',
@@ -77,7 +77,7 @@ export async function handler(params, context) {
     media_id: record.id,
     url:      record.url,
     type:     record.type,
-    summary:  `${record.type === 'photo' ? 'Foto' : record.type === 'video' ? 'Vídeo' : 'Audio'} guardado. URL: ${record.url}`,
+    summary:  `${record.type === 'photo' ? 'Foto' : record.type === 'video' ? 'Vídeo' : 'Audio'} guardado. URL: ${publicUrl}`,
   };
 }
 
@@ -94,3 +94,4 @@ function genericCaption(type) {
   if (type === 'audio') return 'Audio del día';
   return null;
 }
+

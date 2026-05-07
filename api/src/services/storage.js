@@ -4,7 +4,14 @@ import {
   DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
 import { randomUUID } from 'crypto';
+import fs from 'fs/promises';
 import path from 'path';
+
+const LOCAL_MEDIA_DIR = process.env.LOCAL_MEDIA_DIR || '/home/openclaw/japonweb-media';
+const USE_LOCAL_STORAGE = process.env.STORAGE_DRIVER === 'local' ||
+  !process.env.S3_BUCKET ||
+  !process.env.S3_ACCESS_KEY_ID ||
+  !process.env.S3_SECRET_ACCESS_KEY;
 
 const s3 = new S3Client({
   region:   process.env.S3_REGION || 'auto',
@@ -35,6 +42,15 @@ export async function uploadMedia(buffer, { type, mimeType, originalName }) {
 
   const key = `${type}s/${new Date().toISOString().slice(0, 10)}/${randomUUID()}.${ext}`;
 
+  if (USE_LOCAL_STORAGE) {
+    const filePath = path.join(LOCAL_MEDIA_DIR, key);
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    await fs.writeFile(filePath, buffer);
+
+    const baseUrl = PUBLIC_URL || '/uploads';
+    return { key, url: `${baseUrl}/${key}` };
+  }
+
   await s3.send(new PutObjectCommand({
     Bucket:      BUCKET,
     Key:         key,
@@ -51,5 +67,10 @@ export async function uploadMedia(buffer, { type, mimeType, originalName }) {
  * @param {string} key
  */
 export async function deleteMedia(key) {
+  if (USE_LOCAL_STORAGE) {
+    await fs.rm(path.join(LOCAL_MEDIA_DIR, key), { force: true });
+    return;
+  }
+
   await s3.send(new DeleteObjectCommand({ Bucket: BUCKET, Key: key }));
 }

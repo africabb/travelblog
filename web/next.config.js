@@ -11,8 +11,11 @@ const nextConfig = {
       { protocol: 'https', hostname: 'deaventurassevive.wordpress.com' },
       // M&A media CDN (hero photo, podcast)
       { protocol: 'https', hostname: 'media.hustlegotreal.com' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
       // para desarrollo local
       { protocol: 'http',  hostname: 'localhost' },
+      // media local servida por la API en el servidor
+      { protocol: 'http',  hostname: '204.168.146.128' },
     ],
   },
 };

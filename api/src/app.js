@@ -2,6 +2,8 @@ import Fastify          from 'fastify';
 import cors             from '@fastify/cors';
 import multipart        from '@fastify/multipart';
 import sensible         from '@fastify/sensible';
+import fs               from 'fs';
+import path             from 'path';
 
 import authPlugin       from './plugins/auth.js';
 import entriesRoutes    from './routes/entries.js';
@@ -46,6 +48,23 @@ export async function buildApp(opts = {}) {
 
   // ── Health ───────────────────────────────────────────────
   app.get('/health', async () => ({ ok: true, ts: new Date().toISOString() }));
+
+  app.get('/uploads/*', async (req, reply) => {
+    const localMediaDir = process.env.LOCAL_MEDIA_DIR || '/home/openclaw/japonweb-media';
+    const requestedPath = req.params['*'];
+    const resolvedPath = path.resolve(localMediaDir, requestedPath);
+    const mediaRoot = path.resolve(localMediaDir);
+
+    if (!resolvedPath.startsWith(mediaRoot + path.sep)) {
+      return reply.badRequest('Invalid media path');
+    }
+
+    if (!fs.existsSync(resolvedPath)) {
+      return reply.notFound('Media not found');
+    }
+
+    return reply.send(fs.createReadStream(resolvedPath));
+  });
 
   return app;
 }

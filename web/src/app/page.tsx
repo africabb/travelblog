@@ -1,4 +1,4 @@
-import { fetchStats }    from '@/lib/api';
+﻿import { fetchStats }    from '@/lib/api';
 import Link               from 'next/link';
 import Image              from 'next/image';
 import nextDynamic        from 'next/dynamic';
@@ -47,7 +47,7 @@ const TRIPS = [
     cities: 'Palma de Mallorca',
     active: true,
     done:   false,
-    cover:  null,
+    cover:  'https://media.hustlegotreal.com/affymiguelpalma.webp',
     bg:     '#14342B',
   },
   {
@@ -60,7 +60,7 @@ const TRIPS = [
     cities: 'Tokio · Kioto · Osaka · Nara · Hiroshima',
     active: false,
     done:   false,
-    cover:  null,
+    cover:  'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=82',
     bg:     '#2C0A0A',
   },
   {
@@ -73,7 +73,7 @@ const TRIPS = [
     cities: 'Santa Eulalia · Es Canar · Sant Antoni · Dalt Vila',
     active: false,
     done:   false,
-    cover:  null,
+    cover:  'https://images.unsplash.com/photo-1605443796819-7f468cbd6f34?auto=format&fit=crop&w=1200&q=82',
     bg:     '#0A2118',
   },
   {
@@ -86,7 +86,7 @@ const TRIPS = [
     cities: 'Mar Menor · La Manga del Mar Menor · Cartagena',
     active: false,
     done:   false,
-    cover:  null,
+    cover:  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=82',
     bg:     '#071A2A',
   },
 ] as const;
@@ -261,19 +261,30 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════════
           TRIPS  ─ square cards grid
       ══════════════════════════════════════════ */}
-      <section id="destinos" className="border-t border-black/[0.06] py-16">
+      <section id="destinos" className="border-t border-black/[0.06] py-20 sm:py-24">
         <div className="max-w-5xl mx-auto px-5 sm:px-8">
 
-          <div className="flex items-center gap-4 mb-10">
-            <span className="text-[10px] tracking-label uppercase font-medium text-ink-soft">
-              01 — Destinos
-            </span>
-            <div className="flex-1 h-px bg-black/8" />
+          <div className="mb-10 sm:mb-12">
+            <div className="flex items-center gap-4 mb-5">
+              <span className="text-[10px] tracking-label uppercase font-medium text-ink-soft">
+                01 — Destinos
+              </span>
+              <div className="flex-1 h-px bg-black/8" />
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.25fr)] gap-6 lg:gap-12 items-end">
+              <h2 className="font-display font-bold text-ink leading-[0.95] text-[clamp(2.2rem,7vw,5.5rem)]">
+                Viajes que se comen con los ojos.
+              </h2>
+              <p className="font-sans text-sm sm:text-base text-ink-soft leading-relaxed max-w-xl lg:pb-2">
+                Cada destino guarda sus días, restaurantes, fotos y lugares para volver sin perder el hilo.
+                Bert lo ordena, África lo fotografía y Miguel lo disfruta.
+              </p>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            {TRIPS.map((trip) => (
-              <TripCard key={trip.slug} trip={trip} stats={trip.active ? stats : null} />
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-4 sm:gap-5">
+            {TRIPS.map((trip, index) => (
+              <TripCard key={trip.slug} trip={trip} stats={trip.active ? stats : null} index={index} />
             ))}
           </div>
         </div>
@@ -475,81 +486,109 @@ export default async function HomePage() {
 
 
 /* ─── TripCard ───────────────────────────────────────────── */
-function TripCard({ trip, stats }: { trip: typeof TRIPS[number]; stats: Stats | null }) {
+function TripCard({
+  trip,
+  stats,
+  index,
+}: {
+  trip: typeof TRIPS[number];
+  stats: Stats | null;
+  index: number;
+}) {
+  const isFeature = index === 0;
+  const places = trip.cities.split(' · ').slice(0, isFeature ? 5 : 3);
   const inner = (
     <div
-      className="relative aspect-square rounded-2xl overflow-hidden group"
+      className={`relative min-h-[320px] overflow-hidden rounded-[1.35rem] group
+                  shadow-[0_16px_45px_rgba(18,27,33,0.10)]
+                  ring-1 ring-black/[0.06]
+                  ${isFeature ? 'md:col-span-3 md:row-span-2 md:min-h-[520px]' : 'md:col-span-3 lg:col-span-3'}`}
       style={{ backgroundColor: trip.bg }}
     >
-      {trip.cover && (
-        <Image
-          src={trip.cover}
-          alt={trip.name}
-          fill
-          className="object-cover opacity-60 group-hover:opacity-75 group-hover:scale-105
-                     transition-all duration-500"
-          unoptimized
-        />
-      )}
-
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `linear-gradient(to top, ${trip.bg}EE 0%, ${trip.bg}55 50%, transparent 100%)`,
-        }}
+      <Image
+        src={trip.cover}
+        alt={trip.name}
+        fill
+        sizes={isFeature ? '(min-width: 768px) 50vw, 100vw' : '(min-width: 768px) 33vw, 100vw'}
+        className="object-cover opacity-80 group-hover:scale-[1.045] transition-transform duration-700"
+        unoptimized
       />
 
-      {/* Status badge */}
-      <div className="absolute top-3 right-3">
+      <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/15 to-black/78" />
+      <div
+        className="absolute inset-0 opacity-70 mix-blend-multiply"
+        style={{ background: `linear-gradient(135deg, transparent 25%, ${trip.bg} 100%)` }}
+      />
+
+      <div className="absolute top-4 left-4 right-4 z-10 flex items-start justify-between gap-3">
+        <span className="font-sans text-[10px] text-white/70 tracking-[0.28em] uppercase">
+          {trip.num} · {trip.period}
+        </span>
         {trip.active ? (
-          <span className="inline-flex items-center gap-1 text-[9px] font-medium text-emerald-300
-                           bg-black/40 backdrop-blur-sm px-2 py-0.5 rounded-full">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-emerald-100
+                           bg-emerald-950/55 backdrop-blur-md px-3 py-1 rounded-full">
             <span className="w-1 h-1 rounded-full bg-emerald-400 pulse-dot" />
             Activo
           </span>
         ) : trip.done ? (
-          <span className="text-[9px] font-medium text-white/70
-                           bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
-            ✓ Visitado
+          <span className="text-[10px] font-semibold text-white bg-white/16 backdrop-blur-md px-3 py-1 rounded-full">
+            Visitado
           </span>
         ) : (
-          <span className="text-[9px] font-medium text-white/50
-                           bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-full uppercase tracking-wide">
+          <span className="text-[10px] font-semibold text-white/75
+                           bg-black/35 backdrop-blur-md px-3 py-1 rounded-full uppercase tracking-[0.16em]">
             Próximamente
           </span>
         )}
       </div>
 
-      {/* Bottom content */}
-      <div className="absolute bottom-0 inset-x-0 p-3.5 sm:p-4">
-        <p className="font-sans text-[10px] text-white/50 mb-1.5">
-          {trip.num} &nbsp;·&nbsp; {trip.flag} {trip.period}
+      <div className="absolute bottom-0 inset-x-0 z-10 p-5 sm:p-6">
+        <p className="font-sans text-[11px] text-white/70 mb-2">
+          {trip.flag} {trip.active ? 'Viaje vivo' : trip.done ? 'Diario publicado' : 'En la lista'}
         </p>
-        <h2
-          className={`font-display font-bold text-white leading-tight transition-all duration-300
-                      ${trip.href ? 'group-hover:translate-y-[-2px]' : 'opacity-60'}`}
-          style={{ fontSize: 'clamp(1rem, 3.5vw, 1.25rem)' }}
-        >
+        <h2 className="font-display font-bold text-white leading-[0.95] text-[clamp(2rem,6vw,4.2rem)] md:text-[clamp(1.8rem,3.3vw,3.5rem)]">
           {trip.name}
         </h2>
 
-        {trip.active && stats && stats.entries > 0 && (
-          <div className="flex gap-3 mt-2">
-            {[{ n: stats.days, l: 'días' }, { n: stats.photos, l: 'fotos' }].map(({ n, l }) => (
-              <div key={l}>
-                <span className="font-display font-bold text-white text-sm">{n}</span>
-                <span className="font-sans text-[9px] text-white/50 ml-0.5">{l}</span>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="mt-4 flex flex-wrap gap-2">
+          {places.map((place) => (
+            <span
+              key={place}
+              className="inline-flex items-center gap-1.5 rounded-full bg-white/13 px-3 py-1
+                         font-sans text-[11px] text-white/80 backdrop-blur-md"
+            >
+              <MapPin size={11} strokeWidth={1.8} />
+              {place}
+            </span>
+          ))}
+        </div>
 
-        {trip.href && (
-          <p className="font-sans text-[10px] text-white/40 group-hover:text-white/80
-                        transition-colors mt-1">
-            Leer →
-          </p>
-        )}
+        <div className="mt-5 flex items-end justify-between gap-4">
+          {trip.active && stats && stats.entries > 0 ? (
+            <div className="flex gap-4">
+              {[{ n: stats.days, l: 'días' }, { n: stats.photos, l: 'fotos' }].map(({ n, l }) => (
+                <div key={l}>
+                  <span className="font-display font-bold text-white text-2xl leading-none">{n}</span>
+                  <span className="font-sans text-[10px] text-white/55 ml-1">{l}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="font-sans text-xs text-white/55 max-w-[13rem]">
+              Restaurantes, lugares y recuerdos en orden cronológico.
+            </p>
+          )}
+
+          {trip.href && (
+            <span
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-ink
+                         shadow-lg shadow-black/20 transition-transform duration-300 group-hover:translate-x-1"
+              aria-hidden="true"
+            >
+              <ChevronRight size={18} strokeWidth={1.9} />
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
