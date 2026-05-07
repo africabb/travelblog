@@ -167,6 +167,10 @@ export const definition = {
           items: { type: 'string' },
           description: 'Media IDs to attach to this day entry.',
         },
+        replace_body: {
+          type: 'boolean',
+          description: 'Use true only when rewriting the existing day to remove literal audio text or duplicated prose. Use false or omit when adding a new scene to the day.',
+        },
         source_message_id: { type: 'string' },
       },
     },
@@ -184,7 +188,7 @@ export async function handler(params, context) {
 
   let entry;
   if (existing.length) {
-    const body = mergeBody(existing[0].body, entryData.body);
+    const body = params.replace_body ? entryData.body : mergeBody(existing[0].body, entryData.body);
 
     entry = await api('PATCH', `/api/entries/${existing[0].id}`, {
       title: entryData.title ?? existing[0].title,
