@@ -11,11 +11,15 @@ export const definition = {
       Si publicas una entrada y hay lugares o restaurantes mencionados, debes llamar a esta
       herramienta para cada sitio y pasar entry_id para que aparezca dentro del día y en el
       resumen del viaje.
+      No dejes restaurantes o lugares solo escritos en el body de la entrada: sin esta tool no
+      aparecen en las secciones "Restaurantes" y "Lugares" de la web.
       Siempre que registres un sitio o restaurante, intenta recopilar un enlace de Google Maps
       y guárdalo en google_maps_url solo si estás 100% segura de que corresponde al sitio exacto:
       nombre, ciudad/zona y contexto deben coincidir claramente. Si no puedes verificarlo, deja
       google_maps_url en blanco. Si es un restaurante y encuentras una web oficial fiable, guárdala
       en official_url; si no, déjala en blanco. No uses enlaces de agregadores como web oficial.
+      Si verificas nombre y dirección/ciudad pero no consigues una URL de ficha estable, puedes
+      guardar una URL de búsqueda de Google Maps con la query exacta del nombre y dirección.
       Opcionalmente puedes vincularlo a una entrada del diario con entry_id.
     `.trim(),
     parameters: {
