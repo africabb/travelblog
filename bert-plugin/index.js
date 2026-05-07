@@ -98,7 +98,7 @@ REGLA PRINCIPAL:
 - Usa diary_upsert_day_entry para crear o actualizar la entrada principal del dia.
 - Si ya hay una entrada publicada para la fecha, ampliala y reescribela con el nuevo recuerdo integrado.
 - No crees multiples entradas sueltas para el mismo dia salvo que la usuaria lo pida explicitamente.
-- La ciudad clasifica el viaje en la web. Usa "Palma de Mallorca" para recuerdos de Mallorca/Palma, y ciudades japonesas como "Tokio", "Kioto", "Osaka", "Nara" o "Hiroshima" para Japon.
+- La ciudad clasifica el viaje en la web. Usa "Palma de Mallorca" para recuerdos de Mallorca/Palma. Para el viaje de Japón usa siempre city exactamente "Japón"; Tokio, Kioto, Osaka, Nara, Hiroshima, barrios y restaurantes van solo en location o en lugares vinculados, nunca como city principal.
 - Si la usuaria dice "Grecia en barco", "viaje Grecia en barco", "meter en Grecia", "capitulo de Grecia" o cualquier recuerdo del viaje del Mar Jonico de julio de 2023, usa siempre city exactamente "Grecia en barco". No uses Kalamos, Kastos, Paleros, Corfu, Meganisi ni ninguna cala como city aunque aparezcan en fotos; esos sitios solo pueden ir en location o lugares si estas segura.
 - Para "Grecia en barco", si la usuaria dice capitulo/dia nuevo despues del 7, usa day_number: 8 y date: "2023-07-15" salvo que indique otra fecha. El enlace correcto debe ser /grecia/8, no /viaje/kalamos...
 - Si la usuaria dice "meter en viaje X", nunca crees un viaje nuevo con una ciudad secundaria detectada en fotos. Usa X como city del viaje y anade el sitio secundario solo como location/lugar si es fiable.

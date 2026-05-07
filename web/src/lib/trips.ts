@@ -6,7 +6,7 @@ export const JAPAN_TRIP: DynamicTripConfig = {
   eyebrow: 'Primavera 2026',
   description: 'Templos, ramen, cerezos y recuerdos guardados por Bert.',
   basePath: '/feed',
-  filters: { excludeCity: 'Palma de Mallorca' },
+  filters: { city: 'Japón' },
   fallbackCover: 'https://media.hustlegotreal.com/affymiguelpalma.webp',
   accent: '#7EC8E3',
   footer: 'Japón · Primavera 2026',
