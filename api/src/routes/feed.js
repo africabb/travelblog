@@ -33,33 +33,38 @@ export default async function feedRoutes(app) {
     const entries = await query(`
       SELECT
         e.*,
-        COALESCE(
-          json_agg(
-            jsonb_build_object(
-              'id', m.id, 'url', m.url, 'type', m.type,
-              'caption', m.caption, 'sort_order', m.sort_order
-            )
-            ORDER BY m.sort_order, m.created_at
-          ) FILTER (WHERE m.id IS NOT NULL AND m.status = 'published'),
-          '[]'
-        ) AS media,
-        COALESCE(
-          json_agg(DISTINCT jsonb_build_object(
-            'id', p.id, 'name', p.name, 'name_jp', p.name_jp,
-            'type', p.type, 'city', p.city,
-            'category', p.category, 'rating', p.rating,
-            'price_range', p.price_range, 'description', p.description,
-            'google_maps_url', p.google_maps_url,
-            'official_url', p.official_url
-          )) FILTER (WHERE p.id IS NOT NULL),
-          '[]'
-        ) AS places
+        COALESCE(m.media, '[]') AS media,
+        COALESCE(p.places, '[]') AS places
       FROM entries e
-      LEFT JOIN media        m  ON m.entry_id = e.id
-      LEFT JOIN entry_places ep ON ep.entry_id = e.id
-      LEFT JOIN places       p  ON p.id = ep.place_id
+      LEFT JOIN LATERAL (
+        SELECT json_agg(
+          jsonb_build_object(
+            'id', media.id, 'url', media.url, 'type', media.type,
+            'caption', media.caption, 'sort_order', media.sort_order
+          )
+          ORDER BY media.sort_order, media.created_at
+        ) AS media
+        FROM media
+        WHERE media.entry_id = e.id
+          AND media.status = 'published'
+      ) m ON true
+      LEFT JOIN LATERAL (
+        SELECT json_agg(
+          jsonb_build_object(
+            'id', places.id, 'name', places.name, 'name_jp', places.name_jp,
+            'type', places.type, 'city', places.city,
+            'category', places.category, 'rating', places.rating,
+            'price_range', places.price_range, 'description', places.description,
+            'google_maps_url', places.google_maps_url,
+            'official_url', places.official_url
+          )
+          ORDER BY places.name
+        ) AS places
+        FROM entry_places ep
+        JOIN places ON places.id = ep.place_id
+        WHERE ep.entry_id = e.id
+      ) p ON true
       WHERE ${filters.join(' AND ')}
-      GROUP BY e.id
       ORDER BY e.date ASC, e.sort_order ASC
       LIMIT $1 OFFSET $2
     `, params);
