@@ -1,4 +1,6 @@
-﻿import { uploadMedia } from '../client.js';
+import { uploadMedia } from '../client.js';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 export const definition = {
   type: 'function',
@@ -9,15 +11,20 @@ export const definition = {
       Úsala siempre que el usuario mande un archivo multimedia.
       Puede vincularse a una entrada existente (entry_id) o quedar suelta para vincular después.
       Devuelve el ID y la URL pública del archivo subido.
+      Si WhatsApp proporciona una ruta local del archivo, usa file_path en vez de media_base64 para no cargar archivos grandes dentro del modelo.
       No analices visualmente fotos o vídeos para crear captions; usa solo el texto explícito de la usuaria.
     `.trim(),
     parameters: {
       type: 'object',
-      required: ['media_base64', 'mime_type'],
+      required: ['mime_type'],
       properties: {
+        file_path: {
+          type: 'string',
+          description: 'Ruta local del archivo recibido por WhatsApp. Preferir siempre este campo cuando exista.',
+        },
         media_base64: {
           type: 'string',
-          description: 'Contenido del archivo en base64.',
+          description: 'Contenido del archivo en base64. Usar solo si no hay file_path.',
         },
         mime_type: {
           type: 'string',
@@ -53,15 +60,20 @@ export const definition = {
 };
 
 export async function handler(params, context) {
-  const { media_base64, mime_type, original_name, ...meta } = params;
+  const { file_path, media_base64, mime_type, original_name, ...meta } = params;
 
-  if (!media_base64) throw new Error('media_base64 es obligatorio');
+  if (!file_path && !media_base64) {
+    throw new Error('file_path o media_base64 es obligatorio');
+  }
 
-  const buffer = Buffer.from(media_base64, 'base64');
+  const buffer = file_path
+    ? await fs.readFile(file_path)
+    : Buffer.from(media_base64, 'base64');
+  const resolvedName = original_name ?? (file_path ? path.basename(file_path) : null);
 
   const record = await uploadMedia(buffer, {
     mime_type:         mime_type,
-    original_name:     original_name ?? null,
+    original_name:     resolvedName,
     entry_id:          meta.entry_id          ?? null,
     status:            'published',
     caption:           meta.caption           ?? genericCaption(recordTypeFromMime(mime_type)),
@@ -77,7 +89,7 @@ export async function handler(params, context) {
     media_id: record.id,
     url:      record.url,
     type:     record.type,
-    summary:  `${record.type === 'photo' ? 'Foto' : record.type === 'video' ? 'Vídeo' : 'Audio'} guardado. URL: ${publicUrl}`,
+    summary:  `${recordSummaryLabel(record.type)}. URL: ${record.url}`,
   };
 }
 
@@ -93,5 +105,12 @@ function genericCaption(type) {
   if (type === 'video') return 'Vídeo del día';
   if (type === 'audio') return 'Audio del día';
   return null;
+}
+
+function recordSummaryLabel(type) {
+  if (type === 'photo') return 'Foto guardada';
+  if (type === 'video') return 'Vídeo guardado';
+  if (type === 'audio') return 'Audio guardado';
+  return 'Archivo guardado';
 }
 
