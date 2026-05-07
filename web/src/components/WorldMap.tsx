@@ -11,6 +11,9 @@ const LOCATIONS = [
   { name: 'Sivota (Lefkada)',  lat: 38.5833, lng: 20.5667, trip: 'Grecia en barco', entry: 'Sivota', date: 'Verano 2023', href: '/grecia/5', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/img_0001-3045918172-e1689257774541-edited.jpg' },
   { name: 'Kastos',            lat: 38.5656, lng: 20.8898, trip: 'Grecia en barco', entry: 'Kastos', date: '13 Julio 2023', href: '/grecia/6', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/dsc02754.jpg' },
   { name: 'Kalamos',           lat: 38.6194, lng: 20.9298, trip: 'Grecia en barco', entry: 'Kalamos', date: '14 Julio 2023', href: '/grecia/7', done: true, image: 'https://deaventurassevive.wordpress.com/wp-content/uploads/2023/07/dsc02781.jpg' },
+  /* Spain - visited */
+  { name: 'Palma de Mallorca',  lat: 39.5696, lng: 2.6502, trip: 'Palma de Mallorca', entry: 'Diario de Palma', date: '2026', href: '/palma', done: true, image: 'https://media.hustlegotreal.com/affymiguelpalma.webp' },
+  { name: 'Murcia',             lat: 37.9922, lng: -1.1307, trip: 'Murcia', entry: 'Murcia empieza en casa de María', date: '6 Mayo 2026', href: '/viaje/murcia/2026-05-06', done: true, image: 'https://japon.amurasoftware.com/uploads/photos/2026-05-07/10a0ecf0-d3ef-45be-a764-9dc23d93820f..jpg' },
   /* Japan — upcoming */
   { name: 'Tokio',    lat: 35.6762, lng: 139.6503, trip: 'Japón 2026', entry: 'Diario de Japón', date: 'Primavera 2026', href: '/feed', done: false },
   { name: 'Kioto',    lat: 35.0116, lng: 135.7681, trip: 'Japón 2026', entry: 'Diario de Japón', date: 'Primavera 2026', href: '/feed', done: false },
@@ -21,6 +24,9 @@ const LOCATIONS = [
 
 const BRAND  = '#669bbc';
 const FUTURE = '#b0b0b0';
+const VISITED_COUNTRIES = ['España', 'Grecia'];
+const WORLD_COUNTRIES = 195;
+const VISITED_PERCENT = ((VISITED_COUNTRIES.length / WORLD_COUNTRIES) * 100).toFixed(1);
 
 /* ─── WorldMap ───────────────────────────────────────────── */
 export default function WorldMap() {
@@ -36,10 +42,11 @@ export default function WorldMap() {
 
       const map = L.map(containerRef.current!, {
         center:          [36, 60],
-        zoom:            3,
-        zoomControl:     true,
+        zoom:            2,
+        zoomControl:     false,
         scrollWheelZoom: true,
         attributionControl: true,
+        worldCopyJump:   true,
       });
 
       mapRef.current = map;
@@ -105,6 +112,8 @@ export default function WorldMap() {
         );
       });
 
+      setTimeout(() => map.invalidateSize(), 80);
+
       /* Fix tile gap on resize */
       window.addEventListener('resize', () => map.invalidateSize());
     })();
@@ -116,11 +125,27 @@ export default function WorldMap() {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="w-full rounded-2xl overflow-hidden
-                 shadow-[0_2px_20px_rgba(0,0,0,0.08)]"
-      style={{ height: '420px' }}
-    />
+    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_220px] items-center gap-8 lg:gap-10">
+      <div className="relative mx-auto w-full max-w-[520px] aspect-square rounded-full overflow-hidden bg-[#d8e7ef]
+                      shadow-[0_24px_80px_rgba(11,24,38,0.18)] ring-1 ring-black/10">
+        <div
+          ref={containerRef}
+          className="absolute inset-0"
+        />
+        <div className="pointer-events-none absolute inset-0 rounded-full ring-[18px] ring-white/20 shadow-[inset_0_0_42px_rgba(8,30,48,0.30)]" />
+      </div>
+
+      <div className="text-center lg:text-left">
+        <p className="text-[10px] tracking-label uppercase font-medium text-ink-soft mb-3">
+          Mundo visitado
+        </p>
+        <p className="font-display font-bold text-ink leading-none text-[clamp(3.5rem,9vw,5.8rem)]">
+          {VISITED_PERCENT}%
+        </p>
+        <p className="font-sans text-sm text-ink-soft leading-relaxed mt-4 max-w-[16rem] mx-auto lg:mx-0">
+          {VISITED_COUNTRIES.length} de {WORLD_COUNTRIES} países guardados en el diario.
+        </p>
+      </div>
+    </div>
   );
 }

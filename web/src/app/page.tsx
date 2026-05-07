@@ -13,10 +13,14 @@ export const dynamic = 'force-dynamic';
 const WorldMap = nextDynamic(() => import('@/components/WorldMap'), {
   ssr:     false,
   loading: () => (
-    <div
-      className="w-full rounded-2xl bg-[#f0ede9] animate-pulse"
-      style={{ height: '420px' }}
-    />
+    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_220px] items-center gap-8 lg:gap-10">
+      <div className="mx-auto w-full max-w-[520px] aspect-square rounded-full bg-[#f0ede9] animate-pulse shadow-[0_24px_80px_rgba(11,24,38,0.12)]" />
+      <div className="hidden lg:block">
+        <div className="h-3 w-28 bg-[#f0ede9] rounded-full mb-4 animate-pulse" />
+        <div className="h-16 w-36 bg-[#f0ede9] rounded-xl mb-4 animate-pulse" />
+        <div className="h-12 w-44 bg-[#f0ede9] rounded-xl animate-pulse" />
+      </div>
+    </div>
   ),
 });
 
@@ -77,7 +81,7 @@ const TRIPS = [
   {
     num:    '05',
     slug:   'ibiza',
-    href:   null,
+    href:   '/viaje/ibiza',
     flag:   '🏝️',
     name:   'Ibiza',
     period: 'Verano 2026',
@@ -90,7 +94,7 @@ const TRIPS = [
   {
     num:    '06',
     slug:   'la-manga',
-    href:   null,
+    href:   '/viaje/la-manga',
     flag:   '🌊',
     name:   'La Manga',
     period: 'Verano 2026',
