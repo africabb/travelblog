@@ -263,8 +263,8 @@ export async function generateTripDayMetadata({
 
     const dayNumber = getDayNumber(entries, 0);
     const title = firstEntry.title
-      ? `${firstEntry.title} · Dia ${dayNumber}`
-      : `${config.title} · Dia ${dayNumber}`;
+      ? `${firstEntry.title} · Día ${dayNumber}`
+      : `${config.title} · Día ${dayNumber}`;
     const description = excerpt(entries.map((entry) => entry.body).join(' '), config.description);
     const image = absoluteUrl(
       entries
@@ -283,7 +283,7 @@ export async function generateTripDayMetadata({
         description,
         url,
         type: 'article',
-        siteName: 'Miguel & Africa',
+        siteName: 'Miguel & África',
         publishedTime: firstEntry.date,
         images: [
           {

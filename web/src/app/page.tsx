@@ -1,4 +1,3 @@
-﻿import { fetchStats }    from '@/lib/api';
 import Link               from 'next/link';
 import Image              from 'next/image';
 import nextDynamic        from 'next/dynamic';
@@ -7,7 +6,6 @@ import {
   Utensils, Camera, Bot, Smartphone, PenLine, Globe,
   MapPin, ChevronRight,
 } from 'lucide-react';
-import type { Stats }     from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -45,13 +43,26 @@ const TRIPS = [
     name:   'Palma de Mallorca',
     period: '2026',
     cities: 'Palma de Mallorca',
-    active: true,
-    done:   false,
+    active: false,
+    done:   true,
     cover:  'https://media.hustlegotreal.com/affymiguelpalma.webp',
     bg:     '#14342B',
   },
   {
     num:    '03',
+    slug:   'murcia',
+    href:   '/viaje/murcia',
+    flag:   '☀️',
+    name:   'Murcia',
+    period: 'Mayo 2026',
+    cities: 'Murcia',
+    active: true,
+    done:   false,
+    cover:  'https://japon.amurasoftware.com/uploads/photos/2026-05-07/10a0ecf0-d3ef-45be-a764-9dc23d93820f..jpg',
+    bg:     '#3A241B',
+  },
+  {
+    num:    '04',
     slug:   'japan',
     href:   '/feed',
     flag:   '🇯🇵',
@@ -64,7 +75,7 @@ const TRIPS = [
     bg:     '#2C0A0A',
   },
   {
-    num:    '04',
+    num:    '05',
     slug:   'ibiza',
     href:   null,
     flag:   '🏝️',
@@ -77,7 +88,7 @@ const TRIPS = [
     bg:     '#0A2118',
   },
   {
-    num:    '05',
+    num:    '06',
     slug:   'la-manga',
     href:   null,
     flag:   '🌊',
@@ -93,8 +104,6 @@ const TRIPS = [
 
 /* ─── Page ──────────────────────────────────────────────── */
 export default async function HomePage() {
-  const stats = await fetchStats().catch(() => null);
-
   return (
     <div className="min-h-screen bg-cream">
 
@@ -271,20 +280,20 @@ export default async function HomePage() {
               </span>
               <div className="flex-1 h-px bg-black/8" />
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.25fr)] gap-6 lg:gap-12 items-end">
-              <h2 className="font-display font-bold text-ink leading-[0.95] text-[clamp(2.2rem,7vw,5.5rem)]">
+            <div className="max-w-3xl">
+              <h2 className="font-display font-bold text-ink leading-[0.94] text-[clamp(2.35rem,6vw,4.8rem)] max-w-2xl">
                 Viajes que se comen con los ojos.
               </h2>
-              <p className="font-sans text-sm sm:text-base text-ink-soft leading-relaxed max-w-xl lg:pb-2">
+              <p className="font-sans text-sm sm:text-base text-ink-soft leading-relaxed max-w-2xl mt-5">
                 Cada destino guarda sus días, restaurantes, fotos y lugares para volver sin perder el hilo.
                 Bert lo ordena, África lo fotografía y Miguel lo disfruta.
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-4 sm:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {TRIPS.map((trip, index) => (
-              <TripCard key={trip.slug} trip={trip} stats={trip.active ? stats : null} index={index} />
+              <TripCard key={trip.slug} trip={trip} index={index} />
             ))}
           </div>
         </div>
@@ -488,28 +497,30 @@ export default async function HomePage() {
 /* ─── TripCard ───────────────────────────────────────────── */
 function TripCard({
   trip,
-  stats,
   index,
 }: {
   trip: typeof TRIPS[number];
-  stats: Stats | null;
   index: number;
 }) {
-  const isFeature = index === 0;
-  const places = trip.cities.split(' · ').slice(0, isFeature ? 5 : 3);
+  const places = trip.cities.split(' · ').slice(0, 4);
+  const statusText = trip.active ? 'Activo' : trip.done ? 'Visitado' : 'Próximamente';
+  const statusClass = trip.active
+    ? 'text-emerald-100 bg-emerald-950/55'
+    : trip.done
+      ? 'text-white bg-white/16'
+      : 'text-white/75 bg-black/35 uppercase tracking-[0.16em]';
   const inner = (
     <div
-      className={`relative min-h-[320px] overflow-hidden rounded-[1.35rem] group
+      className="relative min-h-[390px] overflow-hidden rounded-[1.25rem] group
                   shadow-[0_16px_45px_rgba(18,27,33,0.10)]
-                  ring-1 ring-black/[0.06]
-                  ${isFeature ? 'md:col-span-3 md:row-span-2 md:min-h-[520px]' : 'md:col-span-3 lg:col-span-3'}`}
+                  ring-1 ring-black/[0.06]"
       style={{ backgroundColor: trip.bg }}
     >
       <Image
         src={trip.cover}
         alt={trip.name}
         fill
-        sizes={isFeature ? '(min-width: 768px) 50vw, 100vw' : '(min-width: 768px) 33vw, 100vw'}
+        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
         className="object-cover opacity-80 group-hover:scale-[1.045] transition-transform duration-700"
         unoptimized
       />
@@ -524,29 +535,17 @@ function TripCard({
         <span className="font-sans text-[10px] text-white/70 tracking-[0.28em] uppercase">
           {trip.num} · {trip.period}
         </span>
-        {trip.active ? (
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-emerald-100
-                           bg-emerald-950/55 backdrop-blur-md px-3 py-1 rounded-full">
-            <span className="w-1 h-1 rounded-full bg-emerald-400 pulse-dot" />
-            Activo
-          </span>
-        ) : trip.done ? (
-          <span className="text-[10px] font-semibold text-white bg-white/16 backdrop-blur-md px-3 py-1 rounded-full">
-            Visitado
-          </span>
-        ) : (
-          <span className="text-[10px] font-semibold text-white/75
-                           bg-black/35 backdrop-blur-md px-3 py-1 rounded-full uppercase tracking-[0.16em]">
-            Próximamente
-          </span>
-        )}
+        <span className={`inline-flex items-center gap-1.5 text-[10px] font-semibold backdrop-blur-md px-3 py-1 rounded-full ${statusClass}`}>
+          {trip.active && <span className="w-1 h-1 rounded-full bg-emerald-400 pulse-dot" />}
+          {statusText}
+        </span>
       </div>
 
       <div className="absolute bottom-0 inset-x-0 z-10 p-5 sm:p-6">
-        <p className="font-sans text-[11px] text-white/70 mb-2">
+        <p className="font-sans text-[11px] text-white/72 mb-2">
           {trip.flag} {trip.active ? 'Viaje vivo' : trip.done ? 'Diario publicado' : 'En la lista'}
         </p>
-        <h2 className="font-display font-bold text-white leading-[0.95] text-[clamp(2rem,6vw,4.2rem)] md:text-[clamp(1.8rem,3.3vw,3.5rem)]">
+        <h2 className="font-display font-bold text-white leading-[0.96] text-[clamp(2.25rem,8vw,3.4rem)] sm:text-[clamp(2.1rem,4vw,3rem)] break-words max-w-[10ch]">
           {trip.name}
         </h2>
 
@@ -564,20 +563,9 @@ function TripCard({
         </div>
 
         <div className="mt-5 flex items-end justify-between gap-4">
-          {trip.active && stats && stats.entries > 0 ? (
-            <div className="flex gap-4">
-              {[{ n: stats.days, l: 'días' }, { n: stats.photos, l: 'fotos' }].map(({ n, l }) => (
-                <div key={l}>
-                  <span className="font-display font-bold text-white text-2xl leading-none">{n}</span>
-                  <span className="font-sans text-[10px] text-white/55 ml-1">{l}</span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="font-sans text-xs text-white/55 max-w-[13rem]">
-              Restaurantes, lugares y recuerdos en orden cronológico.
-            </p>
-          )}
+          <p className="font-sans text-xs text-white/62 max-w-[14rem] leading-relaxed">
+            Restaurantes, lugares y recuerdos en orden cronológico.
+          </p>
 
           {trip.href && (
             <span
