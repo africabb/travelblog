@@ -1,5 +1,19 @@
 import { api } from '../client.js';
 
+function normalize(value = '') {
+  return String(value)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function samePlace(a, b) {
+  return normalize(a.name) === normalize(b.name)
+    && normalize(a.city ?? '') === normalize(b.city ?? '');
+}
+
 export const definition = {
   type: 'function',
   function: {
@@ -13,6 +27,8 @@ export const definition = {
       resumen del viaje.
       No dejes restaurantes o lugares solo escritos en el body de la entrada: sin esta tool no
       aparecen en las secciones "Restaurantes" y "Lugares" de la web.
+      Si el mismo sitio ya existe para la misma ciudad, reutiliza y vincula ese sitio: no crees
+      duplicados de restaurantes o lugares.
       Siempre que registres un sitio o restaurante, intenta recopilar un enlace de Google Maps
       y guárdalo en google_maps_url solo si estás 100% segura de que corresponde al sitio exacto:
       nombre, ciudad/zona y contexto deben coincidir claramente. Si no puedes verificarlo, deja
@@ -90,11 +106,30 @@ export const definition = {
 export async function handler(params, context) {
   const { entry_id, media_id, ...placeData } = params;
 
-  const place = await api('POST', '/api/places', {
-    ...placeData,
-    cover_media_id: media_id ?? null,
-    visited_at:     context?.timestamp ?? new Date().toISOString(),
-  });
+  const existingPlaces = placeData.city
+    ? await api('GET', `/api/places?city=${encodeURIComponent(placeData.city)}`).catch(() => [])
+    : [];
+  const existing = existingPlaces.find((place) => samePlace(place, placeData));
+
+  const patch = {};
+  if (existing) {
+    if (!existing.google_maps_url && placeData.google_maps_url) patch.google_maps_url = placeData.google_maps_url;
+    if (!existing.official_url && placeData.official_url) patch.official_url = placeData.official_url;
+    if (!existing.description && placeData.description) patch.description = placeData.description;
+    if (!existing.category && placeData.category) patch.category = placeData.category;
+    if (!existing.address && placeData.address) patch.address = placeData.address;
+    if (!existing.cover_media_id && media_id) patch.cover_media_id = media_id;
+  }
+
+  const place = existing
+    ? Object.keys(patch).length
+      ? await api('PATCH', `/api/places/${existing.id}`, patch)
+      : existing
+    : await api('POST', '/api/places', {
+      ...placeData,
+      cover_media_id: media_id ?? null,
+      visited_at:     context?.timestamp ?? new Date().toISOString(),
+    });
 
   // Vincular a entrada si se proporcionó entry_id
   if (entry_id) {
@@ -106,6 +141,6 @@ export async function handler(params, context) {
     place_id: place.id,
     name:     place.name,
     type:     place.type,
-    summary:  `"${place.name}" (${place.type}) guardado${entry_id ? ' y vinculado a la entrada' : ''}.`,
+    summary:  `"${place.name}" (${place.type}) ${existing ? 'reutilizado' : 'guardado'}${entry_id ? ' y vinculado a la entrada' : ''}.`,
   };
 }

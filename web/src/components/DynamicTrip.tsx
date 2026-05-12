@@ -204,7 +204,6 @@ export async function DynamicTripDayPage({
                   ))}
                 </div>
               )}
-              <EntryPlaces places={entry.places ?? []} accent={config.accent} />
             </article>
           ))}
         </div>
@@ -561,23 +560,6 @@ function SummaryItem({ item, accent }: { item: Place; accent: string }) {
         <ExternalLinks place={item} accent={accent} />
       </span>
     </li>
-  );
-}
-
-function EntryPlaces({ places, accent }: { places: Place[]; accent: string }) {
-  const restaurants = places.filter(isRestaurantLike);
-  const locations = places.filter((place) => !isRestaurantLike(place));
-
-  return (
-    <section className="mt-8 pt-6 border-t border-black/8">
-      <p className="text-[10px] tracking-[.34em] uppercase text-ink-soft font-semibold mb-4">
-        Restaurantes y lugares
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <ReferenceList title="Restaurantes" items={restaurants} empty="Sin restaurantes guardados todavía" accent={accent} />
-        <ReferenceList title="Lugares" items={locations} empty="Sin lugares guardados todavía" accent={accent} />
-      </div>
-    </section>
   );
 }
 

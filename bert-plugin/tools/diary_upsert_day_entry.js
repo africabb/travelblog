@@ -153,7 +153,7 @@ export const definition = {
         },
         body: {
           type: 'string',
-          description: 'Narrative body for the day entry. If the day already exists, write only the new polished scene or the full merged story; the tool will never delete previous text accidentally.',
+          description: 'Narrative body for the day entry, written in third person about Miguel and Africa. If the day already exists, write only the new polished scene or the full merged story; the tool will never delete previous text accidentally.',
         },
         location: { type: 'string' },
         city: { type: 'string' },
