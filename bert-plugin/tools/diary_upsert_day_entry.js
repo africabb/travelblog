@@ -29,6 +29,7 @@ const GREECE_DATE_TO_DAY = {
   '2023-07-15': 8,
   '2023-07-16': 9,
 };
+const JAPAN_TRIP_CITY = 'Japón';
 const JAPAN_CITIES = new Set(['tokio', 'kioto', 'osaka', 'nara', 'hiroshima', 'japon', 'japón']);
 
 function slugifyTripName(name = '') {
@@ -58,6 +59,11 @@ function isGreeceTrip(value = '') {
   return GREECE_ALIASES.some((alias) => normalized.includes(normalizeText(alias)));
 }
 
+function isJapanTrip(value = '') {
+  const normalized = normalizeText(value);
+  return [...JAPAN_CITIES].some((city) => normalized.includes(normalizeText(city)));
+}
+
 function normalizeTripFields(params) {
   const date = datePath(params.date);
   const tripText = [
@@ -67,6 +73,19 @@ function normalizeTripFields(params) {
     params.body,
     ...(params.tags ?? []),
   ].filter(Boolean).join(' ');
+
+  if (isJapanTrip(tripText)) {
+    return {
+      ...params,
+      date,
+      city: JAPAN_TRIP_CITY,
+      location: params.location || (
+        params.city && normalizeText(params.city) !== normalizeText(JAPAN_TRIP_CITY)
+          ? params.city
+          : params.location
+      ),
+    };
+  }
 
   if (!isGreeceTrip(tripText)) return { ...params, date };
 

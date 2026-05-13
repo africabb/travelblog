@@ -12,7 +12,8 @@ export const definition = {
       Puede vincularse a una entrada existente (entry_id) o quedar suelta para vincular después.
       Devuelve el ID y la URL pública del archivo subido.
       Si WhatsApp proporciona una ruta local del archivo, usa file_path en vez de media_base64 para no cargar archivos grandes dentro del modelo.
-      No analices visualmente fotos o vídeos para crear captions; usa solo el texto explícito de la usuaria.
+      Si el modelo puede ver la foto, puede proponer un pie de foto breve y natural.
+      No inventes nombres de lugares, restaurantes ni platos: usa nombres concretos solo si la usuaria los ha dicho o si están verificados.
     `.trim(),
     parameters: {
       type: 'object',
@@ -36,7 +37,7 @@ export const definition = {
         },
         caption: {
           type: 'string',
-          description: 'Pie de foto opcional. No describas la imagen: usa solo el texto que haya escrito la usuaria o un caption genérico como "Foto del día".',
+          description: 'Pie de foto opcional. Puede describir la imagen de forma breve si el modelo la ha visto, pero sin inventar nombres de sitios, restaurantes ni platos.',
         },
         location: {
           type: 'string',
