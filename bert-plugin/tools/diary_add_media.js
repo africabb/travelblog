@@ -90,7 +90,7 @@ export async function handler(params, context) {
     location:          meta.location          ?? null,
     taken_at:          meta.taken_at          ?? null,
     source_channel:    'whatsapp',
-    source_message_id: meta.source_message_id ?? context?.messageId ?? null,
+    source_message_id: meta.source_message_id ?? resolvedName ?? context?.messageId ?? null,
     source_timestamp:  context?.timestamp     ?? new Date().toISOString(),
   });
 

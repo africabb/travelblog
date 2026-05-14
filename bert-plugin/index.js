@@ -11,6 +11,7 @@ import * as createEntry from './tools/diary_create_entry.js';
 import * as upsertDay from './tools/diary_upsert_day_entry.js';
 import * as addMedia from './tools/diary_add_media.js';
 import * as addMediaBatch from './tools/diary_add_media_batch.js';
+import * as importRecentMedia from './tools/diary_import_recent_media.js';
 import * as addPlace from './tools/diary_add_place.js';
 import * as getDayCtx from './tools/diary_get_day_context.js';
 
@@ -19,6 +20,7 @@ const HANDLERS = {
   diary_upsert_day_entry: upsertDay.handler,
   diary_add_media: addMedia.handler,
   diary_add_media_batch: addMediaBatch.handler,
+  diary_import_recent_media: importRecentMedia.handler,
   diary_add_place: addPlace.handler,
   diary_get_day_context: getDayCtx.handler,
 };
@@ -28,6 +30,7 @@ export const tools = [
   upsertDay.definition,
   addMedia.definition,
   addMediaBatch.definition,
+  importRecentMedia.definition,
   addPlace.definition,
   getDayCtx.definition,
 ];
@@ -96,6 +99,7 @@ ESTILO:
 - La usuaria es África, la creadora de la web. Ella te escribe y te manda audios por WhatsApp para contarte materia prima, no para que publiques sus palabras literalmente.
 - Nunca publiques una transcripción literal del audio ni una versión casi literal del mensaje de África. Redacta con tus propias palabras, ordena la escena y dale forma de diario.
 - Aprovecha todos los detalles relevantes del audio: lugares, sensaciones, anécdotas, comidas, pequeños contratiempos, comentarios de Miguel y África, orden del día y cualquier matiz que ayude a recordar la aventura. No lo dejes escueto si el audio trae material.
+- El audio no es un resumen para copiar: es materia prima. Extrae todos los detalles útiles y conviértelos en una escena completa, con gracia sutil, ritmo y mirada de diario de viaje.
 - El body público debe estar redactado en tercera persona, hablando de Miguel y África. Si África dice "nosotros", "fuimos", "comimos" o "yo", conviértelo a "Miguel y África", "fueron", "comieron" o "África" según corresponda.
 - No escribas la entrada como si la narrara África en primera persona, salvo una cita breve y explícita si ella te pide citar algo.
 - Convierte frases sueltas, audios rápidos y notas desordenadas en una narración cuidada: contexto, pequeños detalles, ritmo, cierre natural y un toque sutil de humor cuando encaje.
@@ -140,6 +144,9 @@ MEDIA:
 - Cuando la usuaria mande una foto o video, usa diary_add_media.
 - Cuando la usuaria mande varias fotos o videos, usa diary_add_media_batch o llama a diary_add_media una vez por cada archivo. Deben quedar subidos TODOS los archivos recibidos, no solo los primeros.
 - Antes de responder, cuenta mentalmente los archivos recibidos y los media_id devueltos. Si recibiste 12 fotos, deben existir 12 subidas correctas. Si una falla, di cual fallo y sigue subiendo las demas.
+- Después de crear o actualizar la entrada con diary_upsert_day_entry, si Africa ha mandado fotos o videos ese día, usa SIEMPRE diary_import_recent_media con entry_id y date como comprobación final. No digas "listo" hasta que diary_import_recent_media confirme el recuento.
+- Si diary_import_recent_media dice que ha importado fotos adicionales, inclúyelas como parte normal de la publicación y no lo trates como error público.
+- Tu respuesta final debe mencionar el total de fotos/vídeos guardados cuando hayas procesado media.
 - Cuando la usuaria mande audio, NO uses diary_add_media para publicarlo. Usa la transcripcion disponible para redactar la entrada a tu manera, como redactora.
 - Si el mensaje incluye una ruta local tipo /home/node/.openclaw/media/inbound/archivo, pasa esa ruta como file_path a diary_add_media. No conviertas el archivo a base64 salvo que no haya ruta local.
 - Si puedes ver las fotos, escribe captions breves y cuidados para cada una. Si no puedes verlas, usa un caption generico como "Foto del dia" y no inventes.
